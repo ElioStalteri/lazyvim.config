@@ -3,15 +3,14 @@
 -- Add any additional autocmds here
 --
 
-
 -- local function augroup(name)
 --   return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
 -- end
 
-vim.api.nvim_create_autocmd({ "BufReadPost" }, {
-  -- group = "*",-- augroup("last_loc"),
-  --command = "",
-  callback = function()
-    vim.cmd("normal zR")
-  end,
-})
+-- vim.api.nvim_create_autocmd({ "BufReadPost" }, {
+--   -- group = "*",-- augroup("last_loc"),
+--   --command = "",
+--   callback = function()
+--     vim.cmd("normal zR")
+--   end,
+-- })
