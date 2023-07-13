@@ -2,14 +2,19 @@
 -- stylua: ignore
 if true then return {
   -- add gruvbox
-  { "ofirgall/ofirkai.nvim" },
+  { 
+    "loctvl842/monokai-pro.nvim" ,
+    opts = {
+      filter = "classic", -- classic | octagon | pro | machine | ristretto | spectrum
+    }
+  },
   -- Configure LazyVim to load gruvbox
-  -- {
-  --   "LazyVim/LazyVim",
-  --   opts = {
-  --     colorscheme = "ofirkai.",
-  --   },
-  -- }
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "monokai-pro",
+    },
+  }
 } end
 
 -- every spec file under the "plugins" directory will be loaded automatically by lazy.nvim
@@ -38,7 +43,7 @@ return {
   },
 
   -- disable trouble
-  { "folke/trouble.nvim",      enabled = false },
+  { "folke/trouble.nvim", enabled = false },
 
   -- add symbols-outline
   {
@@ -217,8 +222,8 @@ return {
         ["<S-Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_prev_item()
-          elseif luasnip.jumpable( -1) then
-            luasnip.jump( -1)
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
           else
             fallback()
           end
