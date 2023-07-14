@@ -39,6 +39,8 @@ return {
       })
     end,
   },
+
+  { "mg979/vim-visual-multi" },
 }
 
 -- -- every spec file under the "plugins" directory will be loaded automatically by lazy.nvim
