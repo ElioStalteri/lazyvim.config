@@ -6,7 +6,7 @@ local function map(mode, lhs, rhs, opts)
   local options = { noremap = true, silent = true }
   if opts then
     if opts.desc then
-      opts.desc = "keymaps.lua: " .. opts.desc
+      opts.desc = opts.desc
     end
     options = vim.tbl_extend("force", options, opts)
   end
@@ -15,3 +15,4 @@ end
 
 map("n", "<C-d>", "<C-d>zz", { remap = true })
 map("n", "<C-u>", "<C-u>zz", { remap = true })
+map("n", "<leader>d", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
