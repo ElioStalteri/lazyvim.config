@@ -36,6 +36,7 @@ return {
         "typescript",
         "vim",
         "yaml",
+        "sql",
       })
     end,
   },
