@@ -11,6 +11,7 @@ return {
     "loctvl842/monokai-pro.nvim",
     opts = {
       filter = "classic", -- classic | octagon | pro | machine | ristretto | spectrum
+      -- transparent_background = true,
     },
   },
   {
