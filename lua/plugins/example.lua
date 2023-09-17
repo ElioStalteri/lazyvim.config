@@ -1,6 +1,13 @@
 --stylua ignore
 return {
   {
+    "kristijanhusak/vim-dadbod-ui",
+    dependencies = {
+      { "tpope/vim-dadbod", lazy = true },
+      { "kristijanhusak/vim-dadbod-completion", lazy = true, ft = { "sql", "mysql", "plsql" } },
+    },
+  },
+  {
     "loctvl842/monokai-pro.nvim",
     opts = {
       filter = "classic", -- classic | octagon | pro | machine | ristretto | spectrum
