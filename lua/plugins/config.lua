@@ -10,7 +10,7 @@ return {
   {
     "loctvl842/monokai-pro.nvim",
     opts = {
-      filter = "classic", -- classic | octagon | pro | machine | ristretto | spectrum
+      filter = "spectrum", -- classic | octagon | pro | machine | ristretto | spectrum
       -- transparent_background = true,
     },
   },
@@ -71,6 +71,7 @@ return {
       })
     end,
   },
+  { "mg979/vim-visual-multi" },
 }
 
 -- return {
