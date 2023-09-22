@@ -14,10 +14,10 @@ return {
       -- transparent_background = true,
     },
   },
+  { "ellisonleao/gruvbox.nvim" },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "monokai-pro",
     },
   },
   {
