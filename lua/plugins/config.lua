@@ -83,11 +83,11 @@ return {
         load = {
           ["core.defaults"] = {}, -- Loads default behaviour
           ["core.concealer"] = {}, -- Adds pretty icons to your documents
-          ["core.presenter"] = {
-            config = {
-              zen_mode = "zen-mode",
-            },
-          }, -- Adds pretty icons to your documents
+          -- ["core.presenter"] = {
+          --   config = {
+          --     zen_mode = "zen-mode",
+          --   },
+          -- }, --  this plugin is due to change so I'm gonna hold on untile there is a good version
           ["core.dirman"] = { -- Manages Neorg workspaces
             config = {
               workspaces = {
