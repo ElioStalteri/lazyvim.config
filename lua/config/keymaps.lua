@@ -16,3 +16,4 @@ end
 map("n", "<C-d>", "<C-d>zz", { remap = true })
 map("n", "<C-u>", "<C-u>zz", { remap = true })
 map("n", "<leader>d", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
+map("n", "<leader>z", "<cmd>ZenMode<cr>", { desc = "Toggle ZenMode" })
