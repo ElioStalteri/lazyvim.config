@@ -17,3 +17,8 @@ map("n", "<C-d>", "<C-d>zz", { remap = true })
 map("n", "<C-u>", "<C-u>zz", { remap = true })
 map("n", "<leader>d", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
 map("n", "<leader>z", "<cmd>ZenMode<cr>", { desc = "Toggle ZenMode" })
+
+map("v", "<leader>r", '"hy:%s/<C-r>h//g<left><left>', { desc = "Replace all instances of highlighted words" }) -- Replace all instances of highlighted words
+map("v", "<leader>S", ":sort<CR>", { desc = "Sort highlighted text in visual mode with Control+" }) -- Sort highlighted text in visual mode with Control+S
+map("v", "<leader>j", ":m '>+1<CR>gv=gv", { desc = "Move current line dow" }) -- Move current line down
+map("v", "<leader>k", ":m '>-2<CR>gv=gv", { desc = "Move current line up" }) -- Move current line up
