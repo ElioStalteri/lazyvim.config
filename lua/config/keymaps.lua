@@ -22,3 +22,6 @@ map("v", "<leader>r", '"hy:%s/<C-r>h//g<left><left>', { desc = "Replace all inst
 map("v", "<leader>S", ":sort<CR>", { desc = "Sort highlighted text in visual mode with Control+" })
 map("v", "<leader>j", ":m '>+1<CR>gv=gv", { desc = "Move current line dow" })
 map("v", "<leader>k", ":m '>-2<CR>gv=gv", { desc = "Move current line up" })
+
+-- real inspiration for a minimal config
+-- https://gitlab.com/linuxdabbler/dotfiles/-/blob/main/.config/nvim/init.lua?ref_type=heads#L151
