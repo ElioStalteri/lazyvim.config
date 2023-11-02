@@ -31,14 +31,14 @@ return {
         mocha = {
           rosewater = "#f5e0dc",
           flamingo = "#f2cdcd",
-          pink = "#f5c2e7", -- Escape Sequences
+          pink = sublimeColors.orange, -- "#f5c2e7", -- Escape Sequences
           mauve = sublimeColors.red, -- "#cba6f7", Keyword
-          red = "#f38ba8", -- Builtins
+          red = sublimeColors.blue, -- "#f38ba8", -- Builtins
           maroon = sublimeColors.orange, -- "#eba0ac", Parameters
           peach = sublimeColors.purple, -- "#fab387", Constants, Numbers
           yellow = sublimeColors.blue, -- "#f9e2af", Classes, Metadata
           green = sublimeColors.yallow, -- "#a6e3a1", Strings
-          teal = "#94e2d5",
+          teal = sublimeColors.green, -- "#94e2d5",
           sky = sublimeColors.red, -- "#89dceb", Operators
           sapphire = sublimeColors.red, -- "#74c7ec",
           blue = sublimeColors.green, -- #89b4fa -- Methods, Functions
