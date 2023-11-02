@@ -7,6 +7,9 @@ return {
       -- { "kristijanhusak/vim-dadbod-completion", lazy = true, ft = { "sql", "mysql", "plsql" } },
     },
   },
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000, opts = {
+    flavour = "mocha",
+  } },
   {
     "loctvl842/monokai-pro.nvim",
     opts = {
@@ -19,7 +22,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "nightfly",
+      colorscheme = "catppuccin",
     },
   },
   {
