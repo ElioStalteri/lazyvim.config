@@ -71,6 +71,7 @@ return {
           -- Conditional = { fg = colors.yellow },
           Repeat = { fg = colors.yellow },
           Keyword = { fg = colors.yellow },
+          Title = { fg = colors.white },
           -- Exception = { fg = colors.yellow },
           -- Include = { fg = colors.yellow },
           -- Macro = { fg = colors.yellow },
