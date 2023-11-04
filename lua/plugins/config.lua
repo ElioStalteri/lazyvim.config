@@ -84,6 +84,7 @@ return {
           htmlH1 = { fg = colors.text },
           htmlH2 = { fg = colors.text },
           ["@boolean"] = { fg = colors.peach },
+          DashboardDesc = { fg = colors.text },
           -- Exception = { fg = colors.yellow },
           -- Include = { fg = colors.yellow },
           -- Macro = { fg = colors.yellow },
