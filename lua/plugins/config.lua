@@ -35,7 +35,8 @@ return {
           mauve = sublimeColors.red, -- "#cba6f7", Keyword
           red = sublimeColors.blue, -- "#f38ba8", -- Builtins
           maroon = sublimeColors.orange, -- "#eba0ac", Parameters
-          peach = sublimeColors.purple, -- "#fab387", Constants, Numbers
+          -- peach = sublimeColors.purple, -- "#fab387", Constants, Numbers
+          peach = sublimeColors.white, -- "#7B76FF", -- Constants, Numbers
           yellow = sublimeColors.blue, -- "#f9e2af", Classes, Metadata
           green = sublimeColors.yallow, -- "#a6e3a1", Strings
           teal = sublimeColors.green, -- "#94e2d5",
@@ -71,10 +72,18 @@ return {
           -- Conditional = { fg = colors.yellow },
           Repeat = { fg = colors.yellow },
           Keyword = { fg = colors.yellow },
+          ["@keyword.coroutine"] = { fg = colors.sky },
+          ["@type"] = { fg = colors.subtext0 },
+          Type = { fg = colors.subtext0 },
+          -- ["@function.builtin"] = { fg = colors.yallow }, -- it doesn't work :'(
+          ["@lsp.typemod.method"] = { fg = colors.yallow },
           Title = { fg = colors.text },
+          ["@text.title"] = { fg = colors.text },
+          Structure = { fg = colors.blue },
           Character = { fg = colors.text },
           htmlH1 = { fg = colors.text },
           htmlH2 = { fg = colors.text },
+          ["@boolean"] = { fg = colors.peach },
           -- Exception = { fg = colors.yellow },
           -- Include = { fg = colors.yellow },
           -- Macro = { fg = colors.yellow },
