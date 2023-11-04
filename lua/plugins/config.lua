@@ -35,7 +35,7 @@ return {
           mauve = sublimeColors.red, -- "#cba6f7", Keyword
           red = sublimeColors.blue, -- "#f38ba8", -- Builtins
           maroon = sublimeColors.orange, -- "#eba0ac", Parameters
-          -- peach = sublimeColors.purple, -- "#fab387", Constants, Numbers
+          -- peach = sublimeColors.purple, -- "#fab387", Constants, Numbers -- it deosn't work :'(
           peach = sublimeColors.white, -- "#7B76FF", -- Constants, Numbers
           yellow = sublimeColors.blue, -- "#f9e2af", Classes, Metadata
           green = sublimeColors.yallow, -- "#a6e3a1", Strings
