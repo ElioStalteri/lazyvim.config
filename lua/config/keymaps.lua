@@ -23,5 +23,6 @@ map("v", "<leader>S", ":sort<CR>", { desc = "Sort highlighted text in visual mod
 map("v", "<leader>j", ":m '>+1<CR>gv=gv", { desc = "Move current line dow" })
 map("v", "<leader>k", ":m '>-2<CR>gv=gv", { desc = "Move current line up" })
 
+map("n", "<leader>p", '"_dP', { desc = "paste without looding copy register" })
 -- real inspiration for a minimal config
 -- https://gitlab.com/linuxdabbler/dotfiles/-/blob/main/.config/nvim/init.lua?ref_type=heads#L151
