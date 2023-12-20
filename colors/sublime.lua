@@ -90,7 +90,7 @@ local function get()
     number = sublimeColors.purple,
     ok = "#90EE90",
     operator = sublimeColors.red,
-    parameter = sublimeColors.white,
+    parameter = sublimeColors.orange,
     preproc = sublimeColors.red,
     preproc_conditional = sublimeColors.red,
     property = sublimeColors.white,
