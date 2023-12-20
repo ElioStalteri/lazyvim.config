@@ -78,7 +78,7 @@ local function get()
     interface = sublimeColors.blue,
     keyword = sublimeColors.red,
     keyword_coroutine = sublimeColors.red,
-    keyword_function = sublimeColors.red,
+    keyword_function = sublimeColors.blue,
     keyword_operator = sublimeColors.red,
     keyword_return = sublimeColors.red,
     label = sublimeColors.red,
