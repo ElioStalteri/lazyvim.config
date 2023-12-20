@@ -1,3 +1,5 @@
+local Highlite = require("highlite") --- @type Highlite
+
 local sublimeColors = {
   green = "#a6e228",
   blue = "#56d8ef",
@@ -251,4 +253,8 @@ local function get(bg, get_terminal)
   return palette, terminal_palette
 end
 
-return get
+local bg = vim.api.nvim_get_option("background")
+local palette, terminal_palette = get(bg, true)
+
+local groups = Highlite.groups("default", palette)
+Highlite.generate("sublime", groups, terminal_palette)

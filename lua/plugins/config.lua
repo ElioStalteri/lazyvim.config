@@ -22,77 +22,90 @@ return {
     },
   },
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    priority = 1000,
-    opts = {
-      flavour = "mocha",
-      color_overrides = {
-        mocha = {
-          rosewater = "#f5e0dc",
-          flamingo = "#f2cdcd",
-          pink = sublimeColors.orange, -- "#f5c2e7", -- Escape Sequences
-          mauve = sublimeColors.red, -- "#cba6f7", Keyword
-          red = sublimeColors.blue, -- "#f38ba8", -- Builtins
-          maroon = sublimeColors.orange, -- "#eba0ac", Parameters
-          -- peach = sublimeColors.purple, -- "#fab387", Constants, Numbers -- it deosn't work :'(
-          peach = sublimeColors.white, -- Constants, Numbers
-          yellow = sublimeColors.blue, -- "#f9e2af", Classes, Metadata
-          green = sublimeColors.yallow, -- "#a6e3a1", Strings
-          teal = sublimeColors.green, -- "#94e2d5",
-          sky = sublimeColors.red, -- "#89dceb", Operators
-          sapphire = sublimeColors.red, -- "#74c7ec",
-          blue = sublimeColors.green, -- #89b4fa -- Methods, Functions
-          lavender = sublimeColors.white, -- "#b4befe",
-          text = sublimeColors.white, -- "#cdd6f4",
-          subtext1 = sublimeColors.comment, -- "#bac2de",
-          subtext0 = "#a6adc8",
-          overlay2 = sublimeColors.white, -- "#9399b2", -- Braces, Delimiters
-          overlay1 = "#7f849c",
-          overlay0 = sublimeColors.comment, -- "#6c7086", -- Comments
-          surface2 = "#585b70",
-          surface1 = "#45475a",
-          surface0 = "#313244",
-          base = sublimeColors.background, -- "#1e1e2e",
-          mantle = sublimeColors.background1, -- "#181825",
-          crust = sublimeColors.background2, -- "#11111b",
-        },
-      },
-      custom_highlights = function(colors)
-        return {
-          -- Comment = { fg = colors.flamingo },
-          -- TabLineSel = { bg = colors.pink },
-          -- CmpBorder = { fg = colors.surface2 },
-          -- Pmenu = { bg = colors.none },
-          -- Statement = { fg = colors.sky },
-          -- Conditional = { fg = colors.sky },
-          -- Include = { fg = colors.sky },
+    "Iron-E/nvim-highlite",
+    config = function(_, opts)
+      -- OPTIONAL: setup the plugin. See "Configuration" for information
+      require("highlite").setup({ generator = { plugins = { vim = false }, syntax = false } })
 
-          Statement = { fg = colors.yellow },
-          -- Conditional = { fg = colors.yellow },
-          Repeat = { fg = colors.yellow },
-          Keyword = { fg = colors.yellow },
-          ["@keyword.coroutine"] = { fg = colors.sky },
-          ["@type"] = { fg = colors.subtext0 },
-          Type = { fg = colors.subtext0 },
-          -- ["@function.builtin"] = { fg = colors.yallow }, -- it doesn't work :'(
-          ["@lsp.typemod.method"] = { fg = colors.yallow },
-          Title = { fg = colors.text },
-          ["@text.title"] = { fg = colors.text },
-          Structure = { fg = colors.blue },
-          Character = { fg = colors.text },
-          htmlH1 = { fg = colors.text },
-          htmlH2 = { fg = colors.text },
-          ["@boolean"] = { fg = colors.peach },
-          DashboardDesc = { fg = colors.text },
-          ["@tag.attribute.tsx"] = { fg = colors.blue },
-          -- Exception = { fg = colors.yellow },
-          -- Include = { fg = colors.yellow },
-          -- Macro = { fg = colors.yellow },
-        }
-      end,
-    },
+      -- or one of the alternate colorschemes (see the "Built-in Colorschemes" section)
+      vim.api.nvim_command("colorscheme highlite")
+    end,
+    lazy = false,
+    priority = math.huge,
+    version = "^4.0.0",
   },
+  -- {
+  --   "catppuccin/nvim",
+  --   name = "catppuccin",
+  --   priority = 1000,
+  --   opts = {
+  --     flavour = "mocha",
+  --     color_overrides = {
+  --       mocha = {
+  --         rosewater = "#f5e0dc",
+  --         flamingo = "#f2cdcd",
+  --         pink = sublimeColors.orange, -- "#f5c2e7", -- Escape Sequences
+  --         mauve = sublimeColors.red, -- "#cba6f7", Keyword
+  --         red = sublimeColors.blue, -- "#f38ba8", -- Builtins
+  --         maroon = sublimeColors.orange, -- "#eba0ac", Parameters
+  --         -- peach = sublimeColors.purple, -- "#fab387", Constants, Numbers -- it deosn't work :'(
+  --         peach = sublimeColors.white, -- Constants, Numbers
+  --         yellow = sublimeColors.blue, -- "#f9e2af", Classes, Metadata
+  --         green = sublimeColors.yallow, -- "#a6e3a1", Strings
+  --         teal = sublimeColors.green, -- "#94e2d5",
+  --         sky = sublimeColors.red, -- "#89dceb", Operators
+  --         sapphire = sublimeColors.red, -- "#74c7ec",
+  --         blue = sublimeColors.green, -- #89b4fa -- Methods, Functions
+  --         lavender = sublimeColors.white, -- "#b4befe",
+  --         text = sublimeColors.white, -- "#cdd6f4",
+  --         subtext1 = sublimeColors.comment, -- "#bac2de",
+  --         subtext0 = "#a6adc8",
+  --         overlay2 = sublimeColors.white, -- "#9399b2", -- Braces, Delimiters
+  --         overlay1 = "#7f849c",
+  --         overlay0 = sublimeColors.comment, -- "#6c7086", -- Comments
+  --         surface2 = "#585b70",
+  --         surface1 = "#45475a",
+  --         surface0 = "#313244",
+  --         base = sublimeColors.background, -- "#1e1e2e",
+  --         mantle = sublimeColors.background1, -- "#181825",
+  --         crust = sublimeColors.background2, -- "#11111b",
+  --       },
+  --     },
+  --     custom_highlights = function(colors)
+  --       return {
+  --         -- Comment = { fg = colors.flamingo },
+  --         -- TabLineSel = { bg = colors.pink },
+  --         -- CmpBorder = { fg = colors.surface2 },
+  --         -- Pmenu = { bg = colors.none },
+  --         -- Statement = { fg = colors.sky },
+  --         -- Conditional = { fg = colors.sky },
+  --         -- Include = { fg = colors.sky },
+  --
+  --         Statement = { fg = colors.yellow },
+  --         -- Conditional = { fg = colors.yellow },
+  --         Repeat = { fg = colors.yellow },
+  --         Keyword = { fg = colors.yellow },
+  --         ["@keyword.coroutine"] = { fg = colors.sky },
+  --         ["@type"] = { fg = colors.subtext0 },
+  --         Type = { fg = colors.subtext0 },
+  --         -- ["@function.builtin"] = { fg = colors.yallow }, -- it doesn't work :'(
+  --         ["@lsp.typemod.method"] = { fg = colors.yallow },
+  --         Title = { fg = colors.text },
+  --         ["@text.title"] = { fg = colors.text },
+  --         Structure = { fg = colors.blue },
+  --         Character = { fg = colors.text },
+  --         htmlH1 = { fg = colors.text },
+  --         htmlH2 = { fg = colors.text },
+  --         ["@boolean"] = { fg = colors.peach },
+  --         DashboardDesc = { fg = colors.text },
+  --         ["@tag.attribute.tsx"] = { fg = colors.blue },
+  --         -- Exception = { fg = colors.yellow },
+  --         -- Include = { fg = colors.yellow },
+  --         -- Macro = { fg = colors.yellow },
+  --       }
+  --     end,
+  --   },
+  -- },
   { "nvim-treesitter/playground" },
   {
     "loctvl842/monokai-pro.nvim",
@@ -106,7 +119,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "catppuccin",
+      colorscheme = "sublime",
     },
   },
   {
