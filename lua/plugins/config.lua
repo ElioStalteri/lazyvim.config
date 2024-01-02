@@ -105,4 +105,11 @@ return {
     end,
   },
   { "folke/zen-mode.nvim" },
+  {
+    "j-hui/fidget.nvim",
+    lazy = false,
+    config = function()
+      require("fidget").setup({})
+    end,
+  },
 }
