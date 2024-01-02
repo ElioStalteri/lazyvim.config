@@ -20,8 +20,8 @@ map("n", "<leader>z", "<cmd>ZenMode<cr>", { desc = "Toggle ZenMode" })
 
 map("v", "<leader>r", '"hy:%s/<C-r>h//g<left><left>', { desc = "Replace all instances of highlighted words" })
 map("v", "<leader>S", ":sort<CR>", { desc = "Sort highlighted text in visual mode with Control+" })
-map("v", "<leader>j", ":m '>+1<CR>gv=gv", { desc = "Move current line dow" })
-map("v", "<leader>k", ":m '>-2<CR>gv=gv", { desc = "Move current line up" })
+map("n", "<leader>k", "v:m '>-2<CR>gv=gv<C-c>", { desc = "Move current line up" })
+map("n", "<leader>j", "v:m '>+1<CR>gv=gv<C-c>", { desc = "Move current line dow" })
 
 map("v", "<leader>p", '"_dP', { desc = "paste without looding copy register" })
 -- real inspiration for a minimal config
