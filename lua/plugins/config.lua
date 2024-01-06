@@ -8,7 +8,7 @@ return {
   },
   {
     "Iron-E/nvim-highlite",
-    config = function(_, opts)
+    config = function()
       -- OPTIONAL: setup the plugin. See "Configuration" for information
       require("highlite").setup({ generator = { plugins = { vim = false }, syntax = false } })
 
