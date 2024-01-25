@@ -6,6 +6,7 @@ return {
       -- { "kristijanhusak/vim-dadbod-completion", lazy = true, ft = { "sql", "mysql", "plsql" } },
     },
   },
+  { "mbbill/undotree" },
   {
     "Iron-E/nvim-highlite",
     config = function()

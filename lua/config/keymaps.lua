@@ -24,5 +24,7 @@ map("n", "<leader>k", "v:m '>-2<CR>gv=gv<C-c>", { desc = "Move current line up" 
 map("n", "<leader>j", "v:m '>+1<CR>gv=gv<C-c>", { desc = "Move current line dow" })
 
 map("v", "<leader>p", '"_dP', { desc = "paste without looding copy register" })
+
+map("n", "<leader>h", ":UndotreeToggle<CR>", { desc = "Toggle undo tree" })
 -- real inspiration for a minimal config
 -- https://gitlab.com/linuxdabbler/dotfiles/-/blob/main/.config/nvim/init.lua?ref_type=heads#L151
