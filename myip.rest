@@ -1,0 +1,3 @@
+# use <C-j> to trigger a request or :call VrcQuery()<cr>
+https://api.ipify.org?format=json
+GET /
