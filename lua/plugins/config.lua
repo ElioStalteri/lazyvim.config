@@ -15,6 +15,7 @@ return {
       keys[#keys + 1] = { mode = { "n" }, "gr", "<cmd>Trouble lsp_references<cr>", desc = "References" }
     end,
   },
+  -- { "rose-pine/neovim", name = "rose-pine" },
   {
     "Iron-E/nvim-highlite",
     config = function()
@@ -34,6 +35,7 @@ return {
     "LazyVim/LazyVim",
     opts = {
       colorscheme = "sublime",
+      -- colorscheme = "rose-pine-moon",
     },
   },
   {
@@ -42,42 +44,6 @@ return {
       return {}
     end,
   },
-  -- {
-  --   "hrsh7th/nvim-cmp",
-  --   dependencies = { "hrsh7th/cmp-emoji" },
-  --   ---@param opts cmp.ConfigSchema
-  --   opts = function(_, opts)
-  --     local has_words_before = function()
-  --       unpack = unpack or table.unpack
-  --       local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  --       return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-  --     end
-  --     local luasnip = require("luasnip")
-  --     local cmp = require("cmp")
-  --     opts.mapping = vim.tbl_extend("force", opts.mapping, {
-  --       ["<Tab>"] = cmp.mapping(function(fallback)
-  --         if cmp.visible() then
-  --           cmp.select_next_item()
-  --         elseif luasnip.expand_or_jumpable() then
-  --           luasnip.expand_or_jump()
-  --         elseif has_words_before() then
-  --           cmp.complete()
-  --         else
-  --           fallback()
-  --         end
-  --       end, { "i", "s" }),
-  --       ["<S-Tab>"] = cmp.mapping(function(fallback)
-  --         if cmp.visible() then
-  --           cmp.select_prev_item()
-  --         elseif luasnip.jumpable(-1) then
-  --           luasnip.jump(-1)
-  --         else
-  --           fallback()
-  --         end
-  --       end, { "i", "s" }),
-  --     })
-  --   end,
-  -- },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
@@ -90,31 +56,6 @@ return {
     end,
   },
   { "mg979/vim-visual-multi" },
-  {
-    "nvim-neorg/neorg",
-    build = ":Neorg sync-parsers",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("neorg").setup({
-        load = {
-          ["core.defaults"] = {}, -- Loads default behaviour
-          -- ["core.concealer"] = {}, -- Adds pretty icons to your documents
-          -- ["core.presenter"] = {
-          --   config = {
-          --     zen_mode = "zen-mode",
-          --   },
-          -- }, --  this plugin is due to change so I'm gonna hold on untile there is a good version
-          ["core.dirman"] = { -- Manages Neorg workspaces
-            config = {
-              workspaces = {
-                notes = "~/notes",
-              },
-            },
-          },
-        },
-      })
-    end,
-  },
   { "folke/zen-mode.nvim" },
   {
     "j-hui/fidget.nvim",
