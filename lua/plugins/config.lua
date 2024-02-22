@@ -7,6 +7,21 @@ return {
     },
   },
   { "mbbill/undotree" },
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   ---@class PluginLspOpts
+  --   opts = {
+  --     servers = {
+  --       postgres_lsp = {
+  --         name = "postgres_lsp",
+  --         cmd = { "postgres_lsp" },
+  --         filetypes = { "sql" },
+  --         single_file_support = true,
+  --         -- root_dir = util.root_pattern("root-file.txt"),
+  --       },
+  --     },
+  --   },
+  -- },
   {
     "neovim/nvim-lspconfig",
     init = function()
