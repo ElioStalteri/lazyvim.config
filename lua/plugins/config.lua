@@ -46,10 +46,12 @@ return {
   },
   { "nvim-treesitter/playground" },
   { "bluz71/vim-nightfly-colors", name = "nightfly", lazy = false, priority = 1000 },
+  { "ofirgall/ofirkai.nvim", lazy = false },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "sublime",
+      colorscheme = "ofirkai",
+      -- colorscheme = "sublime",
       -- colorscheme = "rose-pine-moon",
     },
   },
