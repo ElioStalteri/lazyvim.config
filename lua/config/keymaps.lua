@@ -28,5 +28,6 @@ map("v", "<leader>p", '"_dP', { desc = "paste without looding copy register" })
 map("n", "<leader>h", ":UndotreeToggle<CR>", { desc = "Toggle undo tree" })
 
 map("n", "<leader>ct", ":OverseerToggle<CR>", { desc = "Toggle task runner" })
+map("n", "<leader>cR", ":OverseerRun<CR>", { desc = "Run task" })
 -- real inspiration for a minimal config
 -- https://gitlab.com/linuxdabbler/dotfiles/-/blob/main/.config/nvim/init.lua?ref_type=heads#L151
