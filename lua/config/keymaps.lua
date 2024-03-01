@@ -26,5 +26,7 @@ map("v", "<leader>S", ":sort<CR>", { desc = "Sort highlighted text in visual mod
 map("v", "<leader>p", '"_dP', { desc = "paste without looding copy register" })
 
 map("n", "<leader>h", ":UndotreeToggle<CR>", { desc = "Toggle undo tree" })
+
+map("n", "<leader>ct", ":OverseerToggle<CR>", { desc = "Toggle task runner" })
 -- real inspiration for a minimal config
 -- https://gitlab.com/linuxdabbler/dotfiles/-/blob/main/.config/nvim/init.lua?ref_type=heads#L151

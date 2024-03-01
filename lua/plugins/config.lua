@@ -74,6 +74,10 @@ return {
   },
   -- { "mg979/vim-visual-multi" },
   { "folke/zen-mode.nvim" },
+  {
+    "stevearc/overseer.nvim",
+    opts = {},
+  },
   -- {
   --   "j-hui/fidget.nvim",
   --   lazy = false,
