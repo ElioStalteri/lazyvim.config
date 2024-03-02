@@ -5,7 +5,7 @@ return {
       theme = "doom",
       preview = {
         command = "lolcat",
-        file_path = "./header.txt",
+        file_path = "~/.config/nvim/header.txt",
         file_height = 17,
         file_width = 69,
       },
