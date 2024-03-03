@@ -4,9 +4,9 @@ return {
     opts = {
       theme = "doom",
       preview = {
-        command = "cat",
-        file_path = "~/.config/nvim/header.ansi.txt",
-        file_height = 17,
+        command = "lolcat",
+        file_path = "~/.config/nvim/header.txt",
+        file_height = 20,
         file_width = 69,
       },
     },
