@@ -7,21 +7,6 @@ return {
     },
   },
   { "mbbill/undotree" },
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   ---@class PluginLspOpts
-  --   opts = {
-  --     servers = {
-  --       postgres_lsp = {
-  --         name = "postgres_lsp",
-  --         cmd = { "postgres_lsp" },
-  --         filetypes = { "sql" },
-  --         single_file_support = true,
-  --         -- root_dir = util.root_pattern("root-file.txt"),
-  --       },
-  --     },
-  --   },
-  -- },
   {
     "neovim/nvim-lspconfig",
     init = function()
@@ -30,29 +15,12 @@ return {
       keys[#keys + 1] = { mode = { "n" }, "gr", "<cmd>Trouble lsp_references<cr>", desc = "References" }
     end,
   },
-  -- { "rose-pine/neovim", name = "rose-pine" },
-  -- {
-  --   "Iron-E/nvim-highlite",
-  --   config = function()
-  --     -- OPTIONAL: setup the plugin. See "Configuration" for information
-  --     require("highlite").setup({ generator = { plugins = { vim = false }, syntax = false } })
-  --
-  --     -- or one of the alternate colorschemes (see the "Built-in Colorschemes" section)
-  --     vim.api.nvim_command("colorscheme highlite")
-  --   end,
-  --   lazy = false,
-  --   priority = math.huge,
-  --   version = "^4.0.0",
-  -- },
   { "nvim-treesitter/playground" },
-  -- { "bluz71/vim-nightfly-colors", name = "nightfly", lazy = false, priority = 1000 },
   { "ofirgall/ofirkai.nvim", lazy = false },
   {
     "LazyVim/LazyVim",
     opts = {
       colorscheme = "ofirkai",
-      -- colorscheme = "sublime",
-      -- colorscheme = "rose-pine-moon",
     },
   },
   {
@@ -72,17 +40,9 @@ return {
       })
     end,
   },
-  -- { "mg979/vim-visual-multi" },
   { "folke/zen-mode.nvim" },
   {
     "stevearc/overseer.nvim",
     opts = {},
   },
-  -- {
-  --   "j-hui/fidget.nvim",
-  --   lazy = false,
-  --   config = function()
-  --     require("fidget").setup({})
-  --   end,
-  -- },
 }
