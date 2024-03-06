@@ -101,6 +101,10 @@ M.hl_groups = function(scheme)
       fg = scheme.aqua,
       italic = true,
     },
+    ["@keyword.operator"] = {
+      fg = scheme.red,
+      italic = true,
+    },
     ["Constant"] = {
       fg = scheme.white,
       italic = true,
@@ -108,6 +112,9 @@ M.hl_groups = function(scheme)
     ["StorageClass"] = {
       fg = scheme.green,
       italic = true,
+    },
+    ["@punctuation.bracket"] = {
+      fg = scheme.white,
     },
   }
 end
