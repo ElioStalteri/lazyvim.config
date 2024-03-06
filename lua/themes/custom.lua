@@ -33,7 +33,7 @@ M.scheme = {
   unnecessary_fg = "#a0a0a0",
   highlighted_word_bg = "#343942",
   tab_visible_fg = "#b3ab60",
-  line_fg = "#fd971f",
+  line_fg = "#f8f8f0",
   cursor_line_bg = "#333227",
   cursor_linenr_fg = "#e6db74",
   mid_orange = "#de933c",
@@ -57,7 +57,7 @@ M.scheme = {
   -- Plugins colors
   nvim_cmp_fuzzy_fg = "#34d8f7",
   git_signs_add = "#6a921a",
-  git_signs_change = "#0e72cf",
+  git_signs_change = "#e6db74",
 
   status_line = {
     a_fg = "#434343",
