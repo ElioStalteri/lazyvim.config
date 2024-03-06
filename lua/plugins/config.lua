@@ -16,11 +16,12 @@ return {
     end,
   },
   { "nvim-treesitter/playground" },
-  { "ofirgall/ofirkai.nvim", lazy = false },
+  -- { "ofirgall/ofirkai.nvim", lazy = false },
+  { "ElioStalteri/ofirkai.nvim", lazy = false, opts = { custom_theme = true } },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "ofirkai",
+      colorscheme = "ofirkai-custom",
     },
   },
   {
