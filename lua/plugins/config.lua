@@ -46,4 +46,16 @@ return {
     "stevearc/overseer.nvim",
     opts = {},
   },
+  {
+    "akinsho/toggleterm.nvim",
+    config = function()
+      require("toggleterm").setup({
+        open_mapping = [[<c-/>]],
+        shade_terminals = false,
+      })
+    end,
+    keys = {
+      { [[<C-/>]] },
+    },
+  },
 }
