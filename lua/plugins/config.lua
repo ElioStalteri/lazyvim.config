@@ -48,6 +48,7 @@ return {
   },
   {
     "akinsho/toggleterm.nvim",
+    lazy = false,
     config = function()
       require("toggleterm").setup({
         open_mapping = [[<c-/>]],
@@ -56,6 +57,7 @@ return {
     end,
     keys = {
       { [[<C-/>]] },
+      { "<leader>t", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
     },
   },
 }
