@@ -29,5 +29,10 @@ map("n", "<leader>h", ":UndotreeToggle<CR>", { desc = "Toggle undo tree" })
 
 map("n", "<leader>ctt", ":OverseerToggle<CR>", { desc = "Toggle task runner" })
 map("n", "<leader>ctr", ":OverseerRun<CR>", { desc = "Run task" })
+
+map("n", "<leader>gdo", ":DiffviewOpen<CR>", { desc = "Open Diffview" })
+map("n", "<leader>gdh", ":DiffviewFileHistory<CR>", { desc = "Open Diffview file history" })
+map("n", "<leader>gdc", ":DiffviewClose<CR>", { desc = "Close Diffview" })
+
 -- real inspiration for a minimal config
 -- https://gitlab.com/linuxdabbler/dotfiles/-/blob/main/.config/nvim/init.lua?ref_type=heads#L151

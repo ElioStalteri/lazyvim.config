@@ -60,4 +60,14 @@ return {
       { "<leader>t", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
     },
   },
+  { "sindrets/diffview.nvim", opts = {} },
+  {
+    "folke/which-key.nvim",
+    opts = {
+      defaults = {
+        ["<leader>gd"] = { name = "+Diffview" },
+        ["<leader>ct"] = { name = "+TaskRunner" },
+      },
+    },
+  },
 }
