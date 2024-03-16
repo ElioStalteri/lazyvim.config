@@ -36,13 +36,13 @@ local function loadLargeFiles()
   local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()))
   local lines = tonumber(vim.fn.system({ "wc", "-l", vim.fn.expand("%") }):match("%d+"))
   local avgLineSize = ok and stats and stats.size / lines or 0
-  print("avgLineSize")
-  vim.print(avgLineSize)
+  -- print("avgLineSize")
+  -- vim.print(avgLineSize)
 
-  print("lines")
-  vim.print(lines)
-  print("stats")
-  vim.print(stats)
+  -- print("lines")
+  -- vim.print(lines)
+  -- print("stats")
+  -- vim.print(stats)
 
   if (ok and stats and stats.size > MAX_FILE_SIZE) or avgLineSize > MAX_LINE_SIZE then
     ---@diagnostic disable-next-line: inject-field
