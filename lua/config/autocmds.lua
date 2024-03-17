@@ -30,7 +30,7 @@ local function disableTS()
 end
 
 local MAX_LINE_SIZE = 1000
-local MAX_FILE_SIZE = 50000
+local MAX_FILE_SIZE = 100000
 
 local function loadLargeFiles()
   local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()))
