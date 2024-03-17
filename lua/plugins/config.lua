@@ -41,7 +41,14 @@ return {
       })
     end,
   },
-  { "folke/zen-mode.nvim" },
+  {
+    "folke/zen-mode.nvim",
+    opts = {
+      window = {
+        width = 140,
+      },
+    },
+  },
   {
     "stevearc/overseer.nvim",
     opts = {},
