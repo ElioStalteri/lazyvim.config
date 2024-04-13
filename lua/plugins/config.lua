@@ -1,3 +1,11 @@
+local function removebyKey(tab, val)
+  for i, v in ipairs(tab) do
+    if v.id == val then
+      tab[i] = nil
+    end
+  end
+end
+
 return {
   {
     "kristijanhusak/vim-dadbod-ui",
@@ -11,6 +19,9 @@ return {
     "neovim/nvim-lspconfig",
     init = function()
       local keys = require("lazyvim.plugins.lsp.keymaps").get()
+      removebyKey(keys, "<Tab>")
+      removebyKey(keys, "<S-Tab>")
+
       -- change a keymap
       keys[#keys + 1] = { mode = { "n" }, "gr", "<cmd>Trouble lsp_references<cr>", desc = "References" }
     end,
