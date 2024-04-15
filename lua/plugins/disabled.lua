@@ -4,4 +4,5 @@ return {
     enabled = false,
   },
   { "echasnovski/mini.pairs", enabled = false },
+  { "headlines.nvim", enabled = false },
 }
