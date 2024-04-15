@@ -36,3 +36,5 @@ map("n", "<leader>gdc", ":DiffviewClose<CR>", { desc = "Close Diffview" })
 
 -- real inspiration for a minimal config
 -- https://gitlab.com/linuxdabbler/dotfiles/-/blob/main/.config/nvim/init.lua?ref_type=heads#L151
+
+map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
