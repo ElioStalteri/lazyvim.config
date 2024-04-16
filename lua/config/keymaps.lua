@@ -23,7 +23,7 @@ map("v", "<leader>S", ":sort<CR>", { desc = "Sort highlighted text in visual mod
 -- map("n", "<leader>k", "v:m '>-2<CR>gv=gv<C-c>", { desc = "Move current line up" })
 -- map("n", "<leader>j", "v:m '>+1<CR>gv=gv<C-c>", { desc = "Move current line dow" })
 
-map("v", "<leader>p", '"_dP', { desc = "paste without looding copy register" })
+map("v", "\\p", '"_dP', { desc = "paste without looding copy register" })
 
 map("n", "<leader>h", ":UndotreeToggle<CR>", { desc = "Toggle undo tree" })
 
