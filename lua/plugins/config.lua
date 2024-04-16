@@ -80,6 +80,21 @@ return {
   },
   { "sindrets/diffview.nvim", opts = {} },
   {
+    "mrjones2014/legendary.nvim",
+    opts = {
+      extensions = {
+        lazy_nvim = true,
+        which_key = {
+          auto_register = true,
+          do_binding = true,
+        },
+      },
+    },
+    priority = 90000000,
+    lazy = false,
+    dependencies = { "kkharji/sqlite.lua" },
+  },
+  {
     "folke/which-key.nvim",
     opts = {
       defaults = {
