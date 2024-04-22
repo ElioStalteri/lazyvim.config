@@ -25,8 +25,6 @@ map("v", "<leader>S", ":sort<CR>", { desc = "Sort highlighted text in visual mod
 
 map("v", "\\p", '"_dP', { desc = "paste without looding copy register" })
 
-map("n", "\\l", ":Legendary<CR>", { desc = "Open Legendary" })
-
 map("n", "<leader>h", ":UndotreeToggle<CR>", { desc = "Toggle undo tree" })
 
 map("n", "<leader>ctt", ":OverseerToggle<CR>", { desc = "Toggle task runner" })
