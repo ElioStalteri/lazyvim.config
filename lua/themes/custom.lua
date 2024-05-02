@@ -116,6 +116,9 @@ M.hl_groups = function(scheme)
     ["@punctuation.bracket"] = {
       fg = scheme.white,
     },
+    ["@lsp.type.class.svelte"] = {
+      fg = scheme.aqua,
+    },
   }
 end
 
