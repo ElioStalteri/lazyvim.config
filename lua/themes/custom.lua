@@ -1,3 +1,29 @@
+-- HSV to RGB
+local min = math.min
+local max = math.max
+local abs = math.abs
+
+local function HSV2RGB(h, s, v)
+  local k1 = v * (1 - s)
+  local k2 = v - k1
+  local r = min(max(3 * abs((h / 180) % 2 - 1) - 1, 0), 1)
+  local g = min(max(3 * abs(((h - 120) / 180) % 2 - 1) - 1, 0), 1)
+  local b = min(max(3 * abs(((h + 120) / 180) % 2 - 1) - 1, 0), 1)
+  r = string.format("%02x", k1 + k2 * r * 255)
+  g = string.format("%02x", k1 + k2 * g * 255)
+  b = string.format("%02x", k1 + k2 * b * 255)
+  return "#" .. r .. g .. b
+end
+
+local function add_missing(dst, src)
+  for k, v in pairs(src) do
+    if dst[k] == nil then
+      dst[k] = v
+    end
+  end
+  return dst -- for convenience (chaining)
+end
+
 local M = {}
 
 M.scheme = {
@@ -83,8 +109,18 @@ M.scheme = {
   },
 }
 
+local gradient = {}
+
+for i = 1, 360, 1 do
+  gradient["gradient" .. i] = {
+    fg = HSV2RGB(i, 1, 1),
+  }
+end
+
+-- vim.print(gradient)
+
 M.hl_groups = function(scheme)
-  return {
+  return add_missing({
     ["@lsp.type.parameter"] = {
       fg = scheme.orange,
       italic = true,
@@ -119,7 +155,7 @@ M.hl_groups = function(scheme)
     ["@lsp.type.class.svelte"] = {
       fg = scheme.aqua,
     },
-  }
+  }, gradient)
 end
 
 return M
