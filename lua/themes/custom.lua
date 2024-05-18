@@ -155,6 +155,9 @@ M.hl_groups = function(scheme)
     ["@lsp.type.class.svelte"] = {
       fg = scheme.aqua,
     },
+    ["NonText"] = {
+      fg = scheme.grey,
+    },
   }, gradient)
 end
 
