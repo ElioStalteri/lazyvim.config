@@ -9,10 +9,10 @@ local function HSV2RGB(h, s, v)
   local r = min(max(3 * abs((h / 180) % 2 - 1) - 1, 0), 1)
   local g = min(max(3 * abs(((h - 120) / 180) % 2 - 1) - 1, 0), 1)
   local b = min(max(3 * abs(((h + 120) / 180) % 2 - 1) - 1, 0), 1)
-  r = string.format("%02x", k1 + k2 * r * 255)
-  g = string.format("%02x", k1 + k2 * g * 255)
-  b = string.format("%02x", k1 + k2 * b * 255)
-  return "#" .. r .. g .. b
+  local ex_r = string.format("%02x", k1 + k2 * r * 255)
+  local ex_g = string.format("%02x", k1 + k2 * g * 255)
+  local ex_b = string.format("%02x", k1 + k2 * b * 255)
+  return "#" .. ex_r .. ex_g .. ex_b
 end
 
 local function add_missing(dst, src)
