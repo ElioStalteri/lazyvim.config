@@ -26,7 +26,7 @@ return {
       keys[#keys + 1] = { mode = { "n" }, "gr", "<cmd>Trouble lsp_references<cr>", desc = "References" }
     end,
   },
-  { "nvim-treesitter/playground" },
+  -- { "nvim-treesitter/playground" },
   -- { "ofirgall/ofirkai.nvim", lazy = false },
   { "ElioStalteri/ofirkai.nvim", lazy = false, opts = { custom_theme = true } },
   {
@@ -41,17 +41,17 @@ return {
       return {}
     end,
   },
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "svelte",
-        "sql",
-        "http",
-        "json",
-      })
-    end,
-  },
+  -- {
+  --   "nvim-treesitter/nvim-treesitter",
+  --   opts = function(_, opts)
+  --     vim.list_extend(opts.ensure_installed, {
+  --       "svelte",
+  --       "sql",
+  --       "http",
+  --       "json",
+  --     })
+  --   end,
+  -- },
   {
     "folke/zen-mode.nvim",
     opts = {
