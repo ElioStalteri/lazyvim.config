@@ -6,14 +6,14 @@
     "lazyvim.plugins.extras.lang.docker",
     "lazyvim.plugins.extras.lang.go",
     "lazyvim.plugins.extras.lang.json",
+    "lazyvim.plugins.extras.lang.svelte",
     "lazyvim.plugins.extras.lang.tailwind",
     "lazyvim.plugins.extras.lang.typescript",
     "lazyvim.plugins.extras.linting.eslint",
     "lazyvim.plugins.extras.lsp.none-ls",
     "lazyvim.plugins.extras.ui.alpha",
     "lazyvim.plugins.extras.util.dot",
-    "lazyvim.plugins.extras.util.mini-hipatterns",
-    "lazyvim.plugins.extras.editor.trouble-v3"
+    "lazyvim.plugins.extras.util.mini-hipatterns"
   ],
   "news": {
     "NEWS.md": "5204"
