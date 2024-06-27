@@ -141,6 +141,10 @@ M.hl_groups = function(scheme)
       fg = scheme.red,
       italic = true,
     },
+    ["@tag.builtin.tsx"] = {
+      fg = scheme.red,
+      italic = true,
+    },
     ["Constant"] = {
       fg = scheme.white,
       italic = true,
