@@ -158,6 +158,15 @@ M.hl_groups = function(scheme)
     ["NonText"] = {
       fg = scheme.grey,
     },
+    ["MultiCursor"] = {
+      fg = scheme.black,
+      bg = scheme.yellow,
+    },
+    ["MultiCursorMain"] = {
+      fg = scheme.black,
+      bg = scheme.dark_yellow,
+      bold = true,
+    },
   }, gradient)
 end
 
