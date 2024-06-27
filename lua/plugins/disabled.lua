@@ -9,4 +9,5 @@ return {
     "nvimdev/dashboard-nvim",
     enabled = false,
   },
+  -- { "ggandor/flit.nvim", enabled = false },
 }

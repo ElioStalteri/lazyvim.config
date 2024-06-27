@@ -117,7 +117,7 @@ for i = 1, 360, 1 do
   }
 end
 
--- vim.print(gradient)
+-- t(gradient)
 
 M.hl_groups = function(scheme)
   return add_missing({
@@ -162,13 +162,19 @@ M.hl_groups = function(scheme)
     ["NonText"] = {
       fg = scheme.grey,
     },
-    ["MultiCursor"] = {
+
+    ["LeapMatch"] = {
       fg = scheme.black,
       bg = scheme.yellow,
     },
-    ["MultiCursorMain"] = {
+    ["LeapLabelPrimary"] = {
       fg = scheme.black,
-      bg = scheme.dark_yellow,
+      bg = scheme.yellow,
+      bold = true,
+    },
+    ["LeapLabelSecondary"] = {
+      fg = scheme.black,
+      bg = scheme.yellow,
       bold = true,
     },
   }, gradient)
