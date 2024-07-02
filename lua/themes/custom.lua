@@ -163,16 +163,20 @@ M.hl_groups = function(scheme)
       fg = scheme.grey,
     },
 
-    ["LeapMatch"] = {
-      fg = scheme.black,
-      bg = scheme.yellow,
-    },
-    ["LeapLabelPrimary"] = {
+    -- FlashBackdrop
+    -- FlashMatch
+    -- FlashCurrent
+    -- FlashLabel
+    -- FlashPrompt
+    -- FlashPromptIcon
+    -- FlashCursor
+    ["FlashBackdrop"] = {},
+    ["FlashMatch"] = {
       fg = scheme.black,
       bg = scheme.yellow,
       bold = true,
     },
-    ["LeapLabelSecondary"] = {
+    ["FlashLabel"] = {
       fg = scheme.black,
       bg = scheme.yellow,
       bold = true,
