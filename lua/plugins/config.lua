@@ -82,7 +82,7 @@ return {
   {
     "folke/which-key.nvim",
     opts = {
-      defaults = {
+      spec = {
         ["<leader>gd"] = { name = "+Diffview" },
         ["<leader>ct"] = { name = "+TaskRunner" },
       },
