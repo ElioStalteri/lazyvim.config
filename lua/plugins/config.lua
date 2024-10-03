@@ -28,11 +28,14 @@ return {
   },
   -- { "nvim-treesitter/playground" },
   -- { "ofirgall/ofirkai.nvim", lazy = false },
+  { "rose-pine/neovim", lazy = false, name = "rose-pine" },
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   { "ElioStalteri/ofirkai.nvim", lazy = false, opts = { custom_theme = true } },
   {
     "LazyVim/LazyVim",
     opts = {
       colorscheme = "ofirkai-custom",
+      -- colorscheme = "catppuccin",
     },
   },
   {

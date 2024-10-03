@@ -9,3 +9,4 @@ vim.opt.foldlevel = 99
 vim.g.markdown_folding = 1 -- enable markdown folding
 vim.g.autoformat = false
 vim.g.lazygit_config = false
+vim.opt.clipboard = "unnamed,unnamedplus"
