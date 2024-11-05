@@ -127,16 +127,33 @@ return {
       local mappings = {
         { "gsa", desc = "Add Surrounding", mode = { "n", "v" } },
         { "gsd", desc = "Delete Surrounding" },
-        { "gsf", desc = "Find Right Surrounding" },
-        { "gsF", desc = "Find Left Surrounding" },
-        { "gsh", desc = "Highlight Surrounding" },
         { "gsr", desc = "Replace Surrounding" },
-        { "gsn", desc = "Update `MiniSurround.config.n_lines`" },
       }
       mappings = vim.tbl_filter(function(m)
         return m[1] and #m[1] > 0
       end, mappings)
       return vim.list_extend(mappings, keys)
     end,
+  },
+  {
+    "akinsho/bufferline.nvim",
+    version = "*",
+    dependencies = { "nvim-tree/nvim-web-devicons", "folke/edgy.nvim" },
+    opts = {},
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    },
   },
 }
