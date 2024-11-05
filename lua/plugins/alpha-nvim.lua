@@ -26,7 +26,7 @@ local function header_whith_color()
   local lines = {}
   math.randomseed(os.time())
   math.random()
-  local offset = math.random(360) + 1
+  local offset = math.random(360)
   for i, text in pairs(vim.split(logo, "\n")) do
     local hi = "gradient" .. math.fmod((i * 12 + offset), 359)
     local line_chars = text
@@ -35,7 +35,7 @@ local function header_whith_color()
       val = line_chars,
       opts = {
         hl = hi,
-        -- shrink_margin = false,
+        shrink_margin = false,
         position = "center",
       },
     }
@@ -49,6 +49,22 @@ local function header_whith_color()
   }
 
   return output
+end
+
+local function info()
+  local plugins = #vim.tbl_keys(require("lazy").plugins())
+  local v = vim.version()
+  local datetime = os.date(" %d-%m-%Y")
+  local platform = vim.fn.has("win32") == 1 and "" or ""
+  return string.format(
+    "󰂖 plugins %d, %s nvim %d.%d.%d, date %s",
+    plugins,
+    platform,
+    v.major,
+    v.minor,
+    v.patch,
+    datetime
+  )
 end
 
 return {
@@ -67,11 +83,30 @@ return {
     dashboard.section.header.val = nil
     dashboard.opts.layout[2] = header_whith_color()
 
+    local buttons = {
+      type = "group",
+      position = "center",
+      val = {
+        { type = "padding", val = 1 },
+        {
+          type = "text",
+          val = info(),
+          opts = { hl = "Keyword", position = "center" },
+        },
+        { type = "padding", val = 1 },
+        { type = "padding", val = 1 },
+        { type = "padding", val = 1 },
+      },
+    }
+
+    dashboard.opts.layout[3] = buttons
     dashboard.section.buttons.val = {
-      dashboard.button("e", "  > New file", ":ene <BAR> startinsert <CR>"),
-      dashboard.button("f", "  > Find file", ":Telescope find_files<CR>"),
-      dashboard.button("r", "  > Recent", ":Telescope oldfiles<CR>"),
-      dashboard.button("q", "  > Quit NVIM", ":qa<CR>"),
+      dashboard.button("f", " " .. " Find file", ":Telescope find_files<CR>"),
+      dashboard.button("n", " " .. " New file", ":ene <BAR> startinsert <CR>"),
+      dashboard.button("s", " " .. " Restore Session", [[<cmd> lua require("persistence").load() <cr>]]),
+      dashboard.button("r", " " .. " Recent files", ":Telescope oldfiles<CR>"),
+      dashboard.button("l", "󰒲 " .. " Lazy", "<cmd> Lazy <cr>"),
+      dashboard.button("q", " " .. " Quit", "<cmd> qa <cr>"),
     }
 
     require("alpha").setup(dashboard.config)

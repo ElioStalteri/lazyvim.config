@@ -1,11 +1,3 @@
-local function removebyKey(tab, val)
-  for i, v in ipairs(tab) do
-    if v.id == val then
-      tab[i] = nil
-    end
-  end
-end
-
 return {
   {
     "kristijanhusak/vim-dadbod-ui",
@@ -15,20 +7,6 @@ return {
     },
   },
   { "mbbill/undotree" },
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   opts = {
-  --     inlay_hints = { enabled = false },
-  --   },
-  --   init = function()
-  --     local keys = require("lazyvim.plugins.lsp.keymaps").get()
-  --     removebyKey(keys, "<Tab>")
-  --     removebyKey(keys, "<S-Tab>")
-  --
-  --     -- change a keymap
-  --     keys[#keys + 1] = { mode = { "n" }, "gr", "<cmd>Trouble lsp_references<cr>", desc = "References" }
-  --   end,
-  -- },
   -- { "nvim-treesitter/playground" },
   -- { "ofirgall/ofirkai.nvim", lazy = false },
   { "rose-pine/neovim", lazy = false, name = "rose-pine" },
@@ -42,42 +20,17 @@ return {
       vim.cmd.colorscheme("ofirkai-custom")
     end,
   },
-  -- {
-  --   "LazyVim/LazyVim",
-  --   opts = {
-  --     colorscheme = "ofirkai-custom",
-  --     -- colorscheme = "catppuccin",
-  --   },
-  -- },
-  -- {
-  --   "L3MON4D3/LuaSnip",
-  --   keys = function()
-  --     return {}
-  --   end,
-  -- },
-  -- {
-  --   "nvim-treesitter/nvim-treesitter",
-  --   opts = function(_, opts)
-  --     vim.list_extend(opts.ensure_installed, {
-  --       "svelte",
-  --       "sql",
-  --       "http",
-  --       "json",
-  --     })
-  --   end,
-  -- },
-  -- {
-  --   "folke/zen-mode.nvim",
-  --   opts = {
-  --     window = {
-  --       width = 140,
-  --     },
-  --   },
-  -- },
-  -- {
-  --   "stevearc/overseer.nvim",
-  --   opts = {},
-  -- },
+  {
+    "folke/zen-mode.nvim",
+    opts = {
+      window = {
+        width = 140,
+      },
+    },
+    keys = {
+      { "<leader>z", "<cmd>ZenMode<cr>", desc = "Toggle zen mode" },
+    },
+  },
   {
     "akinsho/toggleterm.nvim",
     lazy = false,
@@ -92,16 +45,6 @@ return {
       { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
     },
   },
-  -- { "sindrets/diffview.nvim", opts = {} },
-  -- {
-  --   "folke/which-key.nvim",
-  --   opts = {
-  --     spec = {
-  --       ["<leader>gd"] = { name = "+Diffview" },
-  --       ["<leader>ct"] = { name = "+TaskRunner" },
-  --     },
-  --   },
-  -- },
   {
     "stevearc/oil.nvim",
     opts = {
@@ -118,23 +61,6 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
   -- { "tpope/vim-fugitive" },
-  -- { "IndianBoy42/tree-sitter-just" },
-  {
-    "echasnovski/mini.surround",
-    recommended = true,
-    keys = function(_, keys)
-      -- Populate the keys based on the user's options
-      local mappings = {
-        { "gsa", desc = "Add Surrounding", mode = { "n", "v" } },
-        { "gsd", desc = "Delete Surrounding" },
-        { "gsr", desc = "Replace Surrounding" },
-      }
-      mappings = vim.tbl_filter(function(m)
-        return m[1] and #m[1] > 0
-      end, mappings)
-      return vim.list_extend(mappings, keys)
-    end,
-  },
   {
     "akinsho/bufferline.nvim",
     version = "*",
@@ -155,5 +81,46 @@ return {
       --   If not available, we use `mini` as the fallback
       "rcarriga/nvim-notify",
     },
+  },
+  {
+    "folke/persistence.nvim",
+    event = "BufReadPre", -- this will only start session saving when an actual file was opened
+    opts = {
+      dir = vim.fn.stdpath("state") .. "/sessions/", -- directory where session files are saved
+      -- minimum number of file buffers that need to be open to save
+      -- Set to 0 to always save
+      need = 1,
+      branch = true, -- use git branch to save session
+    },
+    -- keys = {
+    --   {
+    --     "<leader>qs",
+    --     function()
+    --       require("persistence").load()
+    --     end,
+    --     desc = "Restore Session",
+    --   },
+    --   {
+    --     "<leader>qS",
+    --     function()
+    --       require("persistence").select()
+    --     end,
+    --     desc = "Select Session",
+    --   },
+    --   {
+    --     "<leader>ql",
+    --     function()
+    --       require("persistence").load({ last = true })
+    --     end,
+    --     desc = "Restore Last Session",
+    --   },
+    --   {
+    --     "<leader>qd",
+    --     function()
+    --       require("persistence").stop()
+    --     end,
+    --     desc = "Don't Save Current Session",
+    --   },
+    -- },
   },
 }
