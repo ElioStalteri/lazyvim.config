@@ -15,35 +15,46 @@ return {
     },
   },
   { "mbbill/undotree" },
-  {
-    "neovim/nvim-lspconfig",
-    init = function()
-      local keys = require("lazyvim.plugins.lsp.keymaps").get()
-      removebyKey(keys, "<Tab>")
-      removebyKey(keys, "<S-Tab>")
-
-      -- change a keymap
-      keys[#keys + 1] = { mode = { "n" }, "gr", "<cmd>Trouble lsp_references<cr>", desc = "References" }
-    end,
-  },
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   opts = {
+  --     inlay_hints = { enabled = false },
+  --   },
+  --   init = function()
+  --     local keys = require("lazyvim.plugins.lsp.keymaps").get()
+  --     removebyKey(keys, "<Tab>")
+  --     removebyKey(keys, "<S-Tab>")
+  --
+  --     -- change a keymap
+  --     keys[#keys + 1] = { mode = { "n" }, "gr", "<cmd>Trouble lsp_references<cr>", desc = "References" }
+  --   end,
+  -- },
   -- { "nvim-treesitter/playground" },
   -- { "ofirgall/ofirkai.nvim", lazy = false },
   { "rose-pine/neovim", lazy = false, name = "rose-pine" },
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-  { "ElioStalteri/ofirkai.nvim", lazy = false, opts = { custom_theme = true } },
   {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "ofirkai-custom",
-      -- colorscheme = "catppuccin",
-    },
-  },
-  {
-    "L3MON4D3/LuaSnip",
-    keys = function()
-      return {}
+    "ElioStalteri/ofirkai.nvim",
+    lazy = false,
+    opts = { custom_theme = true },
+    priority = 1000, -- Make sure to load this before all the other start plugins.
+    init = function()
+      vim.cmd.colorscheme("ofirkai-custom")
     end,
   },
+  -- {
+  --   "LazyVim/LazyVim",
+  --   opts = {
+  --     colorscheme = "ofirkai-custom",
+  --     -- colorscheme = "catppuccin",
+  --   },
+  -- },
+  -- {
+  --   "L3MON4D3/LuaSnip",
+  --   keys = function()
+  --     return {}
+  --   end,
+  -- },
   -- {
   --   "nvim-treesitter/nvim-treesitter",
   --   opts = function(_, opts)
@@ -55,18 +66,18 @@ return {
   --     })
   --   end,
   -- },
-  {
-    "folke/zen-mode.nvim",
-    opts = {
-      window = {
-        width = 140,
-      },
-    },
-  },
-  {
-    "stevearc/overseer.nvim",
-    opts = {},
-  },
+  -- {
+  --   "folke/zen-mode.nvim",
+  --   opts = {
+  --     window = {
+  --       width = 140,
+  --     },
+  --   },
+  -- },
+  -- {
+  --   "stevearc/overseer.nvim",
+  --   opts = {},
+  -- },
   {
     "akinsho/toggleterm.nvim",
     lazy = false,
@@ -78,19 +89,19 @@ return {
     end,
     keys = {
       { [[<C-/>]] },
-      { "<leader>t", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
+      { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
     },
   },
-  { "sindrets/diffview.nvim", opts = {} },
-  {
-    "folke/which-key.nvim",
-    opts = {
-      spec = {
-        ["<leader>gd"] = { name = "+Diffview" },
-        ["<leader>ct"] = { name = "+TaskRunner" },
-      },
-    },
-  },
+  -- { "sindrets/diffview.nvim", opts = {} },
+  -- {
+  --   "folke/which-key.nvim",
+  --   opts = {
+  --     spec = {
+  --       ["<leader>gd"] = { name = "+Diffview" },
+  --       ["<leader>ct"] = { name = "+TaskRunner" },
+  --     },
+  --   },
+  -- },
   {
     "stevearc/oil.nvim",
     opts = {
@@ -106,5 +117,26 @@ return {
     -- Optional dependencies
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
-  { "tpope/vim-fugitive" },
+  -- { "tpope/vim-fugitive" },
+  -- { "IndianBoy42/tree-sitter-just" },
+  {
+    "echasnovski/mini.surround",
+    recommended = true,
+    keys = function(_, keys)
+      -- Populate the keys based on the user's options
+      local mappings = {
+        { "gsa", desc = "Add Surrounding", mode = { "n", "v" } },
+        { "gsd", desc = "Delete Surrounding" },
+        { "gsf", desc = "Find Right Surrounding" },
+        { "gsF", desc = "Find Left Surrounding" },
+        { "gsh", desc = "Highlight Surrounding" },
+        { "gsr", desc = "Replace Surrounding" },
+        { "gsn", desc = "Update `MiniSurround.config.n_lines`" },
+      }
+      mappings = vim.tbl_filter(function(m)
+        return m[1] and #m[1] > 0
+      end, mappings)
+      return vim.list_extend(mappings, keys)
+    end,
+  },
 }

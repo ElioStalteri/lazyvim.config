@@ -53,15 +53,27 @@ end
 
 return {
   "goolord/alpha-nvim",
-  opts = function()
+  -- opts = function()
+  --   local dashboard = require("alpha.themes.dashboard")
+  --
+  --   dashboard.section.header.val = nil
+  --   dashboard.opts.layout[2] = header_whith_color()
+  --
+  --   return dashboard
+  -- end,
+  config = function()
     local dashboard = require("alpha.themes.dashboard")
 
     dashboard.section.header.val = nil
     dashboard.opts.layout[2] = header_whith_color()
 
-    return dashboard
+    dashboard.section.buttons.val = {
+      dashboard.button("e", "  > New file", ":ene <BAR> startinsert <CR>"),
+      dashboard.button("f", "  > Find file", ":Telescope find_files<CR>"),
+      dashboard.button("r", "  > Recent", ":Telescope oldfiles<CR>"),
+      dashboard.button("q", "  > Quit NVIM", ":qa<CR>"),
+    }
+
+    require("alpha").setup(dashboard.config)
   end,
-  -- config = function()
-  --   require("alpha").setup(configure())
-  -- end,
 }
