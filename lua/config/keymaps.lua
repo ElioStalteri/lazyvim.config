@@ -26,6 +26,8 @@ map("n", "<leader>td", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
 -- map("v", "\\p", '"_dP', { desc = "paste without looding copy register" })
 --
 map("n", "<leader>tu", ":UndotreeToggle<CR>", { desc = "Toggle undo tree" })
+
+map("n", "<leader>xr", ":call VrcQuery()<CR>", { desc = "exec HTTP request" })
 --
 -- map("n", "<leader>ctt", ":OverseerToggle<CR>", { desc = "Toggle task runner" })
 -- map("n", "<leader>ctr", ":OverseerRun<CR>", { desc = "Run task" })

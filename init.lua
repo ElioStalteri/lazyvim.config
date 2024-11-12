@@ -230,6 +230,7 @@ require("lazy").setup({
           { "<leader>s", group = "search" },
           { "<leader>w", group = "window" },
           { "<leader>b", group = "buffer" },
+          { "<leader>x", group = "exec" },
           { "<leader>u", group = "ui", icon = { icon = "󰙵 ", color = "cyan" } },
           { "[", group = "prev" },
           { "]", group = "next" },
@@ -893,7 +894,7 @@ require("lazy").setup({
   require("plugins.rest"),
   require("plugins.alpha-nvim"),
   require("plugins.neotree"),
-  require("plugins.lazygit"),
+  require("plugins.git"),
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
