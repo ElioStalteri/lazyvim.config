@@ -9,8 +9,8 @@ return {
   { "mbbill/undotree" },
   -- { "nvim-treesitter/playground" },
   -- { "ofirgall/ofirkai.nvim", lazy = false },
-  { "rose-pine/neovim", lazy = false, name = "rose-pine" },
-  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  -- { "rose-pine/neovim", lazy = false, name = "rose-pine" },
+  -- { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   {
     "ElioStalteri/ofirkai.nvim",
     lazy = false,
@@ -28,7 +28,7 @@ return {
       },
     },
     keys = {
-      { "<leader>z", "<cmd>ZenMode<cr>", desc = "Toggle zen mode" },
+      { "<leader>tz", "<cmd>ZenMode<cr>", desc = "Toggle zen mode" },
     },
   },
   {
