@@ -163,34 +163,77 @@ return {
       { "<leader>cS", "<cmd>Trouble lsp toggle<cr>", desc = "LSP references/definitions/... (Trouble)" },
       { "<leader>xL", "<cmd>Trouble loclist toggle<cr>", desc = "Location List (Trouble)" },
       { "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
-      -- {
-      --   "[q",
-      --   function()
-      --     if require("trouble").is_open() then
-      --       require("trouble").prev({ skip_groups = true, jump = true })
-      --     else
-      --       local ok, err = pcall(vim.cmd.cprev)
-      --       if not ok then
-      --         vim.notify(err, vim.log.levels.ERROR)
-      --       end
-      --     end
-      --   end,
-      --   desc = "Previous Trouble/Quickfix Item",
-      -- },
-      -- {
-      --   "]q",
-      --   function()
-      --     if require("trouble").is_open() then
-      --       require("trouble").next({ skip_groups = true, jump = true })
-      --     else
-      --       local ok, err = pcall(vim.cmd.cnext)
-      --       if not ok then
-      --         vim.notify(err, vim.log.levels.ERROR)
-      --       end
-      --     end
-      --   end,
-      --   desc = "Next Trouble/Quickfix Item",
-      -- },
+    },
+  },
+  { -- Collection of various small independent plugins/modules
+    "echasnovski/mini.nvim",
+    config = function()
+      -- Better Around/Inside textobjects
+      --
+      -- Examples:
+      --  - va)  - Visually select Around )paren
+      --  - yinq - Yank Inside Next Quote
+      --  - ci'  - Change Inside 'quote
+      require("mini.ai").setup({ n_lines = 500 })
+
+      -- Add/delete/replace surroundings (brackets, quotes, etc.)
+      --
+      -- - saiw) - Surround Add Inner Word )Paren
+      -- - sd'   - Surround Delete 'quotes
+      -- - sr)'  - Surround Replace ) '
+      require("mini.surround").setup()
+
+      -- Simple and easy statusline.
+      --  You could remove this setup call if you don't like it,
+      --  and try some other statusline plugin
+      local statusline = require("mini.statusline")
+      -- set use_icons to true if you have a Nerd Font
+      statusline.setup({ use_icons = vim.g.have_nerd_font })
+
+      -- You can configure sections in the statusline by overriding their
+      -- default behavior. For example, here we set the section for
+      -- cursor location to LINE:COLUMN
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_location = function()
+        return "%2l:%-2v"
+      end
+
+      -- ... and there is more!
+      --  Check out: https://github.com/echasnovski/mini.nvim
+    end,
+  },
+  -- Highlight todo, notes, etc in comments
+  {
+    "folke/todo-comments.nvim",
+    event = "VimEnter",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = { signs = false },
+  },
+  {
+    "declancm/cinnamon.nvim",
+    version = "*", -- use latest release
+    opts = {
+      keymaps = {
+        -- Enable the provided 'basic' keymaps
+        -- basic = true,
+        -- Enable the provided 'extra' keymaps
+        -- extra = true,
+      },
+      options = { mode = "window", delay = 3 },
+    },
+  },
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false, -- Recommended
+    -- ft = "markdown" -- If you decide to lazy-load anyway
+
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
+
+    keys = {
+      { "<leader>tm", "<cmd>Markview<cr>", desc = "Toggle Markdown view" },
     },
   },
 }

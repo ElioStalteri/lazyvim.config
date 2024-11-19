@@ -13,8 +13,15 @@ local function map(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, options)
 end
 
-map("n", "<C-d>", "<C-d>zz", { remap = true })
-map("n", "<C-u>", "<C-u>zz", { remap = true })
+-- map("n", "<C-d>", "<C-d>zz", { remap = true })
+-- map("n", "<C-u>", "<C-u>zz", { remap = true })
+vim.keymap.set("n", "<C-U>", function()
+  require("cinnamon").scroll("<C-U>zz")
+end)
+vim.keymap.set("n", "<C-D>", function()
+  require("cinnamon").scroll("<C-D>zz")
+end)
+
 map("n", "<leader>td", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
 -- map("n", "<leader>z", "<cmd>ZenMode<cr>", { desc = "Toggle ZenMode" })
 --
