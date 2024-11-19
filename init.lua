@@ -466,6 +466,16 @@ require("lazy").setup({
           -- or a suggestion from your LSP for this to activate.
           map("<leader>ca", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
 
+          map("<leader>cA", function()
+            vim.lsp.buf.code_action({
+              apply = true,
+              context = {
+                only = { "source" },
+                diagnostics = {},
+              },
+            })
+          end, "Source Action", { "n", "x" })
+
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
           map("gD", vim.lsp.buf.declaration, "Goto Declaration")
