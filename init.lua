@@ -460,7 +460,7 @@ require("lazy").setup({
 
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
-          -- map("<leader>cr", vim.lsp.buf.rename, "Rename")
+          map("<leader>cr", vim.lsp.buf.rename, "Rename")
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.

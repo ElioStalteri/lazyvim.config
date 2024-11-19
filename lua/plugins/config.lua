@@ -132,20 +132,20 @@ return {
       { "]y", "<Plug>(YankyCycleBackward)", desc = "Cycle Backward Through Yank History" },
     },
   },
-  {
-    "saecki/live-rename.nvim",
-    opts = {},
-    keys = {
-      {
-        "<leader>cr",
-        function()
-          require("live-rename").rename({ insert = true })
-        end,
-        mode = { "n" },
-        desc = "LSP Rename",
-      },
-    },
-  },
+  -- {
+  --   "saecki/live-rename.nvim",
+  --   opts = {},
+  --   keys = {
+  --     {
+  --       "<leader>cr",
+  --       function()
+  --         require("live-rename").rename({ insert = true })
+  --       end,
+  --       mode = { "n" },
+  --       desc = "LSP Rename",
+  --     },
+  --   },
+  -- },
   {
     "folke/trouble.nvim",
     cmd = { "Trouble" },
