@@ -32,7 +32,7 @@ return {
     },
     config = true,
     keys = {
-      { "<leader>gG", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+      { "<leader>gG", "<cmd>Neogit<cr>", desc = "NeoGit" },
     },
   },
 }

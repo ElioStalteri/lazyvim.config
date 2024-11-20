@@ -183,6 +183,7 @@ require("lazy").setup({
     "folke/which-key.nvim",
     event = "VimEnter", -- Sets the loading event to 'VimEnter'
     opts = {
+      preset = "helix",
       icons = {
         -- set icon mappings to true if you have a Nerd Font
         mappings = vim.g.have_nerd_font,
@@ -842,6 +843,7 @@ require("lazy").setup({
   require("plugins.alpha-nvim"),
   require("plugins.neotree"),
   require("plugins.git"),
+  require("plugins.snacks"),
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
