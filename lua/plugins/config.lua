@@ -237,10 +237,6 @@ return {
     },
   },
   {
-    "stevearc/dressing.nvim",
-    opts = {},
-  },
-  {
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     opts = {
