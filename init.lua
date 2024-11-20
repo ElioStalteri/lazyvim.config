@@ -225,14 +225,15 @@ require("lazy").setup({
       spec = {
         {
           mode = { "n", "v" },
-          { "<leader>c", group = "code" },
-          { "<leader>g", group = "git" },
-          { "<leader>t", group = "Toggle" },
-          { "<leader>s", group = "search" },
-          { "<leader>w", group = "window" },
-          { "<leader>b", group = "buffer" },
-          { "<leader>x", group = "exec" },
-          { "<leader>u", group = "ui", icon = { icon = "󰙵 ", color = "cyan" } },
+          { "<leader>c", group = "code", icon = { icon = " ", color = "orange" } },
+          { "<leader>g", group = "git", icon = { icon = " ", color = "red" } },
+          { "<leader>t", group = "Toggle", icon = { icon = "󰞏 ", color = "yellow" } },
+          { "<leader>s", group = "search", icon = { icon = " ", color = "blue" } },
+          { "<leader>w", group = "window", icon = { icon = " ", color = "blue" } },
+          { "<leader>b", group = "buffer", icon = { icon = "󰌒 ", color = "white" } },
+          { "<leader>x", group = "exec", icon = { icon = " ", color = "orange" } },
+          { "<leader>u", group = "ui", icon = { icon = " ", color = "orange" } },
+          { "<leader>q", group = "Close All", icon = { icon = "󱎘 ", color = "red" } },
           { "[", group = "prev" },
           { "]", group = "next" },
           { "g", group = "goto" },
@@ -334,7 +335,7 @@ require("lazy").setup({
       vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "Search by Grep" })
       vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "Search Diagnostics" })
       vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = 'Search Recent Files ("." for repeat)' })
-      vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "  Find existing buffers" })
+      vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "Find existing buffers" })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set("n", "<leader>/", function()
