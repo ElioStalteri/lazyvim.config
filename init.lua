@@ -334,6 +334,8 @@ require("lazy").setup({
       vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "Search current Word" })
       vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "Search by Grep" })
       vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "Search Diagnostics" })
+      vim.keymap.set("n", "<leader>sc", builtin.commands, { desc = "Search commands" })
+      vim.keymap.set("n", "<leader>sC", builtin.command_history, { desc = "Search commands history" })
       vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = 'Search Recent Files ("." for repeat)' })
       vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "Find existing buffers" })
 
