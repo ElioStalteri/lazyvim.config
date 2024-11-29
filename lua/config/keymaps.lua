@@ -48,7 +48,7 @@ map("n", "<leader>xr", ":call VrcQuery()<CR>", { desc = "exec HTTP request" })
 
 map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
-map("n", "<leader>q", ":confirm qa<CR>", { desc = "Close All" })
+map("n", "<leader>q", "<CMD>Neotree close<CR><CMD>confirm qa<CR>", { desc = "Close All" })
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
 map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
