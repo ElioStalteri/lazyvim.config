@@ -490,6 +490,7 @@ require("lazy").setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
+
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
@@ -511,6 +512,24 @@ require("lazy").setup({
                 vim.api.nvim_clear_autocmds({ group = "kickstart-lsp-highlight", buffer = event2.buf })
               end,
             })
+          end
+
+          -- prevent tsserver and denols competeing
+          local active_clients = vim.lsp.get_clients()
+          if client ~= nil and client.name == "denols" then
+            for _, client_ in pairs(active_clients) do
+              -- stop tsserver if denols is already active
+              if client_.name == "vtsls" then
+                client_.stop()
+              end
+            end
+          elseif client ~= nil and client.name == "vtsls" then
+            for _, client_ in pairs(active_clients) do
+              -- prevent tsserver from starting if denols is already active
+              if client_.name == "denols" then
+                client.stop()
+              end
+            end
           end
 
           -- The following code creates a keymap to toggle inlay hints in your

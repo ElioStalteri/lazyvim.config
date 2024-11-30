@@ -15,7 +15,7 @@ return {
     "ElioStalteri/ofirkai.nvim",
     lazy = false,
     opts = { custom_theme = true },
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+    priority = 9000, -- Make sure to load this before all the other start plugins.
     init = function()
       vim.cmd.colorscheme("ofirkai-custom")
     end,
@@ -264,5 +264,8 @@ return {
         desc = "Harpoon Quick Menu",
       },
     },
+  },
+  {
+    "sigmasd/deno-nvim",
   },
 }
