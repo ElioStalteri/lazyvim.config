@@ -275,4 +275,18 @@ return {
   {
     "sigmasd/deno-nvim",
   },
+  {
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    opts = { default_mappings = true },
+    keys = {
+      { "<leader>gcc", "<cmd>GitConflictListQf<cr>", desc = "Open conflic list" },
+      { "<leader>gci", "<cmd>GitConflictChooseTheirs<cr>", desc = "Accept incoming" },
+      { "<leader>gcc", "<cmd>GitConflictChooseOurs<cr>", desc = "Accept current" },
+      { "<leader>gcb", "<cmd>GitConflictChooseBoth<cr>", desc = "Accept both" },
+      { "<leader>gcd", "<cmd>GitConflictChooseNone<cr>", desc = "Discard both" },
+      { "<leader>gcn", "<cmd>GitConflictNextConflict<cr>", desc = "go to nex" },
+      { "<leader>gcp", "<cmd>GitConflictPrevConflict<cr>", desc = "go to prev" },
+    },
+  },
 }
