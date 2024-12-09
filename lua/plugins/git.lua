@@ -20,13 +20,22 @@ return {
     },
   },
   {
-    "tpope/vim-fugitive",
+    "sindrets/diffview.nvim",
     opts = {},
     keys = {
-      { "<leader>gcl", "<cmd>Git mergetool<cr>", desc = "Open conflic list" },
-      { "<leader>gcd", "<cmd>Gdiff<cr>", desc = "open diff view" },
+      { "<leader>go", "<cmd>DiffviewOpen<cr>", desc = "Diffview open" },
+      { "<leader>gc", "<cmd>DiffviewClose<cr>", desc = "Diffview close" },
+      { "<leader>gf", "<cmd>DiffviewToggleFiles<cr>", desc = "Diffview files toggle" },
     },
   },
+  -- {
+  --   "tpope/vim-fugitive",
+  --   opts = {},
+  --   keys = {
+  --     { "<leader>gcl", "<cmd>Git mergetool<cr>", desc = "Open conflic list" },
+  --     { "<leader>gcd", "<cmd>Gdiff<cr>", desc = "open diff view" },
+  --   },
+  -- },
   -- {
   --   "NeogitOrg/neogit",
   --   dependencies = {
