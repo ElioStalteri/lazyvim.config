@@ -19,7 +19,20 @@ return {
       { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
     },
   },
-  { "akinsho/git-conflict.nvim", version = "*", config = true },
+  {
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    opts = {
+      default_mappings = {
+        ours = "<leader>Co",
+        theirs = "<leader>Ct",
+        none = "<leader>C0",
+        both = "<leader>Cb",
+        next = "<leader>Cn",
+        prev = "<leader>Cp",
+      },
+    },
+  },
   -- {
   --   "sindrets/diffview.nvim",
   --   opts = {
