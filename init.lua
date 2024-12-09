@@ -533,16 +533,6 @@ require("lazy").setup({
               end
             end
           end
-
-          -- The following code creates a keymap to toggle inlay hints in your
-          -- code, if the language server you are using supports them
-          --
-          -- This may be unwanted, since they displace some of your code
-          -- if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-          --   map("<leader>th", function()
-          --     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-          --   end, "Toggle Inlay Hints")
-          -- end
         end,
       })
 
@@ -749,7 +739,7 @@ require("lazy").setup({
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
-          --['<CR>'] = cmp.mapping.confirm { select = true },
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
           --['<Tab>'] = cmp.mapping.select_next_item(),
           --['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
