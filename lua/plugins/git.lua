@@ -19,13 +19,7 @@ return {
       { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
     },
   },
-  {
-    "rhysd/conflict-marker.vim",
-    config = function()
-      -- require("conflict-marker").setup({})
-      -- vim.cmd("packadd conflict-marker.vim")
-    end,
-  },
+  { "akinsho/git-conflict.nvim", version = "*", config = true },
   -- {
   --   "sindrets/diffview.nvim",
   --   opts = {
