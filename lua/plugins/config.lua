@@ -280,7 +280,7 @@ return {
     version = "*",
     opts = { default_mappings = true },
     keys = {
-      { "<leader>gcc", "<cmd>GitConflictListQf<cr>", desc = "Open conflic list" },
+      { "<leader>gcl", "<cmd>GitConflictListQf<cr>", desc = "Open conflic list" },
       { "<leader>gci", "<cmd>GitConflictChooseTheirs<cr>", desc = "Accept incoming" },
       { "<leader>gcc", "<cmd>GitConflictChooseOurs<cr>", desc = "Accept current" },
       { "<leader>gcb", "<cmd>GitConflictChooseBoth<cr>", desc = "Accept both" },
