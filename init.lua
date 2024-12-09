@@ -228,6 +228,7 @@ require("lazy").setup({
           { "<leader>c", group = "code", icon = { icon = " ", color = "orange" } },
           { "<leader>g", group = "git", icon = { icon = " ", color = "red" } },
           { "<leader>t", group = "Toggle", icon = { icon = "󰞏 ", color = "yellow" } },
+          { "<leader>C", group = "Conflicts", icon = { icon = "📛 ", color = "red" } },
           { "<leader>n", group = "Notifications", icon = { icon = "📥 ", color = "yellow" } },
           { "<leader>s", group = "search", icon = { icon = " ", color = "blue" } },
           { "<leader>w", group = "window", icon = { icon = " ", color = "blue" } },
