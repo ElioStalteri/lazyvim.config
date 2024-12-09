@@ -68,10 +68,17 @@ return {
     opts = {},
   },
   {
+    "stevearc/dressing.nvim",
+    opts = {},
+  },
+  {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
       -- add any options here
+      messages = { enabled = false },
+      popupmenu = { enabled = false },
+      notify = { enabled = false },
     },
     dependencies = {
       -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries

@@ -22,6 +22,11 @@ return {
         disabled = "yellow",
       },
     },
+    notifier = {
+      enabled = true,
+      timeout = 3000,
+    },
+    quickfile = { enabled = true },
     words = { enabled = true },
     styles = {
       notification = {
@@ -58,6 +63,20 @@ return {
     })
   end,
   keys = {
+    {
+      "<leader>nh",
+      function()
+        Snacks.notifier.show_history()
+      end,
+      desc = "Notification history",
+    },
+    {
+      "<leader>nd",
+      function()
+        Snacks.notifier.hide()
+      end,
+      desc = "Hide notifications",
+    },
     {
       "<leader>bo",
       function()
