@@ -95,3 +95,11 @@ map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 -- highlights under cursor
 map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
 map("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "Inspect Tree" })
+
+map("n", "<leader>fo", "<cmd>copen<cr>", { desc = "open quick fix" })
+map("n", "<leader>fc", "<cmd>cclose<cr>", { desc = "close quick fix" })
+map("n", "<M-j>", "<cmd>cnext<cr>", { desc = "next quick fix" })
+map("n", "<M-k>", "<cmd>cprev<cr>", { desc = "prev quick fix" })
+map("n", "<leader>fd", function()
+  vim.fn.setqflist({}, "r")
+end, { desc = "delete quick fix" })
