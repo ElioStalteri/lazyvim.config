@@ -232,6 +232,7 @@ require("lazy").setup({
           { "<leader>n", group = "Notifications", icon = { icon = "📥 ", color = "yellow" } },
           { "<leader>f", group = "Quickfix", icon = { icon = "📄 ", color = "yellow" } },
           { "<leader>s", group = "Search", icon = { icon = " ", color = "blue" } },
+          { "<leader>a", group = "AI", icon = { icon = "🧠 ", color = "blue" } },
           { "<leader>w", group = "window", icon = { icon = " ", color = "blue" } },
           { "<leader>b", group = "Buffer", icon = { icon = "󰌒 ", color = "white" } },
           { "<leader>x", group = "Exec", icon = { icon = " ", color = "orange" } },
@@ -863,6 +864,7 @@ require("lazy").setup({
   require("plugins.neotree"),
   require("plugins.git"),
   require("plugins.snacks"),
+  require("plugins.codeium"),
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
