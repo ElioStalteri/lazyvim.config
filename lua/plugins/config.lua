@@ -61,12 +61,12 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
   -- { "tpope/vim-fugitive" },
-  {
-    "akinsho/bufferline.nvim",
-    version = "*",
-    dependencies = { "nvim-tree/nvim-web-devicons", "folke/edgy.nvim" },
-    opts = {},
-  },
+  -- {
+  --   "akinsho/bufferline.nvim",
+  --   version = "*",
+  --   dependencies = { "nvim-tree/nvim-web-devicons", "folke/edgy.nvim" },
+  --   opts = {},
+  -- },
   {
     "stevearc/dressing.nvim",
     opts = {},
@@ -215,6 +215,9 @@ return {
     event = "VimEnter",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = { signs = false },
+    keys = {
+      { "<leader>ct", "<cmd>TodoQuickFix<cr>", desc = "TODO QuickFix" },
+    },
   },
   {
     "declancm/cinnamon.nvim",
