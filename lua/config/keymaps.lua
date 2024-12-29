@@ -67,8 +67,9 @@ map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 -- map("n", "<leader>bd", ":bd<cr>", { desc = "Delete Buffer" })
-map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+-- replaced by harpoon pre and next
+-- map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+-- map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
@@ -103,3 +104,5 @@ map("n", "<M-k>", "<cmd>cprev<cr>", { desc = "prev quick fix" })
 map("n", "<leader>fd", function()
   vim.fn.setqflist({}, "r")
 end, { desc = "delete quick fix" })
+
+map("n", "<leader>bl", "<CMD>Telescope buffers<CR>", { desc = "buffer list" })

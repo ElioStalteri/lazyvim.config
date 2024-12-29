@@ -317,10 +317,25 @@ require("lazy").setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          find_files = {
+            theme = "ivy",
+          },
+          live_grep = {
+            theme = "ivy",
+          },
+          buffers = {
+            theme = "ivy",
+            mappings = {
+              i = {
+                ["<c-d>"] = "delete_buffer",
+              },
+            },
+          },
+        },
         extensions = {
           ["ui-select"] = {
-            require("telescope.themes").get_dropdown(),
+            require("telescope.themes").get_ivy(),
           },
         },
       })
