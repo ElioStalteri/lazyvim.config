@@ -306,7 +306,7 @@ require("lazy").setup({
       -- This opens a window that shows you all of the keymaps for the current
       -- Telescope picker. This is really useful to discover what Telescope can
       -- do as well as how to actually do it!
-
+      local builtin_schemes = require("telescope._extensions.themes").builtin_schemes
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       require("telescope").setup({
@@ -337,6 +337,40 @@ require("lazy").setup({
         extensions = {
           ["ui-select"] = {
             require("telescope.themes").get_ivy(),
+          },
+          themes = {
+
+            -- (boolean) -> show/hide previewer window
+            enable_previewer = true,
+
+            -- (boolean) -> enable/disable live preview
+            enable_live_preview = true,
+
+            ignore = vim.list_extend(builtin_schemes, { "embark" }),
+
+            -- (table)
+            -- (boolean) ignore -> toggle ignore light themes
+            -- (list) keywords -> list of keywords that would identify as light theme
+            light_themes = {
+              ignore = true,
+              keywords = { "light", "day", "frappe" },
+            },
+
+            -- (table)
+            -- (boolean) ignore -> toggle ignore dark themes
+            -- (list) keywords -> list of keywords that would identify as dark theme
+            dark_themes = {
+              ignore = false,
+              keywords = { "dark", "night", "black" },
+            },
+
+            persist = {
+              -- enable persisting last theme choice
+              enabled = true,
+
+              -- override path to file that execute colorscheme command
+              path = vim.fn.stdpath("config") .. "/lua/colorscheme.lua",
+            },
           },
         },
       })
@@ -908,5 +942,6 @@ require("lazy").setup({
 
 require("config.keymaps")
 require("config.options")
+require("colorscheme")
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

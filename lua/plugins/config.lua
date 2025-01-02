@@ -11,14 +11,15 @@ return {
   -- { "ofirgall/ofirkai.nvim", lazy = false },
   -- { "rose-pine/neovim", lazy = false, name = "rose-pine" },
   -- { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  { "rebelot/kanagawa.nvim" },
   {
     "ElioStalteri/ofirkai.nvim",
     lazy = false,
     opts = { custom_theme = true },
     priority = 9000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      vim.cmd.colorscheme("ofirkai-custom")
-    end,
+    -- init = function()
+    --   vim.cmd.colorscheme("ofirkai-custom")
+    -- end,
   },
   {
     "folke/zen-mode.nvim",
