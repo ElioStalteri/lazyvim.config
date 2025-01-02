@@ -292,4 +292,21 @@ return {
   {
     "sigmasd/deno-nvim",
   },
+  {
+    "tjdevries/present.nvim",
+    config = function()
+      local present = require("present")
+      present.setup({
+        executors = {
+          js = present.create_system_executor("node"),
+        },
+      })
+    end,
+  },
+  { "uga-rosa/ccc.nvim", opts = {
+    highlighter = {
+      auto_enable = true,
+      lsp = true,
+    },
+  }, lazy = false },
 }
