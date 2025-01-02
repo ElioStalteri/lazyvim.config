@@ -311,7 +311,7 @@ return {
   {
     "sigmasd/deno-nvim",
   },
-  {
+  { -- markdown presentations
     "tjdevries/present.nvim",
     config = function()
       local present = require("present")
@@ -321,6 +321,9 @@ return {
         },
       })
     end,
+    keys = {
+      { "<leader>tp", "<cmd>PresentStart<cr>", desc = "Start markdown presentation" },
+    },
   },
   {
     "uga-rosa/ccc.nvim",
