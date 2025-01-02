@@ -68,8 +68,8 @@ map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 map("n", "<leader>q", "<CMD>Neotree close<CR><CMD>confirm qa<CR>", { desc = "Close All" })
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
-map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
-map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
+-- map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
+-- map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 -- map("n", "<leader>bd", ":bd<cr>", { desc = "Delete Buffer" })
 -- replaced by harpoon pre and next
