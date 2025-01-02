@@ -3,6 +3,12 @@ return {
   priority = 1000,
   lazy = false,
   opts = {
+    lazygit = {
+      configure = false,
+      win = {
+        style = "lazygit",
+      },
+    },
     bigfile = { enabled = true },
     bufDelete = { enabled = true },
     statuscolumn = { enabled = true },
@@ -69,6 +75,13 @@ return {
         Snacks.notifier.show_history()
       end,
       desc = "Notification history",
+    },
+    {
+      "<leader>gg",
+      function()
+        Snacks.lazygit.open()
+      end,
+      desc = "Lazygit",
     },
     {
       "<leader>nd",
