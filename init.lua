@@ -267,6 +267,7 @@ require("lazy").setup({
     event = "VimEnter",
     branch = "0.1.x",
     dependencies = {
+      "andrew-george/telescope-themes",
       "nvim-lua/plenary.nvim",
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         "nvim-telescope/telescope-fzf-native.nvim",
@@ -343,6 +344,7 @@ require("lazy").setup({
       -- Enable Telescope extensions if they are installed
       pcall(require("telescope").load_extension, "fzf")
       pcall(require("telescope").load_extension, "ui-select")
+      pcall(require("telescope").load_extension, "themes")
 
       -- See `:help telescope.builtin`
       local builtin = require("telescope.builtin")

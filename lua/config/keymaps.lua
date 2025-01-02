@@ -98,6 +98,8 @@ map("v", ">", ">gv")
 
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 
+map("n", "<leader>ut", "<cmd>Telescope themes<cr>", { desc = "change theme" })
+
 -- highlights under cursor
 map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
 map("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "Inspect Tree" })

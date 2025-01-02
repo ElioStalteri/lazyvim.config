@@ -122,7 +122,7 @@ end
 M.hl_groups = function(scheme)
   return add_missing({
     ["FloatBorder"] = {
-      fg = scheme.orange,
+      fg = scheme.lightorange,
       -- bg = scheme.ui_bg,
     },
     ["@lsp.type.parameter"] = {
