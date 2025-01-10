@@ -51,9 +51,9 @@ return {
       -- Example Hooks
       -- PrtImplement	Takes the visual selection as prompt to generate code
       -- PrtAsk	Ask the model a question
-      { "<leader>ae", "<cmd>PrtRewrite<cr>", desc = "edit eselction" },
+      { "<leader>ae", "<cmd>PrtRewrite<cr>", mode = { "v" }, desc = "edit eselction" },
       { "<leader>af", "<cmd>PrtChatFinder<cr>", desc = "chat finder" },
-      { "<leader>ai", "<cmd>PrtImplement<cr>", desc = "implement from selection" },
+      { "<leader>ai", "<cmd>PrtImplement<cr>", mode = { "v" }, desc = "implement from selection" },
       { "<leader>ak", "<cmd>PrtAsk<cr>", desc = "ask" },
       { "<leader>ad", "<cmd>PrtChatDelete<cr>", desc = "delete chat" },
       { "<leader>as", "<cmd>PrtStop<cr>", desc = "stop respond" },

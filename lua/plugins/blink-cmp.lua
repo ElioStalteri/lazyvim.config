@@ -12,11 +12,11 @@ return {
     opts = {
       keymap = {
         preset = "default",
-        ["<CR>"] = {
-          function(cmp)
-            cmp.accept()
-          end,
-        },
+        -- ["<CR>"] = {
+        --   function(cmp)
+        --     cmp.accept()
+        --   end,
+        -- },
       },
 
       appearance = {
