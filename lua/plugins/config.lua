@@ -251,18 +251,29 @@ return {
       },
     },
   },
+  -- {
+  --   "OXY2DEV/markview.nvim",
+  --   lazy = false, -- Recommended
+  --   -- ft = "markdown" -- If you decide to lazy-load anyway
+  --
+  --   dependencies = {
+  --     "nvim-treesitter/nvim-treesitter",
+  --     "nvim-tree/nvim-web-devicons",
+  --   },
+  --
+  --   keys = {
+  --     { "<leader>tm", "<cmd>Markview<cr>", desc = "Toggle Markdown view" },
+  --   },
+  -- },
   {
-    "OXY2DEV/markview.nvim",
-    lazy = false, -- Recommended
-    -- ft = "markdown" -- If you decide to lazy-load anyway
-
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-tree/nvim-web-devicons",
-    },
-
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" },
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = { enabled = true },
+    lazy = false,
     keys = {
-      { "<leader>tm", "<cmd>Markview<cr>", desc = "Toggle Markdown view" },
+      { "<leader>tm", "<cmd>RenderMarkdown toggle<cr>", desc = "Toggle Markdown view" },
     },
   },
   {
