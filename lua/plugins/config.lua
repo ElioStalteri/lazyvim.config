@@ -337,7 +337,7 @@ return {
       { "<leader>tp", "<cmd>PresentStart<cr>", desc = "Start markdown presentation" },
     },
   },
-  {
+  { -- color picker and visualizer
     "uga-rosa/ccc.nvim",
     opts = {
       highlighter = {
