@@ -10,8 +10,12 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
+      signature = {
+        enabled = true,
+      },
       keymap = {
         preset = "default",
+        ["<CR>"] = { "accept", "fallback" },
         -- ["<CR>"] = {
         --   function(cmp)
         --     cmp.accept()
