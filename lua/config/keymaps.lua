@@ -102,5 +102,3 @@ map("n", "<M-k>", "<cmd>cprev<cr>", { desc = "prev quick fix" })
 map("n", "<leader>fd", function()
   vim.fn.setqflist({}, "r")
 end, { desc = "delete quick fix" })
-
-map("n", "<leader>bl", "<CMD>Telescope buffers<CR>", { desc = "buffer list" })
