@@ -119,6 +119,8 @@ require("lazy").setup({
   require("plugins.treewalker"),
 
   require("plugins.image"),
+
+  require("plugins.blame"),
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
