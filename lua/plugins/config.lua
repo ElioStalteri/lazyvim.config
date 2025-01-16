@@ -9,10 +9,9 @@ return {
   { "mbbill/undotree" },
   -- { "nvim-treesitter/playground" },
   -- { "ofirgall/ofirkai.nvim", lazy = false },
-  -- { "rose-pine/neovim", lazy = false, name = "rose-pine" },
-  -- { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-  { "rebelot/kanagawa.nvim" },
-  { "rose-pine/neovim" },
+  -- { "rose-pine/neovim" },
+  -- { "catppuccin/nvim" },
+  -- { "rebelot/kanagawa.nvim" },
   {
     "ElioStalteri/ofirkai.nvim",
     lazy = false,
