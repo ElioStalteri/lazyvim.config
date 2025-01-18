@@ -24,6 +24,16 @@ local function add_missing(dst, src)
   return dst -- for convenience (chaining)
 end
 
+-- Background: (46, 46, 46); #282923
+-- Comments: (121, 121, 121); #9ca0a4
+-- White: (214, 214, 214); #f8f8f0
+-- Yellow: (229, 181, 103); #e6db74
+-- Green: (180, 210, 115); #9eda26
+-- Orange: (232, 125, 62); #fd971f
+-- Purple: (158, 134, 200); #ae81ff
+-- Pink: (176, 82, 121); #e95678
+-- Blue: (108, 153, 187); #66d9ef
+
 local M = {}
 
 M.scheme = {
@@ -111,7 +121,7 @@ M.scheme = {
 
 local gradient = {}
 
-for i = 1, 360, 1 do
+for i = 1, 370, 1 do
   gradient["gradient" .. i] = {
     fg = HSV2RGB(i, 1, 1),
   }
