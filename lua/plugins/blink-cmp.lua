@@ -15,7 +15,7 @@ return {
       },
       keymap = {
         preset = "default",
-        ["<CR>"] = { "accept", "fallback" },
+        -- ["<CR>"] = { "accept", "fallback" },
         -- ["<CR>"] = {
         --   function(cmp)
         --     cmp.accept()
