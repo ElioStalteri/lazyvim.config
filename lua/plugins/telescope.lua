@@ -74,6 +74,7 @@ return {
       vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "Search Select Telescope" })
       vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "Search current Word" })
       vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "Search by Grep" })
+      vim.keymap.set("n", "<leader>/", builtin.live_grep, { desc = "Search by Grep" })
       vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "Search Diagnostics" })
       vim.keymap.set("n", "<leader>sc", builtin.commands, { desc = "Search commands" })
       vim.keymap.set("n", "<leader>sC", builtin.command_history, { desc = "Search commands history" })
@@ -86,13 +87,13 @@ return {
       )
 
       -- Slightly advanced example of overriding default behavior and theme
-      vim.keymap.set("n", "<leader>/", function()
-        -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-        builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-          winblend = 10,
-          previewer = false,
-        }))
-      end, { desc = "/ Fuzzily search in current buffer" })
+      -- vim.keymap.set("n", "<leader>/", function()
+      --   -- You can pass additional configuration to Telescope to change the theme, layout, etc.
+      --   builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+      --     winblend = 10,
+      --     previewer = false,
+      --   }))
+      -- end, { desc = "/ Fuzzily search in current buffer" })
 
       -- It's also possible to pass additional configuration options.
       --  See `:help telescope.builtin.live_grep()` for information about particular keys
