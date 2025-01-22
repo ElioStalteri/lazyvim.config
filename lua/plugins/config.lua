@@ -289,48 +289,88 @@ return {
     },
   },
   {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
+    "akinsho/bufferline.nvim",
+    version = "*",
+    dependencies = "nvim-tree/nvim-web-devicons",
     opts = {
-      menu = {
-        width = vim.api.nvim_win_get_width(0) - 4,
-      },
-      settings = {
-        save_on_toggle = true,
-      },
-    },
-    keys = {
-      {
-        "<S-l>",
-        function()
-          require("harpoon"):list():next()
+      options = {
+        offsets = {
+          {
+            filetype = "neo-tree",
+            text = "Nvim Tree",
+            separator = true,
+            text_align = "left",
+          },
+        },
+        diagnostics = "nvim_lsp",
+        diagnostics_indicator = function(count, level)
+          local icon = level:match("error") and " " or " "
+          return " " .. icon .. count
         end,
-        desc = "Harpoon Next File",
-      },
-      {
-        "<S-h>",
-        function()
-          require("harpoon"):list():prev()
-        end,
-        desc = "Harpoon Prev File",
-      },
-      {
-        "<leader>h",
-        function()
-          require("harpoon"):list():add()
-        end,
-        desc = "Harpoon File",
-      },
-      {
-        "<leader>H",
-        function()
-          local harpoon = require("harpoon")
-          harpoon.ui:toggle_quick_menu(harpoon:list())
-        end,
-        desc = "Harpoon Quick Menu",
+        indicator = {
+          -- icon = "▎▎▎▎", -- this should be omitted if indicator style is not 'icon'
+          -- style = "icon", --'icon' | 'underline' | 'none',
+          style = "underline", --'icon' | 'underline' | 'none',
+        },
       },
     },
   },
+  {
+    "leath-dub/snipe.nvim",
+    keys = {
+      {
+        "<leader><leader>",
+        function()
+          require("snipe").open_buffer_menu()
+        end,
+        desc = "Open Snipe buffer menu",
+      },
+    },
+    opts = {},
+  },
+  -- {
+  --   "ThePrimeagen/harpoon",
+  --   branch = "harpoon2",
+  --   opts = {
+  --     menu = {
+  --       width = vim.api.nvim_win_get_width(0) - 4,
+  --     },
+  --     settings = {
+  --       save_on_toggle = true,
+  --     },
+  --   },
+  --   keys = {
+  --     {
+  --       "<S-l>",
+  --       function()
+  --         require("harpoon"):list():next()
+  --       end,
+  --       desc = "Harpoon Next File",
+  --     },
+  --     {
+  --       "<S-h>",
+  --       function()
+  --         require("harpoon"):list():prev()
+  --       end,
+  --       desc = "Harpoon Prev File",
+  --     },
+  --     {
+  --       "<leader>h",
+  --       function()
+  --         require("harpoon"):list():add()
+  --       end,
+  --       desc = "Harpoon File",
+  --     },
+  --     {
+  --       "<leader>H",
+  --       function()
+  --         local harpoon = require("harpoon")
+  --         harpoon.ui:toggle_quick_menu(harpoon:list())
+  --       end,
+  --       desc = "Harpoon Quick Menu",
+  --     },
+  --   },
+  -- },
   {
     "sigmasd/deno-nvim",
   },

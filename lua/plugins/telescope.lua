@@ -78,7 +78,7 @@ return {
       vim.keymap.set("n", "<leader>sc", builtin.commands, { desc = "Search commands" })
       vim.keymap.set("n", "<leader>sC", builtin.command_history, { desc = "Search commands history" })
       vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = 'Search Recent Files ("." for repeat)' })
-      vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "Find existing buffers" })
+      -- vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "Find existing buffers" })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set("n", "<leader>/", function()

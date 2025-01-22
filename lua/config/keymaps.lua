@@ -63,9 +63,9 @@ map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 -- map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 -- map("n", "<leader>bd", ":bd<cr>", { desc = "Delete Buffer" })
--- replaced by harpoon pre and next
--- map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
--- map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+
+map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
