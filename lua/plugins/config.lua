@@ -301,6 +301,20 @@ return {
             separator = true,
             text_align = "left",
           },
+
+          {
+            filetype = "dbui",
+            text = "DB-UI",
+            separator = true,
+            text_align = "left",
+          },
+
+          {
+            filetype = "undotree",
+            text = "Undo Tree",
+            separator = true,
+            text_align = "left",
+          },
         },
         diagnostics = "nvim_lsp",
         diagnostics_indicator = function(count, level)
