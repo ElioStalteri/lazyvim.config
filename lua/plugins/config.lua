@@ -445,5 +445,10 @@ return {
       })
     end,
   },
-  { "chrisgrieser/nvim-justice" },
+  {
+    "chrisgrieser/nvim-justice",
+    keys = {
+      { "<leader>j", "<cmd>Justice<cr>", desc = "run just task" },
+    },
+  },
 }
