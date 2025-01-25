@@ -444,4 +444,15 @@ return {
       { "<leader>j", "<cmd>Justice<cr>", desc = "run just task" },
     },
   },
+  { -- TODO: I'm not convinced
+    "OXY2DEV/foldtext.nvim",
+    lazy = false,
+    opts = {
+      default = { {
+        type = "raw",
+        text = "Fold",
+        hl = "Folded",
+      } },
+    },
+  },
 }
