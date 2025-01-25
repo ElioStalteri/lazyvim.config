@@ -63,12 +63,6 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
   -- { "tpope/vim-fugitive" },
-  -- {
-  --   "akinsho/bufferline.nvim",
-  --   version = "*",
-  --   dependencies = { "nvim-tree/nvim-web-devicons", "folke/edgy.nvim" },
-  --   opts = {},
-  -- },
   {
     "stevearc/dressing.nvim",
     opts = {},
@@ -292,7 +286,7 @@ return {
   {
     "akinsho/bufferline.nvim",
     version = "*",
-    dependencies = "nvim-tree/nvim-web-devicons",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = {
       options = {
         offsets = {
@@ -414,16 +408,15 @@ return {
       },
     },
   },
-  -- { -- color picker and visualizer
-  --   "uga-rosa/ccc.nvim",
-  --   opts = {
-  --     highlighter = {
-  --       auto_enable = true,
-  --       lsp = true,
-  --     },
-  --   },
-  --   lazy = false,
-  -- },
+  { -- color picker
+    "nvzone/minty",
+    dependencies = { { "nvzone/volt", lazy = true } },
+    cmd = { "Shades", "Huefy" },
+    keys = {
+      -- { "<leader>xp", "<cmd>Shades<cr>", desc = "open color picker" },
+      { "<leader>xp", "<cmd>Huefy<cr>", desc = "open color picker" },
+    },
+  },
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
