@@ -12,6 +12,7 @@ return {
   -- { "rose-pine/neovim" },
   -- { "catppuccin/nvim" },
   -- { "rebelot/kanagawa.nvim" },
+  -- { "Styzex/Sonomin.nvim" }, -- TODO: provare a rifare il mio theme con un fork di questo (molto carino potrei prendere spunto)
   {
     "ElioStalteri/ofirkai.nvim",
     lazy = false,
@@ -403,20 +404,46 @@ return {
       { "<leader>tp", "<cmd>PresentStart<cr>", desc = "Start markdown presentation" },
     },
   },
-  { -- color picker and visualizer
-    "uga-rosa/ccc.nvim",
+  {
+    "catgoose/nvim-colorizer.lua",
+    event = "BufReadPre",
     opts = {
-      highlighter = {
-        auto_enable = true,
-        lsp = true,
+      user_default_options = {
+        names = false,
+        tailwind = "lsp",
       },
     },
-    lazy = false,
   },
+  -- { -- color picker and visualizer
+  --   "uga-rosa/ccc.nvim",
+  --   opts = {
+  --     highlighter = {
+  --       auto_enable = true,
+  --       lsp = true,
+  --     },
+  --   },
+  --   lazy = false,
+  -- },
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
     opts = {},
   },
+  { "elliotxx/copypath.nvim", opts = {} },
+  {
+    "danitrap/cheatsh.nvim",
+    opts = {}, -- Optional configuration, you can leave it empty
+  },
+  { -- add console log for selected variables
+    "Goose97/timber.nvim",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("timber").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end,
+  },
+  { "chrisgrieser/nvim-justice" },
 }
