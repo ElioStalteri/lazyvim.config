@@ -18,9 +18,6 @@ return {
     lazy = false,
     opts = { custom_theme = true },
     priority = 9000, -- Make sure to load this before all the other start plugins.
-    -- init = function()
-    --   vim.cmd.colorscheme("ofirkai-custom")
-    -- end,
   },
   {
     "folke/zen-mode.nvim",
@@ -77,11 +74,7 @@ return {
       notify = { enabled = false },
     },
     dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
       "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
       "rcarriga/nvim-notify",
     },
   },
@@ -135,20 +128,6 @@ return {
       { "]y", "<Plug>(YankyCycleBackward)", desc = "Cycle Backward Through Yank History" },
     },
   },
-  -- {
-  --   "saecki/live-rename.nvim",
-  --   opts = {},
-  --   keys = {
-  --     {
-  --       "<leader>cr",
-  --       function()
-  --         require("live-rename").rename({ insert = true })
-  --       end,
-  --       mode = { "n" },
-  --       desc = "LSP Rename",
-  --     },
-  --   },
-  -- },
   {
     "folke/trouble.nvim",
     cmd = { "Trouble" },
@@ -181,40 +160,13 @@ return {
     },
     config = function()
       -- Better Around/Inside textobjects
-      --
-      -- Examples:
-      --  - va)  - Visually select Around )paren
-      --  - yinq - Yank Inside Next Quote
-      --  - ci'  - Change Inside 'quote
       require("mini.ai").setup({ n_lines = 500 })
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
-      -- - saiw) - Surround Add Inner Word )Paren
-      -- - sd'   - Surround Delete 'quotes
-      -- - sr)'  - Surround Replace ) '
       require("mini.surround").setup()
 
       -- hunk diff view
       require("mini.diff").setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      -- local statusline = require("mini.statusline")
-      -- -- set use_icons to true if you have a Nerd Font
-      -- statusline.setup({ use_icons = vim.g.have_nerd_font })
-      --
-      -- -- You can configure sections in the statusline by overriding their
-      -- -- default behavior. For example, here we set the section for
-      -- -- cursor location to LINE:COLUMN
-      -- ---@diagnostic disable-next-line: duplicate-set-field
-      -- statusline.section_location = function()
-      --   return "%2l:%-2v"
-      -- end
-
-      -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
   -- Highlight todo, notes, etc in comments
@@ -258,20 +210,6 @@ return {
       },
     },
   },
-  -- {
-  --   "OXY2DEV/markview.nvim",
-  --   lazy = false, -- Recommended
-  --   -- ft = "markdown" -- If you decide to lazy-load anyway
-  --
-  --   dependencies = {
-  --     "nvim-treesitter/nvim-treesitter",
-  --     "nvim-tree/nvim-web-devicons",
-  --   },
-  --
-  --   keys = {
-  --     { "<leader>tm", "<cmd>Markview<cr>", desc = "Toggle Markdown view" },
-  --   },
-  -- },
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" },
@@ -337,52 +275,7 @@ return {
     },
     opts = {},
   },
-  -- {
-  --   "ThePrimeagen/harpoon",
-  --   branch = "harpoon2",
-  --   opts = {
-  --     menu = {
-  --       width = vim.api.nvim_win_get_width(0) - 4,
-  --     },
-  --     settings = {
-  --       save_on_toggle = true,
-  --     },
-  --   },
-  --   keys = {
-  --     {
-  --       "<S-l>",
-  --       function()
-  --         require("harpoon"):list():next()
-  --       end,
-  --       desc = "Harpoon Next File",
-  --     },
-  --     {
-  --       "<S-h>",
-  --       function()
-  --         require("harpoon"):list():prev()
-  --       end,
-  --       desc = "Harpoon Prev File",
-  --     },
-  --     {
-  --       "<leader>h",
-  --       function()
-  --         require("harpoon"):list():add()
-  --       end,
-  --       desc = "Harpoon File",
-  --     },
-  --     {
-  --       "<leader>H",
-  --       function()
-  --         local harpoon = require("harpoon")
-  --         harpoon.ui:toggle_quick_menu(harpoon:list())
-  --       end,
-  --       desc = "Harpoon Quick Menu",
-  --     },
-  --   },
-  -- },
-  {
-    "sigmasd/deno-nvim",
-  },
+  { "sigmasd/deno-nvim" },
   { -- markdown presentations
     "tjdevries/present.nvim",
     config = function()
