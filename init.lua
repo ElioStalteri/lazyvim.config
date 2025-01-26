@@ -122,7 +122,7 @@ require("lazy").setup({
 
   require("plugins.blame"),
 
-  require("plugins.ghoper"),
+  require("plugins.gopher"),
 
   -- require("plugins.maybe"), -- TODO: decide if you want this
 }, {
