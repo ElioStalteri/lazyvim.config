@@ -122,6 +122,8 @@ require("lazy").setup({
 
   require("plugins.blame"),
 
+  require("plugins.ghoper"),
+
   -- require("plugins.maybe"), -- TODO: decide if you want this
 }, {
   ui = {
