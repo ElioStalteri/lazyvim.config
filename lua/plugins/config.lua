@@ -30,20 +30,20 @@ return {
       { "<leader>tz", "<cmd>ZenMode<cr>", desc = "Toggle zen mode" },
     },
   },
-  -- {
-  --   "akinsho/toggleterm.nvim",
-  --   lazy = false,
-  --   config = function()
-  --     require("toggleterm").setup({
-  --       open_mapping = [[<c-/>]],
-  --       shade_terminals = false,
-  --     })
-  --   end,
-  --   keys = {
-  --     { [[<C-/>]] },
-  --     { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
-  --   },
-  -- },
+  {
+    "akinsho/toggleterm.nvim",
+    lazy = false,
+    config = function()
+      require("toggleterm").setup({
+        open_mapping = [[<c-/>]],
+        shade_terminals = false,
+      })
+    end,
+    keys = {
+      { [[<C-/>]] },
+      { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
+    },
+  },
   {
     "stevearc/oil.nvim",
     opts = {
