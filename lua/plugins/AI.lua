@@ -24,6 +24,7 @@ return {
     keys = {
       { "<leader>at", "<cmd>GpChatToggle vsplit<cr>", desc = "toggle chat" },
       { "<leader>af", "<cmd>GpChatFinder<cr>", desc = "chat finder" },
+      { "<leader>ac", "<cmd>GpContext<cr>", desc = "toggle context" },
       { "<leader>ap", ":<C-u>'<,'>GpChatPaste<cr>", desc = "paste chat", mode = { "v" } },
       { "<leader>ar", ":<C-u>'<,'>GpRewrite<cr>", desc = "rewrite", mode = { "v" } },
       { "<leader>aa", ":<C-u>'<,'>GpAppend<cr>", desc = "append", mode = { "v" } },
