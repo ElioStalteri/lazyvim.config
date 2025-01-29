@@ -12,7 +12,6 @@ return {
   -- { "rose-pine/neovim" },
   -- { "catppuccin/nvim" },
   -- { "rebelot/kanagawa.nvim" },
-  -- { "Styzex/Sonomin.nvim" }, -- TODO: provare a rifare il mio theme con un fork di questo (molto carino potrei prendere spunto)
   {
     "ElioStalteri/ofirkai.nvim",
     lazy = false,
@@ -257,7 +256,7 @@ return {
         indicator = {
           -- icon = "▎▎▎▎", -- this should be omitted if indicator style is not 'icon'
           -- style = "icon", --'icon' | 'underline' | 'none',
-          style = "underline", --'icon' | 'underline' | 'none',
+          style = "none", --'icon' | 'underline' | 'none',
         },
       },
     },
