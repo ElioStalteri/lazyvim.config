@@ -316,7 +316,8 @@ return {
     opts = {
       options = {
         -- theme = "seoul256",
-        theme = "onedark",
+        -- theme = "onedark",
+        theme = "base16",
       },
     },
   },
