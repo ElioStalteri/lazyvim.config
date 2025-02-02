@@ -313,7 +313,12 @@ return {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
-    opts = {},
+    opts = {
+      options = {
+        -- theme = "seoul256",
+        theme = "onedark",
+      },
+    },
   },
   { "elliotxx/copypath.nvim", opts = {} },
   {
