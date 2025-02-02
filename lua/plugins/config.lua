@@ -316,8 +316,8 @@ return {
     opts = {
       options = {
         -- theme = "seoul256",
-        -- theme = "onedark",
-        theme = "base16",
+        theme = "onedark",
+        -- theme = "base16",
       },
     },
   },
@@ -352,5 +352,12 @@ return {
         hl = "Folded",
       } },
     },
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
   },
 }
