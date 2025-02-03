@@ -9,6 +9,7 @@ vim.opt.foldlevel = 99
 vim.opt.shiftround = true -- Round indent
 vim.opt.shiftwidth = 2 -- Size of an indent
 vim.opt.tabstop = 2 -- Size of an indent
+vim.opt.expandtab = true -- tab to spaces
 vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
 vim.opt.smartcase = true -- Don't ignore case with capitals
 vim.opt.smartindent = true -- Insert indents automatically
