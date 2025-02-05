@@ -90,13 +90,13 @@ return {
       end,
       desc = "Hide notifications",
     },
-    {
-      "<leader>bo",
-      function()
-        Snacks.bufdelete.other()
-      end,
-      desc = "Delete other buffers",
-    },
+    -- {
+    --   "<leader>bo",
+    --   function()
+    --     Snacks.bufdelete.other()
+    --   end,
+    --   desc = "Delete other buffers",
+    -- },
 
     {
       "<leader>bd",

@@ -223,6 +223,7 @@ return {
   {
     "akinsho/bufferline.nvim",
     version = "*",
+    lazy = false,
     dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = {
       options = {
@@ -259,6 +260,10 @@ return {
           style = "none", --'icon' | 'underline' | 'none',
         },
       },
+    },
+    keys = {
+      { "<leader>bp", "<CMD>BufferLineTogglePin<CR>", desc = "toggle pin buffer" },
+      { "<leader>bo", "<CMD>BufferLineCloseOthers<CR>", desc = "close other buffers" },
     },
   },
   {
