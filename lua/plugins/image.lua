@@ -1,3 +1,4 @@
+---@type LazyPluginSpec[]
 return {
   {
     "3rd/image.nvim",

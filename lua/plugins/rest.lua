@@ -1,3 +1,4 @@
+---@type LazyPluginSpec[]
 return {
   -- {
   --   "diepm/vim-rest-console",

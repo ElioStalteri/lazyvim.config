@@ -1,3 +1,4 @@
+---@type LazyPluginSpec[]
 return {
   {
     "supermaven-inc/supermaven-nvim",

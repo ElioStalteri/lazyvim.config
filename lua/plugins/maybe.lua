@@ -1,3 +1,4 @@
+---@type LazyPluginSpec[]
 return {
   { -- https://github.com/mhanberg/output-panel.nvim
     "mhanberg/output-panel.nvim",

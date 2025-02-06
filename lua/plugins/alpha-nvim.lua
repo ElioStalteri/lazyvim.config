@@ -67,6 +67,7 @@ local function info()
   )
 end
 
+---@type LazyPluginSpec
 return {
   "goolord/alpha-nvim",
   -- opts = function()
