@@ -114,8 +114,6 @@ require("lazy").setup({
 
   require("plugins.yazi"),
 
-  require("plugins.dropbar"),
-
   require("plugins.treewalker"),
 
   require("plugins.image"),
@@ -123,6 +121,8 @@ require("lazy").setup({
   require("plugins.blame"),
 
   require("plugins.gopher"),
+
+  require("plugins.namu"),
 
   -- require("plugins.maybe"), -- TODO: decide if you want this
 }, {
