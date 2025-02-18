@@ -121,5 +121,13 @@ return {
         yank = "<leader>y", -- yank last output
       },
     },
+    keys = {
+
+      {
+        "<leader>xn",
+        "<cmd>Nvumi<cr>",
+        desc = "run Nvumi",
+      },
+    },
   },
 }
