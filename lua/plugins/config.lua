@@ -366,4 +366,5 @@ return {
     ---@type ibl.config
     opts = {},
   },
+  { "eandrju/cellular-automaton.nvim" },
 }
