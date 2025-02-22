@@ -25,6 +25,24 @@ return {
       window = {
         width = 140,
       },
+      on_open = function(win)
+        local buffline = package.loaded["bufferline"]
+        if buffline then
+          local view = require("zen-mode.view")
+          local layout = view.layout(view.opts)
+          vim.api.nvim_win_set_config(win, {
+            width = layout.width,
+            height = layout.height - 1,
+          })
+          vim.api.nvim_win_set_config(view.bg_win, {
+            width = vim.o.columns,
+            height = view.height() - 1,
+            row = 1,
+            col = layout.col,
+            relative = "editor",
+          })
+        end
+      end,
     },
     keys = {
       { "<leader>tz", "<cmd>ZenMode<cr>", desc = "Toggle zen mode" },
@@ -281,21 +299,21 @@ return {
     opts = {},
   },
   { "sigmasd/deno-nvim" },
-  { -- markdown presentations
-    "tjdevries/present.nvim",
-    config = function()
-      local present = require("present")
-      present.setup({
-        syntax = {},
-        executors = {
-          js = present.create_system_executor("node"),
-        },
-      })
-    end,
-    keys = {
-      { "<leader>tp", "<cmd>PresentStart<cr>", desc = "Start markdown presentation" },
-    },
-  },
+  -- { -- markdown presentations
+  --   "tjdevries/present.nvim",
+  --   config = function()
+  --     local present = require("present")
+  --     present.setup({
+  --       syntax = {},
+  --       executors = {
+  --         js = present.create_system_executor("node"),
+  --       },
+  --     })
+  --   end,
+  --   keys = {
+  --     { "<leader>tp", "<cmd>PresentStart<cr>", desc = "Start markdown presentation" },
+  --   },
+  -- },
   {
     "catgoose/nvim-colorizer.lua",
     event = "BufReadPre",
