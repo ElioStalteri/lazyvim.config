@@ -382,7 +382,18 @@ return {
     main = "ibl",
     ---@module "ibl"
     ---@type ibl.config
-    opts = {},
+    opts = {
+      indent = {
+        char = "▏",
+        -- tab_char = "▏",
+        tab_char = "▎",
+      },
+      scope = {
+        show_start = false,
+        show_end = false,
+        injected_languages = false,
+      },
+    },
   },
   { "eandrju/cellular-automaton.nvim" },
 }
