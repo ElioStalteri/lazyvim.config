@@ -1,3 +1,9 @@
 # use <C-j> to trigger a request or :call VrcQuery()<cr>
 https://api.ipify.org?format=json
+--silent
 GET /
+
+https://httpbin.org
+--silent
+Content-type: application/json
+GET /get

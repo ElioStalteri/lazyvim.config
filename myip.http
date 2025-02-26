@@ -1,0 +1,9 @@
+# use <leader>xr to trigger a request<cr>
+GET https://api.ipify.org?format=json
+Content-Type: application/json
+Accept: application/json
+
+###
+
+GET https://httpbin.org/get
+Content-type: application/json
