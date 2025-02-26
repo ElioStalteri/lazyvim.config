@@ -40,5 +40,6 @@ return {
   },
   keys = {
     { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle file tree" },
+    { "<leader>gs", "<cmd>Neotree toggle git_status<cr>", desc = "Toggle file changed" },
   },
 }
