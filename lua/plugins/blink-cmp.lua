@@ -19,6 +19,9 @@ return {
       signature = {
         enabled = true,
       },
+      cmdline = {
+        completion = { menu = { auto_show = true } },
+      },
       keymap = {
         preset = "default",
         -- ["<CR>"] = { "accept", "fallback" },
@@ -78,11 +81,17 @@ return {
         },
       },
       completion = {
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 500,
+        },
         menu = {
+          auto_show = true,
           draw = {
             -- We don't need label_description now because label and label_description are already
             -- combined together in label by colorful-menu.nvim.
-            columns = { { "kind_icon" }, { "label", gap = 1 } },
+            -- columns = { { "kind_icon" }, { "label", gap = 1 } },
+            columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" }, { "source_name" } },
             components = {
               label = {
                 text = function(ctx)
