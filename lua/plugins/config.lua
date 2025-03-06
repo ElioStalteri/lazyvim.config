@@ -396,4 +396,11 @@ return {
     },
   },
   { "eandrju/cellular-automaton.nvim" },
+  { -- use to create an optimised version of the colorscheme usage -> :ExColors
+    "aileot/ex-colors.nvim",
+    lazy = true,
+    cmd = "ExColors",
+    ---@type ExColors.Config
+    opts = {},
+  },
 }

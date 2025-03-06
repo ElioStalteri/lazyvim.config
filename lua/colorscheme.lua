@@ -1,1 +1,2 @@
-vim.cmd("colorscheme ofirkai-custom")
+vim.cmd("colorscheme ex-ofirkai")
+

@@ -56,4 +56,9 @@ return {
       -- { "n", ft = "go", "<leader>xge", "<cmd>GoIfErr<cr>", desc = "generate go if err" },
     },
   },
+  {
+    "maxandron/goplements.nvim",
+    ft = "go",
+    opts = {},
+  },
 }
