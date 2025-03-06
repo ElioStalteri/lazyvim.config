@@ -14,7 +14,48 @@ return {
   -- },
   { -- https://kulala.mwco.app/
     "mistweaverco/kulala.nvim",
-    opts = {},
+    opts = {
+      ui = {
+        -- Current available pane contains { "body", "headers", "headers_body", "script_output", "stats", "verbose" },
+        default_winbar_panes = { "body", "headers", "headers_body", "verbose", "stats" },
+      },
+      kulala_keymaps = {
+        ["Show headers"] = {
+          "<leader>kH",
+          function()
+            require("kulala.ui").show_headers()
+          end,
+        },
+
+        ["Show body"] = {
+          "<leader>kB",
+          function()
+            require("kulala.ui").show_body()
+          end,
+        },
+
+        ["Show all"] = {
+          "<leader>kA",
+          function()
+            require("kulala.ui").show_headers_body()
+          end,
+        },
+
+        ["Show verbose"] = {
+          "<leader>kV",
+          function()
+            require("kulala.ui").show_verbose()
+          end,
+        },
+
+        ["Show stats"] = {
+          "<leader>kS",
+          function()
+            require("kulala.ui").show_stats()
+          end,
+        },
+      },
+    },
     keys = {
       { "<leader>xr", "<cmd>lua require('kulala').run()<cr>", desc = "Run HTTP request" },
       { "<leader>xR", "<cmd>lua require('kulala').run_all()<cr>", desc = "Run ALL HTTP request" },
