@@ -45,6 +45,8 @@ return {
     keys = {
       { "<leader>at", "<cmd>CodeCompanionChat toggle<cr>", desc = "toggle chat" },
       { "<leader>aa", "<cmd>CodeCompanionActions<cr>", desc = "actions" },
+      { "<leader>ap", "<cmd>CodeCompanion<cr>", desc = "prompt", mode = { "n" } },
+      { "<leader>ap", ":'<,'>CodeCompanion<cr>", desc = "prompt", mode = { "v" } },
     },
   },
   -- {
