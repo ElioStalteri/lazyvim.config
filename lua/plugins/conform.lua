@@ -34,6 +34,7 @@ return {
       --   }
       -- end,
       formatters_by_ft = {
+        http = { "kulala-fmt" },
         lua = { "stylua" },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
