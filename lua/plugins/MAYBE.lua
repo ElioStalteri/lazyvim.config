@@ -1,24 +1,5 @@
 ---@type LazyPluginSpec[]
 return {
-  { -- https://github.com/mhanberg/output-panel.nvim
-    "mhanberg/output-panel.nvim",
-    version = "*",
-    event = "VeryLazy",
-    config = function()
-      require("output_panel").setup({
-        max_buffer_size = 5000, -- default
-      })
-    end,
-    cmd = { "OutputPanel" },
-    keys = {
-      {
-        "<leader>cl",
-        vim.cmd.OutputPanel,
-        mode = "n",
-        desc = "Toggle LSP logs",
-      },
-    },
-  },
   { -- https://github.com/topaxi/pipeline.nvim
     "topaxi/pipeline.nvim",
     keys = {

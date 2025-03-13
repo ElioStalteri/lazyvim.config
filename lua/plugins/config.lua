@@ -324,15 +324,6 @@ return {
       },
     },
   },
-  { -- color picker
-    "nvzone/minty",
-    dependencies = { { "nvzone/volt", lazy = true } },
-    cmd = { "Shades", "Huefy" },
-    keys = {
-      -- { "<leader>xp", "<cmd>Shades<cr>", desc = "open color picker" },
-      { "<leader>xp", "<cmd>Huefy<cr>", desc = "open color picker" },
-    },
-  },
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -412,4 +403,24 @@ return {
     "sphamba/smear-cursor.nvim",
     opts = {},
   },
+  { -- https://github.com/mhanberg/output-panel.nvim
+    "mhanberg/output-panel.nvim",
+    version = "*",
+    event = "VeryLazy",
+    config = function()
+      require("output_panel").setup({
+        max_buffer_size = 5000, -- default
+      })
+    end,
+    cmd = { "OutputPanel" },
+    keys = {
+      {
+        "<leader>cl",
+        vim.cmd.OutputPanel,
+        mode = "n",
+        desc = "Toggle LSP logs",
+      },
+    },
+  },
+  { "saecki/live-rename.nvim" },
 }
