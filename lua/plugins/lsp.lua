@@ -105,23 +105,23 @@ return {
             })
           end
 
-          -- prevent tsserver and denols competeing
-          local active_clients = vim.lsp.get_clients()
-          if client ~= nil and client.name == "denols" then
-            for _, client_ in pairs(active_clients) do
-              -- stop tsserver if denols is already active
-              if client_.name == "vtsls" then
-                client_.stop()
-              end
-            end
-          elseif client ~= nil and client.name == "vtsls" then
-            for _, client_ in pairs(active_clients) do
-              -- prevent tsserver from starting if denols is already active
-              if client_.name == "denols" then
-                client.stop()
-              end
-            end
-          end
+          --   -- prevent tsserver and denols competeing
+          --   local active_clients = vim.lsp.get_clients()
+          --   if client ~= nil and client.name == "denols" then
+          --     for _, client_ in pairs(active_clients) do
+          --       -- stop tsserver if denols is already active
+          --       if client_.name == "ts_ls" then
+          --         client_.stop()
+          --       end
+          --     end
+          --   elseif client ~= nil and client.name == "ts_ls" then
+          --     for _, client_ in pairs(active_clients) do
+          --       -- prevent tsserver from starting if denols is already active
+          --       if client_.name == "denols" then
+          --         client.stop()
+          --       end
+          --     end
+          --   end
         end,
       })
 
@@ -215,5 +215,10 @@ return {
         },
       })
     end,
+  },
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
   },
 }
