@@ -130,6 +130,8 @@ require("lazy").setup({
 
   require("plugins.namu"),
 
+  require("plugins.multicursor"),
+
   -- require("plugins.maybe"), -- TODO: decide if you want this
 }, {
   ui = {
