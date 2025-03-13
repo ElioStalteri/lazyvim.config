@@ -403,4 +403,9 @@ return {
     ---@type ExColors.Config
     opts = {},
   },
+  {
+    "folke/ts-comments.nvim",
+    opts = {},
+    event = "VeryLazy",
+  },
 }
