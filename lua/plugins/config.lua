@@ -368,24 +368,6 @@ return {
       } },
     },
   },
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
-    ---@module "ibl"
-    ---@type ibl.config
-    opts = {
-      indent = {
-        char = "▏",
-        -- tab_char = "▏",
-        tab_char = "▎",
-      },
-      scope = {
-        show_start = false,
-        show_end = false,
-        injected_languages = false,
-      },
-    },
-  },
   { "eandrju/cellular-automaton.nvim" },
   { -- use to create an optimised version of the colorscheme usage -> :ExColors
     "aileot/ex-colors.nvim",
