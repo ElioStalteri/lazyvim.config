@@ -51,6 +51,7 @@ vim.api.nvim_set_hl(0,"Comment",{cterm = {italic = true},fg = 10264740,italic = 
 vim.api.nvim_set_hl(0,"Conceal",{fg = 9408650})
 vim.api.nvim_set_hl(0,"Conditional",{fg = 16328306})
 vim.api.nvim_set_hl(0,"Constant",{cterm = {italic = true},fg = 16316656,italic = true})
+vim.api.nvim_set_hl(0,"CurSearch",{link = "Search"})
 vim.api.nvim_set_hl(0,"Cursor",{cterm = {reverse = true},reverse = true})
 vim.api.nvim_set_hl(0,"CursorColumn",{bg = 1908774})
 vim.api.nvim_set_hl(0,"CursorIM",{cterm = {reverse = true},reverse = true})
