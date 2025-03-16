@@ -326,15 +326,21 @@ return {
   },
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    lazy = false,
-    opts = {
-      options = {
-        -- theme = "seoul256",
-        theme = "onedark",
-        -- theme = "base16",
-      },
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      "ElioStalteri/ofirkai.nvim",
     },
+    lazy = false,
+    config = function()
+      require("lualine").setup({
+        options = {
+          -- theme = "seoul256",
+          -- theme = "onedark",
+          theme = require("ofirkai.statuslines.lualine").theme,
+          -- theme = "base16",
+        },
+      })
+    end,
   },
   { "elliotxx/copypath.nvim", opts = {} },
   {

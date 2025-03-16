@@ -100,10 +100,10 @@ M.scheme = {
     b_bg = "#45453b",
     c_bg = "#33332a",
 
-    normal = "#de933c",
+    normal = "#f8f8f0",
     insert = "#a0bfdf",
-    visual = "#feacd0",
-    replace = "#ffa0a0",
+    visual = "#e6db74",
+    replace = "#f92672",
     command = "#88cf88",
 
     inactive = "#202020",
