@@ -38,7 +38,13 @@ return {
       },
 
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
+        default = {
+          "lsp",
+          "path",
+          "snippets",
+          "buffer",
+          "ripgrep",
+        },
         providers = {
           snippets = {
             opts = {
