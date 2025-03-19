@@ -6,7 +6,6 @@ return {
     -- optional: provides snippets for the snippet source
     dependencies = {
       "rafamadriz/friendly-snippets",
-      "mikavilpas/blink-ripgrep.nvim",
       { "xzbdmw/colorful-menu.nvim", opts = {} },
     },
 
@@ -43,41 +42,12 @@ return {
           "path",
           "snippets",
           "buffer",
-          "ripgrep",
         },
         providers = {
           snippets = {
             opts = {
               search_paths = { vim.fn.stdpath("config") .. "/snippets" },
             },
-          },
-          ripgrep = {
-            module = "blink-ripgrep",
-            name = "Ripgrep",
-            -- the options below are optional, some default values are shown
-            ---@module "blink-ripgrep"
-            ---@type blink-ripgrep.Options
-            opts = {
-              prefix_min_len = 3,
-              context_size = 3,
-              max_filesize = "1M",
-              project_root_marker = ".git",
-              search_casing = "--ignore-case",
-              fallback_to_regex_highlighting = true,
-              debug = false,
-            },
-            -- (optional) customize how the results are displayed. Many options
-            -- are available - make sure your lua LSP is set up so you get
-            -- autocompletion help
-            transform_items = function(_, items)
-              for _, item in ipairs(items) do
-                -- example: append a description to easily distinguish rg results
-                item.labelDetails = {
-                  description = "(rg)",
-                }
-              end
-              return items
-            end,
           },
           markdown = {
             name = "RenderMarkdown",
