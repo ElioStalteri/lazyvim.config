@@ -33,6 +33,9 @@ return {
         prev = "<leader>Cp",
       },
     },
+    keys = {
+      { "<leader>gc", "<cmd>GitConflictListQf<cr>", desc = "show conflicts" },
+    },
   },
   -- {
   --   "sindrets/diffview.nvim",
