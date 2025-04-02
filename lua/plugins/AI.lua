@@ -134,7 +134,7 @@ return {
                     { icon = "👔", prefix = "feat", type = "Add or update business logic." },
                     { icon = "🩺", prefix = "chore", type = "Add or update healthcheck." },
                     { icon = "🧱", prefix = "chore", type = "Infrastructure related changes." },
-                    { icon = "🧑‍💻", prefix = "enhance", type = "Improve developer experience." },
+                    { icon = "💻", prefix = "enhance", type = "Improve developer experience." },
                     { icon = "💸", prefix = "chore", type = "Add sponsorships or money related infrastructure." },
                     {
                       icon = "🧵",
