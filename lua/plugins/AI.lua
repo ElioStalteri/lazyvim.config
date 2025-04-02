@@ -76,7 +76,7 @@ return {
                     "Analyze this git diff and generate single line commit messages and a commit descrition in plain text.\n"
                       .. "USE EXACTLY THIS FORMAT WITHOUT ADDITIONAL EXPLANATION:\n\n"
                       .. "<icon> <prefix>: <commit message>\n\n"
-                      .. "Options:\n%s\n\nGit diff:\n%s",
+                      .. "Options:\n%s\n\nGit diff:\n\n```diff\n\n%s\n\n```",
                     table.concat(format_lines, "\n"),
                     vim.fn.system("git diff --no-ext-diff --staged")
                   )
