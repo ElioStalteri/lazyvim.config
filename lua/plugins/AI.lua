@@ -41,6 +41,54 @@ return {
             })
           end,
         },
+        prompt_library = {
+          ["Generate a Commit Message"] = {
+            strategy = "chat",
+            description = "auto-generate a commit message",
+            opts = {
+              index = 10,
+              is_default = true,
+              is_slash_cmd = true,
+              short_name = "commit",
+              auto_submit = true,
+            },
+            prompts = {
+              {
+                role = "user",
+                content = function()
+                  local git_conventions = {
+                    docs = { icon = "📖", prefix = "docs", type = "Documentation changes" },
+                    fix = { icon = "🐛", prefix = "fix", type = "Bug fix" },
+                    feat = { icon = "✨", prefix = "feat", type = "New feature" },
+                    enhance = { icon = "⚡", prefix = "enhance", type = "Enhancement" },
+                    chore = { icon = "🧹", prefix = "chore", type = "Chore" },
+                    refactor = { icon = "⚠️", prefix = "refactor", type = "Breaking change" },
+                  }
+                  local format_lines = {}
+                  for _, convention in pairs(git_conventions) do
+                    table.insert(
+                      format_lines,
+                      string.format("%s %s: %s", convention.icon, convention.prefix, convention.type)
+                    )
+                  end
+
+                  local prompt = string.format(
+                    "Analyze this git diff and generate single line commit messages and a commit descrition in plain text.\n"
+                      .. "USE EXACTLY THIS FORMAT WITHOUT ADDITIONAL EXPLANATION:\n\n"
+                      .. "<icon> <prefix>: <commit message>\n\n"
+                      .. "Options:\n%s\n\nGit diff:\n%s",
+                    table.concat(format_lines, "\n"),
+                    vim.fn.system("git diff --no-ext-diff --staged")
+                  )
+                  return prompt
+                end,
+                opts = {
+                  contains_code = true,
+                },
+              },
+            },
+          },
+        },
       })
     end,
     keys = {
@@ -48,36 +96,6 @@ return {
       { "<leader>aa", "<cmd>CodeCompanionActions<cr>", desc = "actions" },
       { "<leader>ap", "<cmd>CodeCompanion<cr>", desc = "prompt", mode = { "n" } },
       { "<leader>ap", ":'<,'>CodeCompanion<cr>", desc = "prompt", mode = { "v" } },
-    },
-  },
-  -- commit-ai
-  {
-    "Abizrh/commit-ai.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim",
-    },
-    opts = {
-      icons = true,
-      -- unopiniated commit conventions
-      git_conventions = {
-        docs = { icon = "📖", prefix = "docs", type = "Documentation changes" },
-        fix = { icon = "🐛", prefix = "fix", type = "Bug fix" },
-        feat = { icon = "✨", prefix = "feat", type = "New feature" },
-        enhance = { icon = "⚡", prefix = "enhance", type = "Enhancement" },
-        chore = { icon = "🧹", prefix = "chore", type = "Chore" },
-        refactor = { icon = "⚠️", prefix = "refactor", type = "Breaking change" },
-      },
-      provider_options = {
-        gemini = {
-          model = "gemini-2.0-flash",
-          api_key = os.getenv("AI_API_KEY"),
-          stream = false,
-        },
-      },
-    },
-    keys = {
-      { "<leader>gm", "<cmd>Commit<cr>", desc = "generate commit message" },
     },
   },
 }
