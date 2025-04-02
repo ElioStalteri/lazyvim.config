@@ -82,6 +82,7 @@ return {
     "stevearc/dressing.nvim",
     opts = {},
   },
+  -- noice
   {
     "folke/noice.nvim",
     event = "VeryLazy",

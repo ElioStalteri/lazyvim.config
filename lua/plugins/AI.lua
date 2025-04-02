@@ -50,6 +50,7 @@ return {
       { "<leader>ap", ":'<,'>CodeCompanion<cr>", desc = "prompt", mode = { "v" } },
     },
   },
+  -- commit-ai
   {
     "Abizrh/commit-ai.nvim",
     dependencies = {
@@ -74,6 +75,9 @@ return {
           stream = false,
         },
       },
+    },
+    keys = {
+      { "<leader>gm", "<cmd>Commit<cr>", desc = "generate commit message" },
     },
   },
 }
