@@ -37,6 +37,24 @@ return {
       { "<leader>gc", "<cmd>GitConflictListQf<cr>", desc = "show conflicts" },
     },
   },
+  {
+    "fredeeb/tardis.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      keymap = {
+        ["next"] = "<leader>h", -- next entry in log (older)
+        ["prev"] = "<leader>l", -- previous entry in log (newer)
+        ["quit"] = "q", -- quit all
+        ["revision_message"] = "<leader>m", -- show revision message for current revision
+        ["commit"] = "<leader>ga", -- replace contents of origin buffer with contents of tardis buffer
+      },
+      initial_revisions = 10, -- initial revisions to create buffers for
+      max_revisions = 256,
+    },
+    keys = {
+      { "<leader>gt", "<cmd>Tardis<cr>", desc = "Tardis load and cicle trough file revisions" },
+    },
+  },
   -- {
   --   "sindrets/diffview.nvim",
   --   opts = {
