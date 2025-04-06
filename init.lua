@@ -130,8 +130,6 @@ require("lazy").setup({
 
   require("plugins.image"),
 
-  require("plugins.blame"),
-
   require("plugins.gopher"),
 
   require("plugins.namu"),
