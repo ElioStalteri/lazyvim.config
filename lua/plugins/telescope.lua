@@ -23,9 +23,14 @@ return {
         pickers = {
           find_files = {
             theme = "ivy",
+            hidden = true,
           },
           live_grep = {
             theme = "ivy",
+            file_ignore_patterns = { "node_modules", ".git", ".venv" },
+            additional_args = function(_)
+              return { "--hidden" }
+            end,
           },
           buffers = {
             theme = "ivy",
@@ -69,6 +74,7 @@ return {
 
       -- See `:help telescope.builtin`
       local builtin = require("telescope.builtin")
+
       vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "Search Help" })
       vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "Search Keymaps" })
       vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "Search Files" })
