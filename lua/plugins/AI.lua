@@ -42,6 +42,35 @@ return {
           end,
         },
         prompt_library = {
+          ["Implement the file"] = {
+            strategy = "chat",
+            description = "implement the file",
+            opts = {
+              index = 10,
+              is_default = true,
+              is_slash_cmd = true,
+              short_name = "implement",
+              auto_submit = true,
+            },
+            prompts = {
+              {
+                role = "user",
+                opts = {
+                  contains_code = true,
+                },
+                content = function()
+                  return [[ ### Steps to Follow
+
+You are required to write code following the instructions provided below. Follow these steps exactly:
+
+0. wait for the files to be given to you, that you will use a reference to implement the file
+1. Update the code in #buffer{watch} using the @editor tool 
+2. implement the code into the buffer making sure to follow the information contained in the files provided
+                  ]]
+                end,
+              },
+            },
+          },
           ["Generate a Commit Message"] = {
             strategy = "chat",
             description = "auto-generate a commit message",
