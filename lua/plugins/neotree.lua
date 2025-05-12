@@ -37,6 +37,16 @@ return {
         leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
       },
     },
+    event_handlers = {
+      {
+        event = "neo_tree_buffer_enter",
+        handler = function()
+          vim.cmd([[
+              setlocal relativenumber
+            ]])
+        end,
+      },
+    },
   },
   keys = {
     { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle file tree" },
