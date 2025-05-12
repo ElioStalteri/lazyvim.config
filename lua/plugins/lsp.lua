@@ -200,6 +200,7 @@ return {
         "ts_ls",
         "eslint_d",
         "prettierd",
+        "lua_ls",
       })
       require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
