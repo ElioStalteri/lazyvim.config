@@ -368,7 +368,7 @@ return {
     "OXY2DEV/foldtext.nvim",
     lazy = false,
     opts = {
-      default = { {
+      styles = { {
         type = "raw",
         text = "Fold",
         hl = "Folded",
