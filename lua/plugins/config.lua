@@ -364,17 +364,17 @@ return {
       { "<leader>j", "<cmd>Justice<cr>", desc = "run just task" },
     },
   },
-  {
-    "OXY2DEV/foldtext.nvim",
-    lazy = false,
-    opts = {
-      styles = { {
-        type = "raw",
-        text = "Fold",
-        hl = "Folded",
-      } },
-    },
-  },
+  -- {
+  --   "OXY2DEV/foldtext.nvim",
+  --   lazy = false,
+  --   opts = {
+  --     styles = { {
+  --       type = "raw",
+  --       text = "Fold",
+  --       hl = "Folded",
+  --     } },
+  --   },
+  -- },
   { "eandrju/cellular-automaton.nvim" },
   { -- use to create an optimised version of the colorscheme usage -> :ExColors
     "aileot/ex-colors.nvim",
