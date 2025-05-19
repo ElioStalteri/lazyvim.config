@@ -299,7 +299,7 @@ return {
     },
     opts = {},
   },
-  { "sigmasd/deno-nvim" },
+  -- { "sigmasd/deno-nvim" },
   -- { -- markdown presentations
   --   "tjdevries/present.nvim",
   --   config = function()
