@@ -165,9 +165,9 @@ return {
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-        denols = {
-          root_dir = lspConfig.util.root_pattern("deno.json", "deno.jsonc"),
-        },
+        -- denols = {
+        --   root_dir = lspConfig.util.root_pattern("deno.json", "deno.jsonc"),
+        -- },
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
