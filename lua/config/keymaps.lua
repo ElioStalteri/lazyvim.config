@@ -76,25 +76,25 @@ map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Wi
 map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
 -- Move Lines
--- map("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
--- map("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
-map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
-map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
-map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
-map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
+map("n", "<C-A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
+map("n", "<C-A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
+map("i", "<C-A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
+map("i", "<C-A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
+map("v", "<C-A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
+map("v", "<C-A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
--- treewalker
--- movement
-vim.keymap.set({ "n" }, "<M-S-k>", "<cmd>Treewalker Up<cr>", { silent = true, noremap = true })
-vim.keymap.set({ "n" }, "<M-S-j>", "<cmd>Treewalker Down<cr>", { silent = true, noremap = true })
-vim.keymap.set({ "n" }, "<M-S-h>", "<cmd>Treewalker Left<cr>", { silent = true, noremap = true })
-vim.keymap.set({ "n" }, "<M-S-l>", "<cmd>Treewalker Right<cr>", { silent = true, noremap = true })
-
--- swapping
-vim.keymap.set({ "v" }, "<M-S-k>", "<cmd>Treewalker SwapUp<cr>", { silent = true })
-vim.keymap.set({ "v" }, "<M-S-j>", "<cmd>Treewalker SwapDown<cr>", { silent = true })
-vim.keymap.set({ "v" }, "<M-S-h>", "<cmd>Treewalker SwapLeft<CR>", { silent = true })
-vim.keymap.set({ "v" }, "<M-S-l>", "<cmd>Treewalker SwapRight<CR>", { silent = true })
+-- -- treewalker
+-- -- movement
+-- vim.keymap.set({ "n" }, "<M-S-k>", "<cmd>Treewalker Up<cr>", { silent = true, noremap = true })
+-- vim.keymap.set({ "n" }, "<M-S-j>", "<cmd>Treewalker Down<cr>", { silent = true, noremap = true })
+-- vim.keymap.set({ "n" }, "<M-S-h>", "<cmd>Treewalker Left<cr>", { silent = true, noremap = true })
+-- vim.keymap.set({ "n" }, "<M-S-l>", "<cmd>Treewalker Right<cr>", { silent = true, noremap = true })
+--
+-- -- swapping
+-- vim.keymap.set({ "v" }, "<M-S-k>", "<cmd>Treewalker SwapUp<cr>", { silent = true })
+-- vim.keymap.set({ "v" }, "<M-S-j>", "<cmd>Treewalker SwapDown<cr>", { silent = true })
+-- vim.keymap.set({ "v" }, "<M-S-h>", "<cmd>Treewalker SwapLeft<CR>", { silent = true })
+-- vim.keymap.set({ "v" }, "<M-S-l>", "<cmd>Treewalker SwapRight<CR>", { silent = true })
 
 -- better indenting
 map("v", "<", "<gv")

@@ -126,7 +126,7 @@ require("lazy").setup({
 
   require("plugins.yazi"),
 
-  require("plugins.treewalker"),
+  -- require("plugins.treewalker"),
 
   require("plugins.image"),
 
