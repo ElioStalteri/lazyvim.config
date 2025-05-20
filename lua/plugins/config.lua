@@ -377,10 +377,10 @@ return {
     opts = {},
     event = "VeryLazy",
   },
-  {
-    "sphamba/smear-cursor.nvim",
-    opts = {},
-  },
+  -- {
+  --   "sphamba/smear-cursor.nvim",
+  --   opts = {},
+  -- },
   { -- https://github.com/mhanberg/output-panel.nvim
     "mhanberg/output-panel.nvim",
     version = "*",
