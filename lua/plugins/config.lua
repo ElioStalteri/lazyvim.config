@@ -19,6 +19,13 @@ return {
     opts = { custom_theme = true },
     priority = 9000, -- Make sure to load this before all the other start plugins.
   },
+  { -- use to create an optimised version of the colorscheme usage -> :ExColors
+    "aileot/ex-colors.nvim",
+    lazy = true,
+    cmd = "ExColors",
+    ---@type ExColors.Config
+    opts = {},
+  },
   {
     "folke/zen-mode.nvim",
     opts = {
@@ -365,13 +372,6 @@ return {
     },
   },
   { "eandrju/cellular-automaton.nvim" },
-  { -- use to create an optimised version of the colorscheme usage -> :ExColors
-    "aileot/ex-colors.nvim",
-    lazy = true,
-    cmd = "ExColors",
-    ---@type ExColors.Config
-    opts = {},
-  },
   {
     "folke/ts-comments.nvim",
     opts = {},
