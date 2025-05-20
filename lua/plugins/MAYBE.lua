@@ -73,4 +73,36 @@ return {
     dependencies = { "MunifTanjim/nui.nvim" },
     opts = {},
   },
+  {
+    "athar-qadri/weather.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- Required for HTTP requests
+      "rcarriga/nvim-notify", -- Optional, for notifications
+    },
+    config = function()
+      local weather = require("weather")
+      weather:setup({
+        settings = {
+          update_interval = 60 * 10 * 1000, -- 10 minutes
+          minimum_magnitude = 5,
+          location = { lat = 34.0787, lon = 74.7659 },
+          temperature_unit = "celsius",
+        },
+      })
+      require("weather.notify").start() -- Start notifications
+    end,
+  },
+  {
+    "KoolieAid/pastevim.nvim",
+    dependencies = "nvim-lua/plenary.nvim",
+    config = function()
+      require("pastevim").setup({
+        api_key = "YOUR KEY HERE",
+        public = 1,
+        include_filename = true,
+        code_only = false,
+        expiry = "N",
+      })
+    end,
+  },
 }
