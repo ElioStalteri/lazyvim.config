@@ -36,7 +36,7 @@ return {
             return require("codecompanion.adapters").extend("gemini", {
               env = {
                 api_key = os.getenv("AI_API_KEY"),
-                model = "gemini-2.5-flash-preview-04-17", --"gemini-2.0-flash", -- "gemini-2.5-pro-exp-03-25"
+                model = "gemini-2.5-flash-preview-05-20", --"gemini-2.0-flash", -- "gemini-2.5-pro-exp-03-25"
               },
             })
           end,
