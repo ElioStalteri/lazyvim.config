@@ -16,6 +16,7 @@ vim.opt.smartcase = true -- Don't ignore case with capitals
 vim.opt.smartindent = true -- Insert indents automatically
 vim.opt.spelllang = { "en" }
 vim.g.markdown_folding = 1 -- enable markdown folding
+vim.opt.termguicolors = true
 -- vim.g.autoformat = false
 -- vim.g.lazygit_config = false
 -- vim.opt.clipboard = "unnamed,unnamedplus"

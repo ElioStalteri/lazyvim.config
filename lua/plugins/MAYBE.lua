@@ -105,4 +105,13 @@ return {
       })
     end,
   },
+
+  ------------------------------------------------------------------------------
+
+  {
+    "axkirillov/unified.nvim",
+    opts = {
+      -- your configuration comes here
+    },
+  },
 }
