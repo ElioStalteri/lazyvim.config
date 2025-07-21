@@ -13,6 +13,7 @@ return {
   -- { "rose-pine/neovim" },
   -- { "catppuccin/nvim" },
   -- { "rebelot/kanagawa.nvim" },
+  -- { "tanvirtin/monokai.nvim" },
   {
     "ElioStalteri/ofirkai.nvim",
     lazy = false,
@@ -26,35 +27,35 @@ return {
     ---@type ExColors.Config
     opts = {},
   },
-  {
-    "folke/zen-mode.nvim",
-    opts = {
-      window = {
-        width = 140,
-      },
-      on_open = function(win)
-        local buffline = package.loaded["bufferline"]
-        if buffline then
-          local view = require("zen-mode.view")
-          local layout = view.layout(view.opts)
-          vim.api.nvim_win_set_config(win, {
-            width = layout.width,
-            height = layout.height - 1,
-          })
-          vim.api.nvim_win_set_config(view.bg_win, {
-            width = vim.o.columns,
-            height = view.height() - 1,
-            row = 1,
-            col = layout.col,
-            relative = "editor",
-          })
-        end
-      end,
-    },
-    keys = {
-      { "<leader>tz", "<cmd>ZenMode<cr>", desc = "Toggle zen mode" },
-    },
-  },
+  -- {
+  --   "folke/zen-mode.nvim",
+  --   opts = {
+  --     window = {
+  --       width = 140,
+  --     },
+  --     on_open = function(win)
+  --       local buffline = package.loaded["bufferline"]
+  --       if buffline then
+  --         local view = require("zen-mode.view")
+  --         local layout = view.layout(view.opts)
+  --         vim.api.nvim_win_set_config(win, {
+  --           width = layout.width,
+  --           height = layout.height - 1,
+  --         })
+  --         vim.api.nvim_win_set_config(view.bg_win, {
+  --           width = vim.o.columns,
+  --           height = view.height() - 1,
+  --           row = 1,
+  --           col = layout.col,
+  --           relative = "editor",
+  --         })
+  --       end
+  --     end,
+  --   },
+  --   keys = {
+  --     { "<leader>tz", "<cmd>ZenMode<cr>", desc = "Toggle zen mode" },
+  --   },
+  -- },
   {
     "akinsho/toggleterm.nvim",
     lazy = false,
@@ -146,7 +147,7 @@ return {
       },
       { "y", "<Plug>(YankyYank)", mode = { "n" }, desc = "Yank Text" },
       { "p", "<Plug>(YankyPutAfter)", mode = { "n" }, desc = "Put Text After Cursor" },
-      { "p", '"_dP', mode = { "v" }, desc = "paste without looding copy register" },
+      { "p", '"_dp', mode = { "v" }, desc = "paste without looding copy register" },
       { "P", "<Plug>(YankyPutBefore)", mode = { "n" }, desc = "Put Text Before Cursor" },
       { "gp", "<Plug>(YankyGPutAfter)", mode = { "n" }, desc = "Put Text After Selection" },
       { "gP", "<Plug>(YankyGPutBefore)", mode = { "n" }, desc = "Put Text Before Selection" },
@@ -293,19 +294,19 @@ return {
       { "<leader>bo", "<CMD>BufferLineCloseOthers<CR>", desc = "close other buffers" },
     },
   },
-  {
-    "leath-dub/snipe.nvim",
-    keys = {
-      {
-        "<leader><leader>",
-        function()
-          require("snipe").open_buffer_menu()
-        end,
-        desc = "Open Snipe buffer menu",
-      },
-    },
-    opts = {},
-  },
+  -- {
+  --   "leath-dub/snipe.nvim",
+  --   keys = {
+  --     {
+  --       "<leader><leader>",
+  --       function()
+  --         require("snipe").open_buffer_menu()
+  --       end,
+  --       desc = "Open Snipe buffer menu",
+  --     },
+  --   },
+  --   opts = {},
+  -- },
   -- { "sigmasd/deno-nvim" },
   -- { -- markdown presentations
   --   "tjdevries/present.nvim",
@@ -353,26 +354,12 @@ return {
   },
   { "elliotxx/copypath.nvim", opts = {} },
   {
-    "danitrap/cheatsh.nvim",
-    opts = {}, -- Optional configuration, you can leave it empty
-  },
-  { -- add console log for selected variables
-    "Goose97/timber.nvim",
-    version = "*", -- Use for stability; omit to use `main` branch for the latest features
-    event = "VeryLazy",
-    config = function()
-      require("timber").setup({
-        -- Configuration here, or leave empty to use defaults
-      })
-    end,
-  },
-  {
     "chrisgrieser/nvim-justice",
     keys = {
       { "<leader>j", "<cmd>Justice<cr>", desc = "run just task" },
     },
   },
-  { "eandrju/cellular-automaton.nvim" },
+  -- { "eandrju/cellular-automaton.nvim" },
   {
     "folke/ts-comments.nvim",
     opts = {},
