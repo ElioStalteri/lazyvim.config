@@ -26,7 +26,7 @@ local function header_whith_color()
   local lines = {}
   math.randomseed(os.time())
   math.random()
-  local offset = math.random(360)
+  local offset = math.random(260)
   for i, text in pairs(vim.split(logo, "\n")) do
     local hi = "gradient" .. math.fmod((i * 12 + offset), 359)
     local line_chars = text
