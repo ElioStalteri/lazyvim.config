@@ -131,6 +131,36 @@ end
 
 M.hl_groups = function(scheme)
   return add_missing({
+    ["Cursor"] = {
+      fg = scheme.black,
+      bg = scheme.white,
+      reverse = false,
+    },
+    ["iCursor"] = {
+      fg = scheme.black,
+      bg = scheme.white,
+      reverse = false,
+    },
+    ["lCursor"] = {
+      fg = scheme.black,
+      bg = scheme.white,
+      reverse = false,
+    },
+    ["vCursor"] = {
+      fg = scheme.black,
+      bg = scheme.white,
+      reverse = false,
+    },
+    ["CursorIM"] = {
+      fg = scheme.black,
+      bg = scheme.white,
+      reverse = false,
+    },
+    ["TermCursor"] = {
+      fg = scheme.black,
+      bg = scheme.white,
+      reverse = false,
+    },
     ["FloatBorder"] = {
       fg = scheme.lightorange,
       -- bg = scheme.ui_bg,
