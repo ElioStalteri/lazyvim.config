@@ -1,167 +1,126 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-vim.g.have_nerd_font = true
+vim.opt.winborder = "rounded"
+vim.opt.tabstop = 2
+vim.opt.cursorcolumn = false
+vim.opt.ignorecase = true
+vim.opt.shiftwidth = 2
+vim.opt.smartindent = true
+vim.opt.wrap = false
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.mouse = "a"
-vim.opt.showmode = false
-vim.schedule(function()
-  vim.opt.clipboard = "unnamedplus"
-end)
-vim.opt.breakindent = true
+vim.opt.swapfile = false
+vim.opt.termguicolors = true
 vim.opt.undofile = true
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
+vim.opt.incsearch = true
 vim.opt.signcolumn = "yes"
-vim.opt.updatetime = 250
-vim.opt.timeoutlen = 300
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-vim.opt.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
-vim.opt.inccommand = "split"
-vim.opt.cursorline = true
-vim.opt.scrolloff = 10
 
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
-vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
-vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
-vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+local map = vim.keymap.set
 
-vim.api.nvim_create_autocmd("TextYankPost", {
-  desc = "Highlight when yanking (copying) text",
-  group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-  callback = function()
-    vim.highlight.on_yank()
-  end,
+vim.g.mapleader = " "
+-- map({ "n", "v", "x" }, "<leader>s", ":e #<CR>")
+-- map({ "n", "v", "x" }, "<leader>S", ":sf #<CR>")
+
+-- TODO: add go to references
+vim.pack.add({
+	{ src = "https://github.com/folke/which-key.nvim" },
+	{ src = "https://github.com/supermaven-inc/supermaven-nvim" },
+	-- { src = "kristijanhusak/vim-dadbod-ui" },
+	-- { src = "tpope/vim-dadbod" },
+	-- { src = "https://github.com/vague2k/vague.nvim" },
+	{ src = "https://github.com/echasnovski/mini.icons" },
+	{ src = "https://github.com/stevearc/oil.nvim" },
+	-- { src = "https://github.com/echasnovski/mini.pick" },
+	{ src = "https://github.com/ibhagwan/fzf-lua" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+	{ src = "https://github.com/neovim/nvim-lspconfig" },
+	{ src = "https://github.com/chomosuke/typst-preview.nvim" },
+	{ src = "https://github.com/mason-org/mason.nvim" },
+	{ src = "https://github.com/saghen/blink.cmp" },
+
+	-- { src = "https://github.com/NvChad/showkeys", opt = true },
 })
 
-vim.api.nvim_create_user_command("Cppath", function()
-  local path = vim.fn.expand("%:p")
-  vim.fn.setreg("+", path)
-  vim.notify('Copied "' .. path .. '" to the clipboard!')
-end, {})
-
-vim.filetype.add({
-  pattern = {
-    [".*%.http"] = "http",
-  },
+require("which-key").setup({
+	preset = "helix",
+})
+require("mason").setup()
+-- require("showkeys").setup({ position = "top-right" })
+-- require("mini.pick").setup()
+require("oil").setup()
+require("blink.cmp").setup({
+	signature = {
+		enabled = true,
+	},
+	cmdline = {
+		completion = { menu = { auto_show = true } },
+	},
+	keymap = {
+		preset = "default",
+	},
+	appearance = {
+		use_nvim_cmp_as_default = true,
+		nerd_font_variant = "mono",
+	},
+	sources = {
+		default = {
+			"lsp",
+			"path",
+			"buffer",
+		},
+	},
+	completion = {
+		documentation = {
+			auto_show = true,
+			auto_show_delay_ms = 500,
+		},
+		menu = {
+			auto_show = true,
+			draw = {
+				columns = { { "kind_icon" }, { "label", "label_description", gap = 1 }, { "kind" }, { "source_name" } },
+			},
+		},
+	},
 })
 
--- [[ Install `lazy.nvim` plugin manager ]]
---    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-  if vim.v.shell_error ~= 0 then
-    error("Error cloning lazy.nvim:\n" .. out)
-  end
-end ---@diagnostic disable-next-line: undefined-field
-vim.opt.rtp:prepend(lazypath)
+map("n", "<leader>o", ":update<CR> :source<CR>")
+map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+map(
+	"n",
+	"<leader>q",
+	-- "<CMD>UndotreeHide<CR><CMD>DBUIClose<CR><CMD>Neotree close<CR><CMD>confirm qa<CR>",
+	"<CMD>confirm qa<CR>",
+	{ desc = "Close All" }
+)
+map({ "n", "v", "x" }, "<leader>y", '"+y<CR>')
+map({ "n", "v", "x" }, "<leader>p", '"+p<CR>')
+map({ "n", "v", "x" }, "<leader>d", '"+d<CR>')
 
-require("lazy").setup({
-  {
-    "lewis6991/gitsigns.nvim",
-    opts = {
-      signs = {
-        add = { text = "+" },
-        change = { text = "~" },
-        delete = { text = "_" },
-        topdelete = { text = "‾" },
-        changedelete = { text = "~" },
-      },
-    },
-  },
+-- map("n", "<leader>sf", ":Pick files<CR>")
+-- map("n", "<leader>sh", ":Pick help<CR>")
+map("n", "<leader>td", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
+map("n", "<leader>sf", require("fzf-lua").files)
+map("n", "<leader>sg", require("fzf-lua").grep)
+map("n", "<leader>gf", require("fzf-lua").git_files)
+map("n", "<leader>sh", require("fzf-lua").helptags)
+map("n", "<leader>sb", require("fzf-lua").buffers)
 
-  require("plugins.whichkey"),
+map("n", "-", ":Oil<CR>")
+-- map("t", "", "")
+-- map("t", "", "")
+map("n", "<leader>cf", vim.lsp.buf.format)
 
-  require("plugins.telescope"),
-
-  -- LSP Plugins
-  {
-    -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
-    -- used for completion, annotations and signatures of Neovim apis
-    "folke/lazydev.nvim",
-    ft = "lua",
-    opts = {
-      library = {
-        -- Load luvit types when the `vim.uv` word is found
-        { path = "luvit-meta/library", words = { "vim%.uv" } },
-      },
-    },
-  },
-  { "Bilal2453/luvit-meta", lazy = true },
-
-  -- easy creation of snippets
-  require("plugins.snippets"),
-
-  -- lsp configuration
-  require("plugins.lsp"),
-
-  -- auto format files
-  require("plugins.conform"),
-
-  -- auto completion
-  require("plugins.blink-cmp"),
-  -- require("plugins.nvim-cmp"),
-
-  require("plugins.treesitter"),
-
-  require("plugins.config"),
-
-  require("plugins.rest"),
-
-  require("plugins.alpha-nvim"),
-
-  require("plugins.neotree"),
-
-  require("plugins.git"),
-
-  require("plugins.snacks"),
-
-  require("plugins.AI"),
-
-  require("plugins.yazi"),
-
-  require("plugins.image"),
-
-  require("plugins.gopher"),
-
-  require("plugins.namu"),
-
-  require("plugins.multicursor"),
-
-  -- require("plugins.maybe"), -- TODO: decide if you want this
-}, {
-  ui = {
-    -- If you are using a Nerd Font: set icons to an empty table which will use the
-    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = "⌘",
-      config = "🛠",
-      event = "📅",
-      ft = "📂",
-      init = "⚙",
-      keys = "🗝",
-      plugin = "🔌",
-      runtime = "💻",
-      require = "🌙",
-      source = "📄",
-      start = "🚀",
-      task = "📌",
-      lazy = "💤 ",
-    },
-  },
+vim.lsp.enable({ "lua_ls", "svelte", "tinymist", "emmetls" })
+vim.lsp.config("lua_ls", {
+	settings = {
+		Lua = {
+			workspace = {
+				library = vim.api.nvim_get_runtime_file("", true),
+			}
+		}
+	}
 })
 
-require("config.keymaps")
-
-require("config.options")
-
-require("colorscheme")
-
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+-- colors
+-- require("vague").setup({ transparent = true })
+-- vim.cmd("colorscheme vague")
+vim.cmd("colorscheme ex-ofirkai")
+vim.cmd(":hi statusline guibg=NONE")
