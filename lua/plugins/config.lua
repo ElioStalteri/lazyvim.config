@@ -14,6 +14,7 @@ return {
   -- { "catppuccin/nvim" },
   -- { "rebelot/kanagawa.nvim" },
   -- { "tanvirtin/monokai.nvim" },
+  -- { "vague2k/vague.nvim" },
   {
     "ElioStalteri/ofirkai.nvim",
     lazy = false,
