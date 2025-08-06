@@ -21,6 +21,7 @@ vim.g.mapleader = " "
 
 -- TODO: add go to references
 vim.pack.add({
+	{ src = "https://github.com/folke/trouble.nvim" },
 	{ src = "https://github.com/folke/which-key.nvim" },
 	{ src = "https://github.com/supermaven-inc/supermaven-nvim" },
 	-- { src = "kristijanhusak/vim-dadbod-ui" },
@@ -43,10 +44,26 @@ require("which-key").setup({
 	preset = "helix",
 })
 require("mason").setup()
+require("supermaven-nvim").setup({})
 -- require("showkeys").setup({ position = "top-right" })
 -- require("mini.pick").setup()
 require("oil").setup()
+require("trouble").setup({
+	modes = {
+		lsp = {
+			win = { position = "right" },
+		},
+	},
+})
+
 require("blink.cmp").setup({
+	fuzzy = {
+		implementation = "prefer_rust",
+		prebuilt_binaries = {
+			download = true,
+			force_version = "1.*"
+		},
+	},
 	signature = {
 		enabled = true,
 	},
@@ -81,7 +98,11 @@ require("blink.cmp").setup({
 	},
 })
 
+
+map("n", "<leader>cx", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Diagnostics (Trouble)" })
+map("n", "<leader>cX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", { desc = "Buffer Diagnostics (Trouble)" })
 map("n", "<leader>o", ":update<CR> :source<CR>")
+map("n", "<leader>u", vim.pack.update)
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 map(
 	"n",
@@ -96,12 +117,14 @@ map({ "n", "v", "x" }, "<leader>d", '"+d<CR>')
 
 -- map("n", "<leader>sf", ":Pick files<CR>")
 -- map("n", "<leader>sh", ":Pick help<CR>")
-map("n", "<leader>td", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
+-- map("n", "<leader>td", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
 map("n", "<leader>sf", require("fzf-lua").files)
 map("n", "<leader>sg", require("fzf-lua").grep)
 map("n", "<leader>gf", require("fzf-lua").git_files)
 map("n", "<leader>sh", require("fzf-lua").helptags)
 map("n", "<leader>sb", require("fzf-lua").buffers)
+map("n", "gd", require("fzf-lua").lsp_definitions)
+map("n", "gr", require("fzf-lua").lsp_references)
 
 map("n", "-", ":Oil<CR>")
 -- map("t", "", "")
