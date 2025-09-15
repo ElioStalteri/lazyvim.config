@@ -25,6 +25,10 @@ return {
           timeout = 30000, -- timeout in milliseconds
           temperature = 0, -- adjust if needed
           max_tokens = 4096,
+          extra_request_body = {
+            include_thoughts = false,
+            thinking_budget = 0,
+          },
         },
       },
       behaviour = {
