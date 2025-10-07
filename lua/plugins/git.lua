@@ -21,38 +21,18 @@ return {
   --   },
   -- },
   {
-    "akinsho/git-conflict.nvim",
-    version = "*",
+    "StackInTheWild/headhunter.nvim",
+    lazy = true,
     opts = {
-      default_mappings = {
-        ours = "<leader>Co",
-        theirs = "<leader>Ct",
-        none = "<leader>C0",
-        both = "<leader>Cb",
-        next = "<leader>Cn",
-        prev = "<leader>Cp",
-      },
+      register_keymaps = false, -- Disable internal keymaps if using lazy.nvim keys
     },
     keys = {
-      { "<leader>gc", "<cmd>GitConflictListQf<cr>", desc = "show conflicts" },
-    },
-  },
-  {
-    "fredeeb/tardis.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {
-      keymap = {
-        ["next"] = "<leader>h", -- next entry in log (older)
-        ["prev"] = "<leader>l", -- previous entry in log (newer)
-        ["quit"] = "q", -- quit all
-        ["revision_message"] = "<leader>m", -- show revision message for current revision
-        ["commit"] = "<leader>ga", -- replace contents of origin buffer with contents of tardis buffer
-      },
-      initial_revisions = 10, -- initial revisions to create buffers for
-      max_revisions = 256,
-    },
-    keys = {
-      { "<leader>gt", "<cmd>Tardis<cr>", desc = "Tardis load and cicle trough file revisions" },
+      { "<leader>gq", "<cmd>HeadhunterQuickFix<cr>", desc = "Conflicts Quickfix list" },
+      { "<leader>gn", "<cmd>HeadhunterNext<cr>", desc = "Go to next Conflict" },
+      { "<leader>gp", "<cmd>HeadhunterPrevious<cr>", desc = "Go to previous Conflict" },
+      { "<leader>gh", "<cmd>HeadhunterTakeHead<cr>", desc = "Take changes from HEAD" },
+      { "<leader>go", "<cmd>HeadhunterTakeOrigin<cr>", desc = "Take changes from origin" },
+      { "<leader>gb", "<cmd>HeadhunterTakeBoth<cr>", desc = "Take both changes" },
     },
   },
   {

@@ -151,4 +151,9 @@ return {
       },
     },
   },
+
+  -- jupiter notebook in neovim
+  { "bxrne/euporie.nvim" },
+
+
 }
