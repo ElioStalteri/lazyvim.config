@@ -97,11 +97,9 @@ return {
       --   end,
       --   desc = "Sidekick Toggle Claude",
       -- },
-
       {
         "<leader>ac",
         function()
-          require("sidekick.cli").close()
           require("sidekick.cli").send({
             msg = "create a commit message following github standard and add an emoji, use the staged changes",
           })
