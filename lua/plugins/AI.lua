@@ -101,7 +101,7 @@ return {
         "<leader>ac",
         function()
           require("sidekick.cli").send({
-            msg = "create a commit message following github standard and add an emoji, use the staged changes",
+            msg = "there are new changes, create a commit message following github standard and add an emoji, use the staged changes",
           })
         end,
         desc = "Sidekick commit",
