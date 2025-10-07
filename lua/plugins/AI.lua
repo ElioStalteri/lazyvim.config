@@ -21,16 +21,13 @@ return {
       --     enabled = true,
       --   },
       -- },
-      cli = {
-        prompts = {
-          -- refactor = "Please refactor {this} to be more maintainable",
-          -- security = "Review {file} for security vulnerabilities",
-          commit = function(ctx)
-            return "create a commit message following github standard and add an emoji: \n"
-              .. vim.fn.system("git diff --no-ext-diff --staged")
-          end,
-        },
-      },
+      -- cli = {
+      --   prompts = {
+      --     refactor = "Please refactor {this} to be more maintainable",
+      --     security = "Review {file} for security vulnerabilities",
+      --     commit = "create a commit message following github standard and add an emoji, use the staged changes",
+      --   },
+      -- },
     },
     keys = {
       {
@@ -63,10 +60,10 @@ return {
       {
         "<leader>at",
         function()
-          require("sidekick.cli").send({ msg = "{this}" })
+          require("sidekick.cli").toggle({ name = "claude", focus = true })
         end,
-        mode = { "x", "n" },
-        desc = "Send This",
+        -- mode = { "x", "n" },
+        desc = "Sidekick Toggle Claude",
       },
       {
         "<leader>av",
@@ -93,12 +90,23 @@ return {
         desc = "Sidekick Switch Focus",
       },
       -- Example of a keybinding to open Claude directly
+      -- {
+      --   "<leader>ac",
+      --   function()
+      --     require("sidekick.cli").toggle({ name = "claude", focus = true })
+      --   end,
+      --   desc = "Sidekick Toggle Claude",
+      -- },
+
       {
         "<leader>ac",
         function()
-          require("sidekick.cli").toggle({ name = "claude", focus = true })
+          require("sidekick.cli").close()
+          require("sidekick.cli").send({
+            msg = "create a commit message following github standard and add an emoji, use the staged changes",
+          })
         end,
-        desc = "Sidekick Toggle Claude",
+        desc = "Sidekick commit",
       },
     },
   },
