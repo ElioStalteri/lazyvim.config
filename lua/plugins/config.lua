@@ -188,13 +188,13 @@ return {
   { -- Collection of various small independent plugins/modules
     "echasnovski/mini.nvim",
     keys = {
-      {
-        "<leader>gd",
-        function()
-          require("mini.diff").toggle_overlay(0)
-        end,
-        desc = "Diff",
-      },
+      -- {
+      --   "<leader>gd",
+      --   function()
+      --     require("mini.diff").toggle_overlay(0)
+      --   end,
+      --   desc = "Diff",
+      -- },
     },
     config = function()
       -- Better Around/Inside textobjects
@@ -204,7 +204,7 @@ return {
       require("mini.surround").setup()
 
       -- hunk diff view
-      require("mini.diff").setup()
+      -- require("mini.diff").setup()
     end,
   },
   -- Highlight todo, notes, etc in comments

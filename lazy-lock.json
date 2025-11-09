@@ -10,6 +10,7 @@
   "conform.nvim": { "branch": "master", "commit": "cde4da5c1083d3527776fee69536107d98dae6c9" },
   "copilot.lua": { "branch": "master", "commit": "5bde2cfe01f049f522eeb8b52c5c723407db8bdf" },
   "copypath.nvim": { "branch": "main", "commit": "b5a950ce7bc1e1b5297d229927e092bf627b6f79" },
+  "difft.nvim": { "branch": "main", "commit": "cabc1d56e8ce9647973039c65c71608583f700a0" },
   "dressing.nvim": { "branch": "master", "commit": "2d7c2db2507fa3c4956142ee607431ddb2828639" },
   "ex-colors.nvim": { "branch": "main", "commit": "76a20ce29d160a4eb9f275a615dc8257cb15c58c" },
   "fidget.nvim": { "branch": "main", "commit": "e32b672d8fd343f9d6a76944fedb8c61d7d8111a" },
