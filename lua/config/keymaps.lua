@@ -35,8 +35,6 @@ map("n", "<leader>td", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
 map("v", "<leader>r", '"hy:%s/<C-r>h//g<left><left>', { desc = "Replace all instances of highlighted words" })
 -- map("v", "<leader>S", ":sort<CR>", { desc = "Sort highlighted text in visual mode with Control+" })
 
-map("n", "<leader>tu", ":UndotreeToggle<CR>", { desc = "Toggle undo tree" })
-
 -- real inspiration for a minimal config
 -- https://gitlab.com/linuxdabbler/dotfiles/-/blob/main/.config/nvim/init.lua?ref_type=heads#L151
 
@@ -45,7 +43,7 @@ map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 map(
   "n",
   "<leader>q",
-  "<CMD>UndotreeHide<CR><CMD>DBUIClose<CR><CMD>Neotree close<CR><CMD>confirm qa<CR>",
+  "<CMD>Atone close<CR><CMD>DBUIClose<CR><CMD>Neotree close<CR><CMD>confirm qa<CR>",
   { desc = "Close All" }
 )
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })

@@ -7,7 +7,16 @@ return {
       -- { "kristijanhusak/vim-dadbod-completion", lazy = true, ft = { "sql", "mysql", "plsql" } },
     },
   },
-  { "mbbill/undotree" },
+  -- { "mbbill/undotree" },
+  {
+    "XXiaoA/atone.nvim",
+    cmd = "Atone",
+    opts = {}, -- your configuration here
+    keys = {
+      { "<leader>tu", "<cmd>Atone toggle<cr>", desc = "Toggle undo tree" },
+      -- map("n", "<leader>tu", ":UndotreeToggle<CR>", { desc = "Toggle undo tree" })
+    },
+  },
   -- { "nvim-treesitter/playground" },
   -- { "ofirgall/ofirkai.nvim", lazy = false },
   -- { "rose-pine/neovim" },
