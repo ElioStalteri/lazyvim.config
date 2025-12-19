@@ -10,6 +10,7 @@ return {
     ---@type pipeline.Config
     opts = {},
   },
+
   { -- https://github.com/tlj/api-browser.nvim?tab=readme-ov-file
     "tlj/api-browser.nvim",
     dependencies = {
@@ -27,6 +28,7 @@ return {
       -- { "<leader>se", "<cmd>ApiBrowser endpoints<cr>", desc = "Open list of endpoints for current API." },
     },
   },
+
   { -- https://github.com/livinglogic-nl/relay.nvim
     "livinglogic-nl/relay.nvim",
     opts = {
@@ -51,6 +53,7 @@ return {
       { "<leader>tt", "<cmd>lua require('relay').toggle()<cr>", desc = "toggle task view" },
     },
   },
+
   { -- https://github.com/fredrikaverpil/pr.nvim
     "fredrikaverpil/pr.nvim",
     lazy = true,
@@ -68,11 +71,13 @@ return {
     },
     cmd = { "PRView" },
   },
+
   {
     "m4xshen/hardtime.nvim",
     dependencies = { "MunifTanjim/nui.nvim" },
     opts = {},
   },
+
   {
     "athar-qadri/weather.nvim",
     dependencies = {
@@ -92,6 +97,7 @@ return {
       require("weather.notify").start() -- Start notifications
     end,
   },
+
   {
     "KoolieAid/pastevim.nvim",
     dependencies = "nvim-lua/plenary.nvim",
@@ -155,5 +161,16 @@ return {
   -- jupiter notebook in neovim
   { "bxrne/euporie.nvim" },
 
-
+  {
+    "tigion/games.nvim",
+    keys = {
+      {
+        "<leader>xg",
+        function()
+          require("games").select()
+        end,
+        desc = "Games",
+      },
+    },
+  },
 }
