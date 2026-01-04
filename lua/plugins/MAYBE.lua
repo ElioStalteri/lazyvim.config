@@ -173,4 +173,21 @@ return {
       },
     },
   },
+
+  -- data explorer for parquet files using dackdb
+  {
+    "kyytox/data-explorer.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+    config = function()
+      require("data-explorer").setup()
+    end,
+  },
+
+  -- javascript/typescript console log capture and display in neovim
+  {
+    "chriswritescode-dev/consolelog.nvim",
+    config = function()
+      require("consolelog").setup()
+    end,
+  },
 }
