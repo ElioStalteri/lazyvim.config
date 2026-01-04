@@ -26,8 +26,8 @@ vim.keymap.set({ "n", "i", "s" }, "<c-b>", function()
 end, { silent = true, expr = true })
 
 -- scroll up and down
-map("n", "<C-u>", "<C-u>zz", { desc = "Scroll Up" })
-map("n", "<C-d>", "<C-d>zz", { desc = "Scroll Down" })
+-- map("n", "<C-u>", "<C-u>zz", { desc = "Scroll Up" })
+-- map("n", "<C-d>", "<C-d>zz", { desc = "Scroll Down" })
 
 map("n", "<leader>td", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
 -- map("n", "<leader>z", "<cmd>ZenMode<cr>", { desc = "Toggle ZenMode" })
