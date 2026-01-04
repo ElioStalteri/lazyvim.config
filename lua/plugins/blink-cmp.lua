@@ -1,6 +1,15 @@
 ---@type LazyPluginSpec[]
 return {
-
+  {
+    "saghen/blink.indent",
+    --- @module 'blink.indent'
+    --- @type blink.indent.Config
+    opts = {
+      scope = {
+        highlights = { "BlinkIndentScope" },
+      },
+    },
+  },
   {
     "saghen/blink.cmp",
     -- optional: provides snippets for the snippet source

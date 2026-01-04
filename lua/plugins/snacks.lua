@@ -42,18 +42,18 @@ return {
         },
       },
       indent = {
-        enabled = true,
-        indent = {
-          char = "▏",
-          only_current = true,
-          -- only_scope = true,
-        },
-        scope = {
-          char = "▏",
-        },
-        animate = {
-          enabled = false,
-        },
+        enabled = false,
+        -- indent = {
+        --   char = "▏",
+        --   only_current = true,
+        --   -- only_scope = true,
+        -- },
+        -- scope = {
+        --   char = "▏",
+        -- },
+        -- animate = {
+        --   enabled = false,
+        -- },
       },
     },
     init = function()
