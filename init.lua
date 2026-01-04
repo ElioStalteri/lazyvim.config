@@ -124,7 +124,7 @@ require("lazy").setup({
 
   require("plugins.AI"),
 
-  require("plugins.yazi"),
+  -- require("plugins.yazi"),
 
   require("plugins.image"),
 
