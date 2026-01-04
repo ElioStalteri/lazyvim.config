@@ -417,4 +417,15 @@ return {
       { "<leader>xS", "<cmd>ScratchOpen<cr>", desc = "Scratch open" },
     },
   },
+  {
+    "lesnik2u/herald.nvim",
+    event = "VeryLazy",
+    opts = {
+      filename_mode = "relative",
+      show_git_branch = true,
+    },
+    keys = {
+      { "<leader>uf", "<cmd>Herald toggle<cr>", desc = "toggle file Path" },
+    },
+  },
 }

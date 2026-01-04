@@ -20,6 +20,7 @@
   "gopher.nvim": { "branch": "main", "commit": "6a3924cee5a9f36d316f8e4a90c3020438d3513f" },
   "goplements.nvim": { "branch": "main", "commit": "1750ace64d42efcbc1ce36eef848a3cea5f88c79" },
   "grug-far.nvim": { "branch": "main", "commit": "74eef260e1142264ab994fb9c88e4f420e9486d7" },
+  "herald.nvim": { "branch": "main", "commit": "0e3fda23ba773991200b1faa9016c221e511ee71" },
   "kulala.nvim": { "branch": "main", "commit": "cd3eaa83b8d60533837202dede73238334d71832" },
   "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
   "lazydev.nvim": { "branch": "main", "commit": "5231c62aa83c2f8dc8e7ba957aa77098cda1257d" },
