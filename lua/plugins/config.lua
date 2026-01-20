@@ -217,40 +217,40 @@ return {
       { "<leader>ct", "<cmd>TodoQuickFix<cr>", desc = "TODO QuickFix" },
     },
   },
-  { -- smooth scrolling
-    "declancm/cinnamon.nvim",
-    version = "*", -- use latest release
-    opts = {
-      keymaps = {
-        -- Enable the provided 'basic' keymaps
-        -- basic = true,
-        -- Enable the provided 'extra' keymaps
-        -- extra = true,
-      },
-      options = {
-        mode = "window",
-        -- delay = 8,
-      },
-    },
-    keys = {
-      {
-        "<C-U>",
-        function()
-          require("cinnamon").scroll("<C-U>zz")
-        end,
-        mode = { "n" },
-        desc = "Scroll Up",
-      },
-      {
-        "<C-D>",
-        function()
-          require("cinnamon").scroll("<C-D>zz")
-        end,
-        mode = { "n" },
-        desc = "Scroll Down",
-      },
-    },
-  },
+  -- { -- smooth scrolling
+  --   "declancm/cinnamon.nvim",
+  --   version = "*", -- use latest release
+  --   opts = {
+  --     keymaps = {
+  --       -- Enable the provided 'basic' keymaps
+  --       -- basic = true,
+  --       -- Enable the provided 'extra' keymaps
+  --       -- extra = true,
+  --     },
+  --     options = {
+  --       mode = "window",
+  --       -- delay = 8,
+  --     },
+  --   },
+  --   keys = {
+  --     {
+  --       "<C-U>",
+  --       function()
+  --         require("cinnamon").scroll("<C-U>zz")
+  --       end,
+  --       mode = { "n" },
+  --       desc = "Scroll Up",
+  --     },
+  --     {
+  --       "<C-D>",
+  --       function()
+  --         require("cinnamon").scroll("<C-D>zz")
+  --       end,
+  --       mode = { "n" },
+  --       desc = "Scroll Down",
+  --     },
+  --   },
+  -- },
   -- { -- smooth scrolling
   --   "karb94/neoscroll.nvim",
   --   opts = {},
