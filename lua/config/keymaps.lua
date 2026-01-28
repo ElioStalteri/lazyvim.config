@@ -93,4 +93,4 @@ map("n", "<leader>fd", function()
 end, { desc = "delete quick fix" })
 
 map("n", "<leader>y", "<cmd>Cppath<cr>", { desc = "copy path" })
-map("n", "<leader>o", ":e <C-f>", { desc = "open file by path" })
+-- map("n", "<leader>o", ":e <C-f>", { desc = "open file by path" })
