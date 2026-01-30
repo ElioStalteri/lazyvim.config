@@ -13,7 +13,7 @@
   "ex-colors.nvim": { "branch": "main", "commit": "76a20ce29d160a4eb9f275a615dc8257cb15c58c" },
   "fidget.nvim": { "branch": "main", "commit": "7fa433a83118a70fe24c1ce88d5f0bd3453c0970" },
   "friendly-snippets": { "branch": "main", "commit": "6cd7280adead7f586db6fccbd15d2cac7e2188b9" },
-  "fzf-lua": { "branch": "main", "commit": "83fa6ff3ff05f02a3fc3f93707b1aa7004831645" },
+  "fzf-lua": { "branch": "main", "commit": "94e2ae01cbc76ba4aa61e2c7b38fe7f25159fc29" },
   "gitsigns.nvim": { "branch": "main", "commit": "abf82a65f185bd54adc0679f74b7d6e1ada690c9" },
   "gopher.nvim": { "branch": "main", "commit": "6a3924cee5a9f36d316f8e4a90c3020438d3513f" },
   "goplements.nvim": { "branch": "main", "commit": "1750ace64d42efcbc1ce36eef848a3cea5f88c79" },
@@ -65,7 +65,7 @@
   "ts-comments.nvim": { "branch": "main", "commit": "123a9fb12e7229342f807ec9e6de478b1102b041" },
   "vim-dadbod": { "branch": "master", "commit": "6d1d41da4873a445c5605f2005ad2c68c99d8770" },
   "vim-dadbod-ui": { "branch": "master", "commit": "48c4f271da13d380592f4907e2d1d5558044e4e5" },
-  "vscode-diff.nvim": { "branch": "main", "commit": "eb84ff55302433aa4f6380575510b840619d8e44" },
+  "vscode-diff.nvim": { "branch": "main", "commit": "fc6157eeb2c9870594db4e18d36ec035de3b8a36" },
   "which-key.nvim": { "branch": "main", "commit": "3aab2147e74890957785941f0c1ad87d0a44c15a" },
   "yanky.nvim": { "branch": "main", "commit": "04fc42b94305d94948c9c197f679336668af3292" }
 }

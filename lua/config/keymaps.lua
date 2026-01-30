@@ -92,5 +92,15 @@ map("n", "<leader>fd", function()
   vim.fn.setqflist({}, "r")
 end, { desc = "delete quick fix" })
 
-map("n", "<leader>y", "<cmd>Cppath<cr>", { desc = "copy path" })
+map("n", "<leader>y", function()
+  local file_path = vim.fn.expand("%:p")
+  local git_root = vim.fn.system("git rev-parse --show-toplevel 2>/dev/null"):gsub("\n", "")
+
+  if git_root ~= "" and vim.v.shell_error == 0 then
+    file_path = file_path:sub(#git_root + 2)
+  end
+
+  vim.fn.setreg("+", file_path)
+  vim.notify("Copied: " .. file_path, vim.log.levels.INFO)
+end, { desc = "copy path (relative to git root)" })
 -- map("n", "<leader>o", ":e <C-f>", { desc = "open file by path" })
