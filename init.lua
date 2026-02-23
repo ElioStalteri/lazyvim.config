@@ -96,7 +96,7 @@ require("lazy").setup({
   { "Bilal2453/luvit-meta", lazy = true },
 
   -- easy creation of snippets
-  require("plugins.snippets"),
+  -- require("plugins.snippets"),
 
   -- lsp configuration
   require("plugins.lsp"),

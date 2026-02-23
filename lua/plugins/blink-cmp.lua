@@ -14,7 +14,7 @@ return {
     "saghen/blink.cmp",
     -- optional: provides snippets for the snippet source
     dependencies = {
-      "rafamadriz/friendly-snippets",
+      -- "rafamadriz/friendly-snippets",
       { "xzbdmw/colorful-menu.nvim", opts = {} },
     },
 
@@ -49,15 +49,15 @@ return {
         default = {
           "lsp",
           "path",
-          "snippets",
+          -- "snippets",
           "buffer",
         },
         providers = {
-          snippets = {
-            opts = {
-              search_paths = { vim.fn.stdpath("config") .. "/snippets" },
-            },
-          },
+          -- snippets = {
+          --   opts = {
+          --     search_paths = { vim.fn.stdpath("config") .. "/snippets" },
+          --   },
+          -- },
           markdown = {
             name = "RenderMarkdown",
             module = "render-markdown.integ.blink",
