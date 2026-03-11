@@ -55,6 +55,10 @@ return {
     opts = {},
   },
   {
+    "MunifTanjim/nui.nvim",
+    commit = "de740991c12411b663994b2860f1a4fd0937c130",
+  },
+  {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
@@ -77,6 +81,7 @@ return {
   },
   {
     "grapp-dev/nui-components.nvim",
+    commit = "1654dd709f13874089eefc80d82e0eb667f7fdfb",
     dependencies = {
       "MunifTanjim/nui.nvim",
     },

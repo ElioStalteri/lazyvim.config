@@ -22,9 +22,23 @@ end
 local function setup_highlights()
   vim.api.nvim_set_hl(0, "SearchPanelBorder", { fg = "#5f6672", default = true })
   vim.api.nvim_set_hl(0, "SearchPanelHeader", { fg = "#aeb6c2", default = true })
+  vim.api.nvim_set_hl(0, "SearchPanelArrow", { link = "Comment", default = true })
   vim.api.nvim_set_hl(0, "SearchPanelFile", { link = "Directory", default = true })
   vim.api.nvim_set_hl(0, "SearchPanelMatch", { link = "DiffDelete", default = true })
   vim.api.nvim_set_hl(0, "SearchPanelReplace", { link = "DiffAdd", default = true })
+end
+
+local function get_file_icon(path)
+  local ok, devicons = pcall(require, "nvim-web-devicons")
+  if not ok then
+    return "*", "SearchPanelFile"
+  end
+
+  local file = vim.fs.basename(path)
+  local ext = file:match("%.([^.]+)$")
+  local icon, icon_hl = devicons.get_icon(file, ext, { default = true })
+
+  return icon or "*", icon_hl or "SearchPanelFile"
 end
 
 local function normalize_path(path)
@@ -158,12 +172,15 @@ local function to_tree_nodes(n)
     end
 
     local first = file.matches[1]
+    local icon, icon_hl = get_file_icon(file.rel_path)
     local file_node = n.node({
       type = "file",
       path = file.path,
       rel_path = file.rel_path,
       lnum = first and first.lnum or 1,
       col = first and first.col or 1,
+      icon = icon,
+      icon_hl = icon_hl,
       text = string.format("%s (%d)", file.rel_path, #file.matches),
     }, children)
     file_node:expand()
@@ -584,8 +601,9 @@ function M.open(opts)
         end,
         prepare_node = function(node, line)
           if node.type == "file" then
-            local marker = node:is_expanded() and "▾ " or "▸ "
-            line:append(marker, "Comment")
+            local marker = node:is_expanded() and " " or " "
+            line:append(marker, "SearchPanelArrow")
+            line:append((node.icon or "*") .. " ", node.icon_hl or "SearchPanelFile")
             line:append(node.text, "SearchPanelFile")
           else
             line:append("  ")
