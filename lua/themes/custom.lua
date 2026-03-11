@@ -70,7 +70,7 @@ M.scheme = {
   highlighted_word_bg = "#343942",
   tab_visible_fg = "#b3ab60",
   line_fg = "#f8f8f0",
-  cursor_line_bg = "#333227",
+  cursor_line_bg = "#40403a",
   cursor_linenr_fg = "#e6db74",
   mid_orange = "#de933c",
   lightorange = "#dea255",
@@ -204,6 +204,18 @@ M.hl_groups = function(scheme)
       fg = scheme.aqua,
     },
     ["NonText"] = {
+      fg = scheme.grey,
+    },
+    ["CursorLine"] = {
+      bg = scheme.cursor_line_bg,
+    },
+    ["SearchPanelCursorLine"] = {
+      bg = scheme.cursor_line_bg,
+    },
+    ["SearchPanelFile"] = {
+      fg = scheme.comment_fg,
+    },
+    ["SearchPanelArrow"] = {
       fg = scheme.grey,
     },
 
