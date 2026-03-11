@@ -14,13 +14,15 @@ local function map(mode, lhs, rhs, opts)
 end
 
 vim.keymap.set({ "n", "i", "s" }, "<c-f>", function()
-  if not require("noice.lsp").scroll(4) then
+  local ok, noice_lsp = pcall(require, "noice.lsp")
+  if not ok or not noice_lsp.scroll(4) then
     return "<c-f>"
   end
 end, { silent = true, expr = true })
 
 vim.keymap.set({ "n", "i", "s" }, "<c-b>", function()
-  if not require("noice.lsp").scroll(-4) then
+  local ok, noice_lsp = pcall(require, "noice.lsp")
+  if not ok or not noice_lsp.scroll(-4) then
     return "<c-b>"
   end
 end, { silent = true, expr = true })
@@ -30,28 +32,17 @@ map("n", "<C-u>", "<C-u>zz", { desc = "Scroll Up" })
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll Down" })
 
 map("n", "<leader>td", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
--- map("n", "<leader>z", "<cmd>ZenMode<cr>", { desc = "Toggle ZenMode" })
---
 map("v", "<leader>r", '"hy:%s/<C-r>h//g<left><left>', { desc = "Replace all instances of highlighted words" })
--- map("v", "<leader>S", ":sort<CR>", { desc = "Sort highlighted text in visual mode with Control+" })
 
--- real inspiration for a minimal config
--- https://gitlab.com/linuxdabbler/dotfiles/-/blob/main/.config/nvim/init.lua?ref_type=heads#L151
-
-map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-
-map(
-  "n",
-  "<leader>q",
-  "<CMD>Atone close<CR><CMD>DBUIClose<CR><CMD>Neotree close<CR><CMD>confirm qa<CR>",
-  { desc = "Close All" }
-)
+map("n", "<leader>q", function()
+  pcall(vim.cmd, "Atone close")
+  pcall(vim.cmd, "DBUIClose")
+  pcall(vim.cmd, "Neotree close")
+  vim.cmd("confirm qa")
+end, { desc = "Close All" })
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
--- map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
--- map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
--- map("n", "<leader>bd", ":bd<cr>", { desc = "Delete Buffer" })
 
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
@@ -103,4 +94,3 @@ map("n", "<leader>y", function()
   vim.fn.setreg("+", file_path)
   vim.notify("Copied: " .. file_path, vim.log.levels.INFO)
 end, { desc = "copy path (relative to git root)" })
--- map("n", "<leader>o", ":e <C-f>", { desc = "open file by path" })

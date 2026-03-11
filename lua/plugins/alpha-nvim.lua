@@ -71,14 +71,7 @@ end
 ---@type LazyPluginSpec
 return {
   "goolord/alpha-nvim",
-  -- opts = function()
-  --   local dashboard = require("alpha.themes.dashboard")
-  --
-  --   dashboard.section.header.val = nil
-  --   dashboard.opts.layout[2] = header_whith_color()
-  --
-  --   return dashboard
-  -- end,
+  event = "VimEnter",
   config = function()
     local dashboard = require("alpha.themes.dashboard")
 

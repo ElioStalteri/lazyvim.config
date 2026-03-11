@@ -1,20 +1,26 @@
 # my neovim config
 
-this is my neovim config with a custom theme
+Custom Neovim setup with an ofirkai-based theme and lazy.nvim plugin management.
 
-## install debendecies
+## install dependencies
 
-Install fonts
+### tools used by this config
+
+- `git`
+- `fd`
+- `rg` (ripgrep)
+- `lazygit` (used by snacks lazygit integration)
+- `stylua`
+- `prettier` or `prettierd`
+- `go` (for go tooling/plugins)
+
+### nerd font
 
 ```bash
-wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip \
-&& cd ~/.local/share/fonts \
-&& unzip JetBrainsMono.zip \
-&& rm JetBrainsMono.zip \
-&& fc-cache -fv
+wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip && unzip ~/.local/share/fonts/JetBrainsMono.zip -d ~/.local/share/fonts && rm ~/.local/share/fonts/JetBrainsMono.zip && fc-cache -fv
 ```
 
-Add to kitty
+### kitty font config
 
 ```kitty
 font_family      JetBrainsMono Nerd Font Mono

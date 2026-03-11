@@ -29,6 +29,8 @@ return {
       vim.keymap.set("n", "<leader>sg", fzf.live_grep, { desc = "Search by Grep" })
       vim.keymap.set("n", "<leader>/", fzf.live_grep, { desc = "Search by Grep" })
       vim.keymap.set("n", "<leader>sd", fzf.diagnostics_workspace, { desc = "Search Diagnostics" })
+      vim.keymap.set("n", "<leader>ss", fzf.lsp_document_symbols, { desc = "Search document symbols" })
+      vim.keymap.set("n", "<leader>sS", fzf.lsp_live_workspace_symbols, { desc = "Search workspace symbols" })
       vim.keymap.set("n", "<leader>sc", fzf.commands, { desc = "Search commands" })
       vim.keymap.set("n", "<leader>sC", fzf.command_history, { desc = "Search commands history" })
       vim.keymap.set("n", "<leader>s.", fzf.oldfiles, { desc = 'Search Recent Files ("." for repeat)' })

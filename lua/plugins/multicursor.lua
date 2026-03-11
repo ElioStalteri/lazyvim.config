@@ -25,7 +25,7 @@ return {
     set({ "n", "x" }, "<C-n>", function()
       mc.matchAddCursor(1)
     end)
-    set({ "n", "x" }, "<C-s>", function()
+    set({ "n", "x" }, "<M-n>", function()
       mc.matchSkipCursor(1)
     end)
     -- set({ "n", "x" }, "<C-N>", function()

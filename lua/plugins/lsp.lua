@@ -11,9 +11,6 @@ return {
 
       -- Useful status updates for LSP.
       { "j-hui/fidget.nvim", opts = {} },
-
-      -- Allows extra capabilities provided by nvim-cmp
-      -- "hrsh7th/cmp-nvim-lsp",
       "saghen/blink.cmp",
     },
     config = function()
@@ -54,10 +51,14 @@ return {
           --  Similar to document symbols, except searches over your entire project.
           -- map("<leader>cS", require("fzf-lua").lsp_live_workspace_symbols, "Workspace Symbols")
 
-          -- Rename the variable under your cursor.
-          --  Most Language Servers support renaming across files, etc.
-          -- map("<leader>cr", vim.lsp.buf.rename, "Rename")
-          map("<leader>cr", require("live-rename").rename, "Rename")
+          map("<leader>cr", function()
+            local ok, live_rename = pcall(require, "live-rename")
+            if ok then
+              live_rename.rename()
+              return
+            end
+            vim.lsp.buf.rename()
+          end, "Rename")
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
@@ -221,9 +222,4 @@ return {
       })
     end,
   },
-  -- {
-  --   "pmizio/typescript-tools.nvim",
-  --   dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-  --   opts = {},
-  -- },
 }

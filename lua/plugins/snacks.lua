@@ -3,7 +3,7 @@ return {
   {
     "folke/snacks.nvim",
     priority = 1000,
-    lazy = false,
+    event = "VeryLazy",
     opts = {
       lazygit = {
         configure = false,
@@ -16,15 +16,13 @@ return {
       statuscolumn = { enabled = true },
       toggle = {
         enabled = true,
-        map = vim.keymap.set, -- keymap.set function to use
-        which_key = true, -- integrate with which-key to show enabled/disabled icons and colors
-        notify = true, -- show a notification when toggling
-        -- icons for enabled/disabled states
+        map = vim.keymap.set,
+        which_key = true,
+        notify = true,
         icon = {
           enabled = " ",
           disabled = " ",
         },
-        -- colors for enabled/disabled states
         color = {
           enabled = "green",
           disabled = "yellow",
@@ -38,38 +36,25 @@ return {
       words = { enabled = true },
       styles = {
         notification = {
-          wo = { wrap = true }, -- Wrap notifications
+          wo = { wrap = true },
         },
       },
       indent = {
         enabled = false,
-        -- indent = {
-        --   char = "▏",
-        --   only_current = true,
-        --   -- only_scope = true,
-        -- },
-        -- scope = {
-        --   char = "▏",
-        -- },
-        -- animate = {
-        --   enabled = false,
-        -- },
       },
     },
     init = function()
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
         callback = function()
-          -- Setup some globals for debugging (lazy-loaded)
           _G.dd = function(...)
             Snacks.debug.inspect(...)
           end
           _G.bt = function()
             Snacks.debug.backtrace()
           end
-          vim.print = _G.dd -- Override print to use snacks for `:=` command
+          vim.print = _G.dd
 
-          -- Create some toggle mappings
           Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
           Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
           Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
@@ -80,7 +65,6 @@ return {
             :map("<leader>uc")
           Snacks.toggle.treesitter():map("<leader>uT")
           Snacks.toggle.inlay_hints():map("<leader>uh")
-          -- Snacks.toggle():map("<leader>ut")
         end,
       })
     end,
@@ -106,14 +90,6 @@ return {
         end,
         desc = "Hide notifications",
       },
-      -- {
-      --   "<leader>bo",
-      --   function()
-      --     Snacks.bufdelete.other()
-      --   end,
-      --   desc = "Delete other buffers",
-      -- },
-
       {
         "<leader>bd",
         function()
@@ -127,12 +103,12 @@ return {
     "josephburgess/nvumi",
     dependencies = { "folke/snacks.nvim" },
     opts = {
-      virtual_text = "inline", -- "newline", -- or "inline"
-      prefix = "= ", -- prefix shown before the virtual text output
+      virtual_text = "inline",
+      prefix = "= ",
       keys = {
-        run = "<CR>", -- run calculations
-        reset = "R", -- reset buffer
-        yank = "<leader>y", -- yank last output
+        run = "<CR>",
+        reset = "R",
+        yank = "<leader>y",
       },
     },
     keys = {

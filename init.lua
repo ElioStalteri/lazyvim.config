@@ -95,9 +95,6 @@ require("lazy").setup({
   },
   { "Bilal2453/luvit-meta", lazy = true },
 
-  -- easy creation of snippets
-  -- require("plugins.snippets"),
-
   -- lsp configuration
   require("plugins.lsp"),
 
@@ -106,13 +103,10 @@ require("lazy").setup({
 
   -- auto completion
   require("plugins.blink-cmp"),
-  -- require("plugins.nvim-cmp"),
 
   require("plugins.treesitter"),
 
   require("plugins.config"),
-
-  require("plugins.rest"),
 
   require("plugins.alpha-nvim"),
 
@@ -124,15 +118,9 @@ require("lazy").setup({
 
   require("plugins.AI"),
 
-  require("plugins.image"),
-
   require("plugins.gopher"),
 
-  require("plugins.namu"),
-
   require("plugins.multicursor"),
-
-  -- require("plugins.maybe"), -- TODO: decide if you want this
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
