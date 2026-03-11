@@ -10,6 +10,7 @@ local state = {
   search = "",
   replacement = "",
   include = "",
+  mode = "literal",
   files = {},
   focused_node = nil,
   interactive_preview = true,
@@ -139,8 +140,8 @@ local function highlight_preview_match(bufnr, node)
   clear_preview_highlight()
 
   local lnum = (node.lnum or 1) - 1
-  local start_col = math.max((node.col or 1) - 1, 0)
-  local end_col = start_col + math.max(#state.search, 1)
+  local start_col = node.start_col0 or math.max((node.col or 1) - 1, 0)
+  local end_col = node.end_col0 or (start_col + math.max(#state.search, 1))
 
   local line = vim.api.nvim_buf_get_lines(bufnr, lnum, lnum + 1, false)[1]
   if line then
@@ -192,6 +193,8 @@ local function schedule_preview(node)
     path = node.path,
     lnum = node.lnum,
     col = node.col,
+    start_col0 = node.start_col0,
+    end_col0 = node.end_col0,
   }
 
   state.preview_timer = uv.new_timer()
@@ -202,30 +205,73 @@ local function schedule_preview(node)
   end)
 end
 
-local function build_preview_parts(line_text, col, search, replacement)
-  local text = (line_text or ""):gsub("\t", "  ")
-  local start_col = math.max(1, tonumber(col) or 1)
-  local end_col = start_col + math.max(#search, 1) - 1
+local function run_sd_on_text(input, opts)
+  local args = { "sd" }
+  if state.mode == "literal" then
+    table.insert(args, "-F")
+  end
+  if opts and opts.max_replacements then
+    table.insert(args, "--max-replacements")
+    table.insert(args, tostring(opts.max_replacements))
+  end
+  table.insert(args, state.search)
+  table.insert(args, state.replacement)
+
+  local obj = vim.system(args, { text = true, cwd = state.cwd, stdin = input }):wait()
+  if obj.code ~= 0 then
+    local err = trim(obj.stderr ~= "" and obj.stderr or (obj.stdout ~= "" and obj.stdout or "sd failed"))
+    return nil, err
+  end
+
+  return obj.stdout or ""
+end
+
+local function replacement_preview_for_match(match_text, cache)
+  if state.mode == "literal" then
+    return state.replacement
+  end
+
+  local cached = cache[match_text]
+  if cached ~= nil then
+    return cached
+  end
+
+  local replaced, err = run_sd_on_text(match_text, { max_replacements = 1 })
+  if not replaced then
+    cache[match_text] = nil
+    return nil, err
+  end
+
+  cache[match_text] = replaced
+  return replaced
+end
+
+local function build_preview_parts(line_text, start_col0, end_col0, match_text, replacement)
+  local text = line_text or ""
+  local start_col = math.max((start_col0 or 0) + 1, 1)
+  local raw_len = math.max((end_col0 or start_col0 or 0) - (start_col0 or 0), 0)
+  local visual_len = math.max(raw_len, 1)
+  local end_col = start_col + visual_len - 1
 
   if #text == 0 then
     return {
       left = "",
-      match = search,
+      match = match_text,
       replacement = replacement,
       right = "",
     }
   end
 
   if start_col > #text then
-    start_col = math.max(1, #text - #search + 1)
-    end_col = start_col + math.max(#search, 1) - 1
+    start_col = #text
+    end_col = #text
   end
 
   local from = math.max(1, start_col - 18)
   local to = math.min(#text, end_col + 22)
 
   local left = text:sub(from, start_col - 1)
-  local match_text = text:sub(start_col, end_col)
+  local shown_match = match_text ~= "" and match_text or text:sub(start_col, end_col)
   local right = text:sub(end_col + 1, to)
 
   if from > 1 then
@@ -237,7 +283,7 @@ local function build_preview_parts(line_text, col, search, replacement)
 
   return {
     left = shorten(left, 40),
-    match = match_text,
+    match = shorten(shown_match, 30),
     replacement = replacement,
     right = shorten(right, 40),
   }
@@ -245,41 +291,67 @@ end
 
 local function parse_rg_output(stdout)
   local files = {}
+  local preview_cache = {}
+  local parse_error = nil
 
   for line in (stdout .. "\n"):gmatch("(.-)\n") do
     if line ~= "" then
-      local rel_path, lnum, col, text = line:match("^(.-):(%d+):(%d+):(.*)$")
-      if rel_path and lnum and col then
-        local abs_path = normalize_path(rel_path)
-        local match = {
-          type = "match",
-          rel_path = rel_path,
-          path = abs_path,
-          lnum = tonumber(lnum),
-          col = tonumber(col),
-          text = text,
-        }
+      local ok, event = pcall(vim.json.decode, line)
+      if ok and event and event.type == "match" and event.data then
+        local data = event.data
+        local rel_path = data.path and data.path.text or nil
+        local line_text = data.lines and data.lines.text or ""
+        line_text = line_text:gsub("\r?\n$", "")
+        local lnum = tonumber(data.line_number) or 1
 
-        local preview = build_preview_parts(text, tonumber(col), state.search, state.replacement)
-        match.left = preview.left
-        match.match_text = preview.match
-        match.replacement_text = preview.replacement
-        match.right = preview.right
+        if rel_path and data.submatches then
+          local abs_path = normalize_path(rel_path)
 
-        if not files[abs_path] then
-          files[abs_path] = {
-            path = abs_path,
-            rel_path = rel_path,
-            matches = {},
-          }
+          if not files[abs_path] then
+            files[abs_path] = {
+              path = abs_path,
+              rel_path = rel_path,
+              matches = {},
+            }
+          end
+
+          for _, submatch in ipairs(data.submatches) do
+            local start_col0 = tonumber(submatch.start) or 0
+            local end_col0 = tonumber(submatch["end"]) or start_col0
+            local match_text = (submatch.match and submatch.match.text) or ""
+            local replacement_text, err = replacement_preview_for_match(match_text, preview_cache)
+            if not replacement_text then
+              replacement_text = state.replacement
+              if not parse_error then
+                parse_error = err
+              end
+            end
+
+            local preview = build_preview_parts(line_text, start_col0, end_col0, match_text, replacement_text)
+            local match = {
+              type = "match",
+              rel_path = rel_path,
+              path = abs_path,
+              lnum = lnum,
+              col = start_col0 + 1,
+              start_col0 = start_col0,
+              end_col0 = end_col0,
+              text = line_text,
+              raw_match_text = match_text,
+              left = preview.left,
+              match_text = preview.match,
+              replacement_text = preview.replacement,
+              right = preview.right,
+            }
+
+            table.insert(files[abs_path].matches, match)
+          end
         end
-
-        table.insert(files[abs_path].matches, match)
       end
     end
   end
 
-  return files
+  return files, parse_error
 end
 
 local function to_tree_nodes(n)
@@ -305,6 +377,9 @@ local function to_tree_nodes(n)
         rel_path = match.rel_path,
         lnum = match.lnum,
         col = match.col,
+        start_col0 = match.start_col0,
+        end_col0 = match.end_col0,
+        raw_match_text = match.raw_match_text,
         left = match.left,
         match_text = match.match_text,
         replacement_text = match.replacement_text,
@@ -377,6 +452,42 @@ local function parse_include_globs()
   return globs
 end
 
+local function current_search_label()
+  if state.mode == "regex" then
+    return "Search (regex)"
+  end
+
+  return "Search (literal)"
+end
+
+local function current_mode_help()
+  if state.mode == "regex" then
+    return "Mode: regex (toggle with m). Capture refs: $1, ${1}, ${name}"
+  end
+
+  return "Mode: literal (toggle with m). Replacement is plain text"
+end
+
+local function sync_mode_signal()
+  if not state.signal then
+    return
+  end
+
+  state.signal.search_label = current_search_label()
+  state.signal.mode_help = current_mode_help()
+end
+
+local schedule_search
+
+local function toggle_mode(n)
+  state.mode = state.mode == "literal" and "regex" or "literal"
+  sync_mode_signal()
+  clear_section_error("replace")
+  clear_section_error("results")
+  state.signal.status = "Mode switched to " .. state.mode
+  schedule_search(n)
+end
+
 local function run_search(n)
   local search = state.search
   local started = uv.hrtime()
@@ -398,8 +509,7 @@ local function run_search(n)
 
   local args = {
     "rg",
-    "--vimgrep",
-    "--fixed-strings",
+    "--json",
     "--hidden",
     "--glob",
     "!.git",
@@ -407,14 +517,19 @@ local function run_search(n)
     "!node_modules",
     "--glob",
     "!.venv",
-    search,
   }
+
+  if state.mode == "literal" then
+    table.insert(args, "--fixed-strings")
+  end
 
   local include_globs = parse_include_globs()
   for _, glob in ipairs(include_globs) do
     table.insert(args, "--glob")
     table.insert(args, glob)
   end
+
+  table.insert(args, search)
 
   vim.system(args, { text = true, cwd = state.cwd }, function(obj)
     vim.schedule(function()
@@ -428,9 +543,14 @@ local function run_search(n)
         return
       end
 
-      local files = parse_rg_output(obj.stdout or "")
+      local files, preview_error = parse_rg_output(obj.stdout or "")
       local elapsed = (uv.hrtime() - started) / 1000000000
       set_results(n, files, elapsed)
+      if preview_error then
+        set_section_error("replace", preview_error)
+      else
+        clear_section_error("replace")
+      end
       if next(files) == nil then
         clear_preview_highlight()
       end
@@ -438,7 +558,7 @@ local function run_search(n)
   end)
 end
 
-local function schedule_search(n)
+schedule_search = function(n)
   if state.search_timer then
     state.search_timer:stop()
     state.search_timer:close()
@@ -506,61 +626,20 @@ local function write_file(path, content)
   return true
 end
 
-local function replace_literal(content, search, replacement)
-  if search == "" then
-    return content, 0
-  end
-
-  local parts = {}
-  local idx = 1
-  local count = 0
-
-  while true do
-    local start_pos, end_pos = content:find(search, idx, true)
-    if not start_pos then
-      table.insert(parts, content:sub(idx))
-      break
-    end
-
-    table.insert(parts, content:sub(idx, start_pos - 1))
-    table.insert(parts, replacement)
-    idx = end_pos + 1
-    count = count + 1
-  end
-
-  return table.concat(parts), count
-end
-
-local function replace_match_at_position(content, lnum, col, search, replacement)
-  if search == "" then
-    return nil, "Search value is empty"
-  end
-
+local function get_line_start_index(content, lnum)
   local line = 1
   local idx = 1
 
   while line < lnum do
     local nl = content:find("\n", idx, true)
     if not nl then
-      return nil, "Match line is out of range"
+      return nil
     end
     idx = nl + 1
     line = line + 1
   end
 
-  local start_pos = idx + math.max((col or 1) - 1, 0)
-  local end_pos = start_pos + #search - 1
-
-  if start_pos < 1 or start_pos > (#content + 1) then
-    return nil, "Match column is out of range"
-  end
-
-  if content:sub(start_pos, end_pos) ~= search then
-    return nil, "Focused diff is stale. Refresh search and try again"
-  end
-
-  local updated = content:sub(1, start_pos - 1) .. replacement .. content:sub(end_pos + 1)
-  return updated
+  return idx
 end
 
 local function reload_buffer_if_loaded(path)
@@ -608,8 +687,13 @@ local function apply_paths(paths, n)
       goto continue
     end
 
-    local updated, count = replace_literal(original, state.search, state.replacement)
-    if count > 0 and updated ~= original then
+    local updated, replace_err = run_sd_on_text(original)
+    if not updated then
+      table.insert(failures, string.format("Cannot replace in %s: %s", path, replace_err or "sd failed"))
+      goto continue
+    end
+
+    if updated ~= original then
       local ok, write_err = write_file(path, updated)
       if not ok then
         table.insert(failures, string.format("Cannot write %s: %s", path, write_err or "unknown error"))
@@ -617,7 +701,8 @@ local function apply_paths(paths, n)
       end
 
       changed_files = changed_files + 1
-      replaced_total = replaced_total + count
+      local estimated = state.files[path] and #state.files[path].matches or 0
+      replaced_total = replaced_total + math.max(estimated, 1)
       reload_buffer_if_loaded(path)
     end
 
@@ -692,13 +777,31 @@ local function apply_current_match(n)
     return
   end
 
-  local updated, replace_err = replace_match_at_position(
-    original,
-    node.lnum or 1,
-    node.col or 1,
-    state.search,
-    state.replacement
-  )
+  local line_start = get_line_start_index(original, node.lnum or 1)
+  if not line_start then
+    set_section_error("results", "Match line is out of range")
+    state.signal.status = "Apply failed"
+    return
+  end
+
+  local start_idx = line_start + (node.start_col0 or math.max((node.col or 1) - 1, 0))
+  local end_idx_exclusive = line_start + (node.end_col0 or (start_idx - line_start + #state.search))
+  if end_idx_exclusive < start_idx then
+    end_idx_exclusive = start_idx
+  end
+
+  local target = original:sub(start_idx, end_idx_exclusive - 1)
+  if node.raw_match_text and node.raw_match_text ~= "" and target ~= node.raw_match_text then
+    set_section_error("results", "Focused diff is stale. Refresh search and try again")
+    state.signal.status = "Apply failed"
+    return
+  end
+
+  local replaced_segment, replace_err = run_sd_on_text(target, { max_replacements = 1 })
+  local updated = nil
+  if replaced_segment then
+    updated = original:sub(1, start_idx - 1) .. replaced_segment .. original:sub(end_idx_exclusive)
+  end
 
   if not updated then
     set_section_error("results", replace_err or "Apply failed")
@@ -785,6 +888,8 @@ function M.open(opts)
     search = "",
     replacement = "",
     include = "",
+    search_label = current_search_label(),
+    mode_help = current_mode_help(),
     search_error = "",
     replace_error = "",
     include_error = "",
@@ -796,6 +901,7 @@ function M.open(opts)
     nodes = {},
     status = "Type to search",
   })
+  sync_mode_signal()
 
   local function error_panel(lines_signal, hidden_signal)
     return n.paragraph({
@@ -819,9 +925,19 @@ function M.open(opts)
 
   local function body()
     return n.rows(
+      n.paragraph({
+        lines = state.signal.mode_help,
+        is_focusable = false,
+        window = {
+          highlight = {
+            Normal = "SearchPanelHelp",
+            NormalFloat = "SearchPanelHelp",
+          },
+        },
+      }),
       n.text_input({
         id = "search-input",
-        border_label = "Search (literal)",
+        border_label = state.signal.search_label,
         max_lines = 1,
         autofocus = true,
         on_blur = clear_preview_if_panel_unfocused,
@@ -972,7 +1088,7 @@ function M.open(opts)
       error_panel(state.signal.results_error, state.signal.results_error_hidden),
       n.paragraph({
         lines = "Results panel only: a apply focused diff, A apply focused file\n"
-          .. "Any panel section: R apply all matches (confirm)",
+          .. "Any panel section: m toggle literal/regex, R apply all (confirm)",
         is_focusable = false,
         window = {
           highlight = {
@@ -1007,6 +1123,13 @@ function M.open(opts)
       key = "r",
       handler = function()
         run_search(n)
+      end,
+    },
+    {
+      mode = "n",
+      key = "m",
+      handler = function()
+        toggle_mode(n)
       end,
     },
     {
