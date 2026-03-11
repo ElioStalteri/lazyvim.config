@@ -37,7 +37,6 @@
   "nvim-treesitter-context": { "branch": "master", "commit": "529ee357b8c03d76ff71233afed68fd0f5fe10b1" },
   "nvim-web-devicons": { "branch": "master", "commit": "d7462543c9e366c0d196c7f67a945eaaf5d99414" },
   "nvim-window-picker": { "branch": "main", "commit": "6382540b2ae5de6c793d4aa2e3fe6dbb518505ec" },
-  "nvumi": { "branch": "main", "commit": "195f52fb82e684e04a250a69824d7f4758499add" },
   "ofirkai.nvim": { "branch": "master", "commit": "8f55bcad39977985a5f02892e75fd8a1f0a9ae75" },
   "oil.nvim": { "branch": "master", "commit": "0fcc83805ad11cf714a949c98c605ed717e0b83e" },
   "opencode.nvim": { "branch": "main", "commit": "a3229ce96a6feed7c2e0d5e88115347c9a53a874" },
