@@ -17,7 +17,13 @@ local state = {
   search_seq = 0,
   search_timer = nil,
   preview_timer = nil,
+  replacement_timer = nil,
+  preview_compute_seq = 0,
+  sd_preview_cache = {},
   preview_bufnr = nil,
+  search_input_component = nil,
+  results_component = nil,
+  reset_results_to_top_on_next_results = false,
 }
 
 local function setup_highlights()
@@ -97,6 +103,14 @@ local function stop_preview_timer()
     state.preview_timer:stop()
     state.preview_timer:close()
     state.preview_timer = nil
+  end
+end
+
+local function stop_replacement_timer()
+  if state.replacement_timer then
+    state.replacement_timer:stop()
+    state.replacement_timer:close()
+    state.replacement_timer = nil
   end
 end
 
@@ -205,7 +219,35 @@ local function schedule_preview(node)
   end)
 end
 
-local function run_sd_on_text(input, opts)
+local function reset_results_to_top()
+  vim.schedule(function()
+    local component = state.results_component
+    if not component or not component:is_mounted() then
+      return
+    end
+
+    local tree = component:get_tree()
+    if not tree then
+      return
+    end
+
+    local first = tree:get_node(1)
+    component:set_focused_node(first)
+    state.focused_node = first
+
+    if component.winid and vim.api.nvim_win_is_valid(component.winid) then
+      pcall(vim.api.nvim_win_set_cursor, component.winid, { 1, 0 })
+    end
+
+    if first then
+      schedule_preview(first)
+    else
+      clear_preview_highlight()
+    end
+  end)
+end
+
+local function build_sd_args(opts)
   local args = { "sd" }
   if state.mode == "literal" then
     table.insert(args, "-F")
@@ -217,6 +259,12 @@ local function run_sd_on_text(input, opts)
   table.insert(args, state.search)
   table.insert(args, state.replacement)
 
+  return args
+end
+
+local function run_sd_on_text(input, opts)
+  local args = build_sd_args(opts)
+
   local obj = vim.system(args, { text = true, cwd = state.cwd, stdin = input }):wait()
   if obj.code ~= 0 then
     local err = trim(obj.stderr ~= "" and obj.stderr or (obj.stdout ~= "" and obj.stdout or "sd failed"))
@@ -226,24 +274,20 @@ local function run_sd_on_text(input, opts)
   return obj.stdout or ""
 end
 
-local function replacement_preview_for_match(match_text, cache)
-  if state.mode == "literal" then
-    return state.replacement
-  end
+local function run_sd_on_text_async(input, opts, callback)
+  local args = build_sd_args(opts)
 
-  local cached = cache[match_text]
-  if cached ~= nil then
-    return cached
-  end
+  vim.system(args, { text = true, cwd = state.cwd, stdin = input }, function(obj)
+    vim.schedule(function()
+      if obj.code ~= 0 then
+        local err = trim(obj.stderr ~= "" and obj.stderr or (obj.stdout ~= "" and obj.stdout or "sd failed"))
+        callback(nil, err)
+        return
+      end
 
-  local replaced, err = run_sd_on_text(match_text, { max_replacements = 1 })
-  if not replaced then
-    cache[match_text] = nil
-    return nil, err
-  end
-
-  cache[match_text] = replaced
-  return replaced
+      callback(obj.stdout or "", nil)
+    end)
+  end)
 end
 
 local function build_preview_parts(line_text, start_col0, end_col0, match_text, replacement)
@@ -291,8 +335,6 @@ end
 
 local function parse_rg_output(stdout)
   local files = {}
-  local preview_cache = {}
-  local parse_error = nil
 
   for line in (stdout .. "\n"):gmatch("(.-)\n") do
     if line ~= "" then
@@ -318,16 +360,8 @@ local function parse_rg_output(stdout)
           for _, submatch in ipairs(data.submatches) do
             local start_col0 = tonumber(submatch.start) or 0
             local end_col0 = tonumber(submatch["end"]) or start_col0
-            local match_text = (submatch.match and submatch.match.text) or ""
-            local replacement_text, err = replacement_preview_for_match(match_text, preview_cache)
-            if not replacement_text then
-              replacement_text = state.replacement
-              if not parse_error then
-                parse_error = err
-              end
-            end
-
-            local preview = build_preview_parts(line_text, start_col0, end_col0, match_text, replacement_text)
+            local raw_match_text = (submatch.match and submatch.match.text) or ""
+            local preview = build_preview_parts(line_text, start_col0, end_col0, raw_match_text, state.replacement)
             local match = {
               type = "match",
               rel_path = rel_path,
@@ -337,7 +371,7 @@ local function parse_rg_output(stdout)
               start_col0 = start_col0,
               end_col0 = end_col0,
               text = line_text,
-              raw_match_text = match_text,
+              raw_match_text = raw_match_text,
               left = preview.left,
               match_text = preview.match,
               replacement_text = preview.replacement,
@@ -351,10 +385,42 @@ local function parse_rg_output(stdout)
     end
   end
 
-  return files, parse_error
+  return files
 end
 
-local function to_tree_nodes(n)
+local to_tree_nodes
+
+local function refresh_nodes(n)
+  if not state.signal then
+    return
+  end
+
+  state.signal.nodes = to_tree_nodes(n)
+end
+
+local function apply_preview_parts_to_files(replacement_map)
+  for _, file in pairs(state.files) do
+    for _, match in ipairs(file.matches) do
+      local replacement_text = replacement_map and replacement_map[match.raw_match_text]
+      if replacement_text == nil then
+        replacement_text = state.replacement
+      end
+      local preview = build_preview_parts(
+        match.text,
+        match.start_col0,
+        match.end_col0,
+        match.raw_match_text,
+        replacement_text
+      )
+      match.left = preview.left
+      match.match_text = preview.match
+      match.replacement_text = preview.replacement
+      match.right = preview.right
+    end
+  end
+end
+
+to_tree_nodes = function(n)
   local nodes = {}
   local paths = {}
 
@@ -419,6 +485,10 @@ local function set_results(n, files, elapsed)
 
   local nodes = to_tree_nodes(n)
   state.signal.nodes = nodes
+  if state.reset_results_to_top_on_next_results then
+    state.reset_results_to_top_on_next_results = false
+    reset_results_to_top()
+  end
 
   local match_word = match_count == 1 and "match" or "matches"
   local seconds = elapsed or 0
@@ -460,6 +530,15 @@ local function current_search_label()
   return "Search (literal)"
 end
 
+local function sync_search_border_label()
+  local component = state.search_input_component
+  if not component or not component:is_mounted() then
+    return
+  end
+
+  component:set_border_text("top", " " .. current_search_label() .. " ", "left")
+end
+
 local function current_mode_help()
   if state.mode == "regex" then
     return "Mode: regex (toggle with m). Capture refs: $1, ${1}, ${name}"
@@ -475,12 +554,15 @@ local function sync_mode_signal()
 
   state.signal.search_label = current_search_label()
   state.signal.mode_help = current_mode_help()
+  sync_search_border_label()
 end
 
 local schedule_search
+local schedule_preview_compute
 
 local function toggle_mode(n)
   state.mode = state.mode == "literal" and "regex" or "literal"
+  state.sd_preview_cache = {}
   sync_mode_signal()
   clear_section_error("replace")
   clear_section_error("results")
@@ -496,10 +578,13 @@ local function run_search(n)
   local seq = state.search_seq
 
   if search == "" then
+    stop_replacement_timer()
+    state.preview_compute_seq = state.preview_compute_seq + 1
     state.files = {}
     state.signal.nodes = {}
     state.signal.status = "Type to search"
     clear_section_error("results")
+    clear_section_error("replace")
     clear_preview_highlight()
     return
   end
@@ -538,19 +623,17 @@ local function run_search(n)
       end
 
       if obj.code > 1 then
+        stop_replacement_timer()
+        state.preview_compute_seq = state.preview_compute_seq + 1
         state.signal.status = "Search failed"
         set_section_error("results", obj.stderr ~= "" and obj.stderr or "rg failed")
         return
       end
 
-      local files, preview_error = parse_rg_output(obj.stdout or "")
+      local files = parse_rg_output(obj.stdout or "")
       local elapsed = (uv.hrtime() - started) / 1000000000
       set_results(n, files, elapsed)
-      if preview_error then
-        set_section_error("replace", preview_error)
-      else
-        clear_section_error("replace")
-      end
+      schedule_preview_compute(n, 220)
       if next(files) == nil then
         clear_preview_highlight()
       end
@@ -566,9 +649,123 @@ schedule_search = function(n)
   end
 
   state.search_timer = uv.new_timer()
-  state.search_timer:start(120, 0, function()
+  state.search_timer:start(180, 0, function()
     vim.schedule(function()
       run_search(n)
+    end)
+  end)
+end
+
+local function preview_cache_key(match_text)
+  return table.concat({ state.mode, state.search, state.replacement, match_text }, "\31")
+end
+
+local function run_preview_compute(n, seq)
+  if not state.signal or seq ~= state.preview_compute_seq then
+    return
+  end
+
+  if next(state.files) == nil then
+    clear_section_error("replace")
+    return
+  end
+
+  if state.mode == "literal" then
+    apply_preview_parts_to_files(nil)
+    refresh_nodes(n)
+    clear_section_error("replace")
+    return
+  end
+
+  local replacement_map = {}
+  local pending_texts = {}
+  local seen = {}
+
+  for _, file in pairs(state.files) do
+    for _, match in ipairs(file.matches) do
+      local text = match.raw_match_text or ""
+      local key = preview_cache_key(text)
+      local cached = state.sd_preview_cache[key]
+      if cached ~= nil then
+        replacement_map[text] = cached
+      elseif not seen[text] then
+        seen[text] = true
+        table.insert(pending_texts, text)
+      end
+    end
+  end
+
+  local preview_error = nil
+  local index = 1
+
+  local function finalize()
+    if not state.signal or seq ~= state.preview_compute_seq then
+      return
+    end
+
+    apply_preview_parts_to_files(replacement_map)
+    refresh_nodes(n)
+
+    if preview_error then
+      set_section_error("replace", preview_error)
+    else
+      clear_section_error("replace")
+    end
+  end
+
+  local function step()
+    if not state.signal or seq ~= state.preview_compute_seq then
+      return
+    end
+
+    local text = pending_texts[index]
+    if text == nil then
+      finalize()
+      return
+    end
+
+    run_sd_on_text_async(text, { max_replacements = 1 }, function(replaced, err)
+      if not state.signal or seq ~= state.preview_compute_seq then
+        return
+      end
+
+      local key = preview_cache_key(text)
+      if replaced then
+        state.sd_preview_cache[key] = replaced
+        replacement_map[text] = replaced
+      else
+        if preview_error == nil then
+          preview_error = err
+        end
+        replacement_map[text] = state.replacement
+      end
+
+      index = index + 1
+      if index % 25 == 0 then
+        vim.schedule(step)
+      else
+        step()
+      end
+    end)
+  end
+
+  if #pending_texts == 0 then
+    finalize()
+    return
+  end
+
+  step()
+end
+
+schedule_preview_compute = function(n, delay_ms)
+  stop_replacement_timer()
+  state.preview_compute_seq = state.preview_compute_seq + 1
+  local seq = state.preview_compute_seq
+
+  state.replacement_timer = uv.new_timer()
+  state.replacement_timer:start(delay_ms or 300, 0, function()
+    vim.schedule(function()
+      run_preview_compute(n, seq)
     end)
   end)
 end
@@ -940,6 +1137,15 @@ function M.open(opts)
         border_label = state.signal.search_label,
         max_lines = 1,
         autofocus = true,
+        on_mount = function(component)
+          state.search_input_component = component
+          sync_search_border_label()
+        end,
+        on_unmount = function(component)
+          if state.search_input_component == component then
+            state.search_input_component = nil
+          end
+        end,
         on_blur = clear_preview_if_panel_unfocused,
         window = {
           highlight = {
@@ -953,6 +1159,8 @@ function M.open(opts)
         on_change = function(value)
           state.search = value
           state.signal.search = value
+          state.reset_results_to_top_on_next_results = true
+          state.sd_preview_cache = {}
           clear_section_error("search")
           schedule_search(n)
         end,
@@ -975,8 +1183,9 @@ function M.open(opts)
         on_change = function(value)
           state.replacement = value
           state.signal.replacement = value
+          state.sd_preview_cache = {}
           clear_section_error("replace")
-          schedule_search(n)
+          schedule_preview_compute(n, 300)
         end,
       }),
       error_panel(state.signal.replace_error, state.signal.replace_error_hidden),
@@ -998,6 +1207,7 @@ function M.open(opts)
         on_change = function(value)
           state.include = value
           state.signal.include = value
+          state.sd_preview_cache = {}
           clear_section_error("include")
           schedule_search(n)
         end,
@@ -1027,7 +1237,13 @@ function M.open(opts)
           }
         end,
         on_mount = function(component)
+          state.results_component = component
           register_results_which_key(component.bufnr)
+        end,
+        on_unmount = function(component)
+          if state.results_component == component then
+            state.results_component = nil
+          end
         end,
         window = {
           highlight = {
@@ -1151,7 +1367,13 @@ function M.open(opts)
     state.search = ""
     state.replacement = ""
     state.include = ""
+    state.search_input_component = nil
+    state.results_component = nil
+    state.reset_results_to_top_on_next_results = false
+    state.sd_preview_cache = {}
     stop_preview_timer()
+    stop_replacement_timer()
+    state.preview_compute_seq = state.preview_compute_seq + 1
     clear_preview_highlight()
     if state.search_timer then
       state.search_timer:stop()
