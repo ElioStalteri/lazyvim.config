@@ -15,6 +15,13 @@ local state = {
   focused_node = nil,
   interactive_preview = true,
   search_seq = 0,
+  search_active_proc = nil,
+  search_active_seq = 0,
+  search_active_started = 0,
+  search_active_request = nil,
+  pending_search_request = nil,
+  search_input_last_hrtime = nil,
+  search_input_ewma_ms = 90,
   search_timer = nil,
   preview_timer = nil,
   replacement_timer = nil,
@@ -24,6 +31,11 @@ local state = {
   search_input_component = nil,
   results_component = nil,
   reset_results_to_top_on_next_results = false,
+  status_base = "Type to search",
+  spinner_timer = nil,
+  spinner_index = 1,
+  search_loading = false,
+  preview_loading = false,
 }
 
 local function setup_highlights()
@@ -96,6 +108,73 @@ local function clear_all_errors()
   clear_section_error("replace")
   clear_section_error("include")
   clear_section_error("results")
+end
+
+local SEARCH_EWMA_ALPHA = 0.35
+local SEARCH_QUIET_MIN_MS = 50
+local SEARCH_QUIET_MAX_MS = 180
+local SEARCH_CANCEL_AGE_MS = 220
+local SPINNER_FRAMES = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+
+local function render_status_line()
+  if not state.signal then
+    return
+  end
+
+  local frame = SPINNER_FRAMES[state.spinner_index]
+  if state.search_loading then
+    state.signal.status = "Searching " .. frame
+  elseif state.preview_loading then
+    state.signal.status = "Updating preview " .. frame
+  else
+    state.signal.status = state.status_base
+  end
+end
+
+local function stop_spinner()
+  if state.spinner_timer then
+    state.spinner_timer:stop()
+    state.spinner_timer:close()
+    state.spinner_timer = nil
+  end
+end
+
+local function ensure_spinner()
+  if state.spinner_timer then
+    return
+  end
+
+  state.spinner_timer = uv.new_timer()
+  state.spinner_timer:start(0, 80, function()
+    vim.schedule(function()
+      if not state.signal then
+        return
+      end
+      state.spinner_index = (state.spinner_index % #SPINNER_FRAMES) + 1
+      render_status_line()
+    end)
+  end)
+end
+
+local function set_loading(kind, value)
+  if kind == "search" then
+    state.search_loading = value
+  elseif kind == "preview" then
+    state.preview_loading = value
+  end
+
+  if state.search_loading or state.preview_loading then
+    ensure_spinner()
+  else
+    stop_spinner()
+  end
+
+  render_status_line()
+end
+
+local function set_status(msg)
+  state.status_base = msg
+  render_status_line()
 end
 
 local function stop_preview_timer()
@@ -492,11 +571,11 @@ local function set_results(n, files, elapsed)
 
   local match_word = match_count == 1 and "match" or "matches"
   local seconds = elapsed or 0
-  state.signal.status = string.format("Total: %d %s in %d files, time: %.4fs", match_count, match_word, file_count, seconds)
+  set_status(string.format("Total: %d %s in %d files, time: %.4fs", match_count, match_word, file_count, seconds))
 end
 
-local function parse_include_globs()
-  local value = trim(state.include or "")
+local function parse_include_globs(include_value)
+  local value = trim(include_value or state.include or "")
   local globs = {}
 
   if value == "" then
@@ -566,31 +645,97 @@ local function toggle_mode(n)
   sync_mode_signal()
   clear_section_error("replace")
   clear_section_error("results")
-  state.signal.status = "Mode switched to " .. state.mode
-  schedule_search(n)
+  set_status("Mode switched to " .. state.mode)
+  schedule_search(n, "mode")
 end
 
-local function run_search(n)
-  local search = state.search
-  local started = uv.hrtime()
+local function clear_search_timer()
+  if state.search_timer then
+    state.search_timer:stop()
+    state.search_timer:close()
+    state.search_timer = nil
+  end
+end
+
+local function search_requests_equal(a, b)
+  if not a or not b then
+    return false
+  end
+
+  return a.search == b.search and a.include == b.include and a.mode == b.mode
+end
+
+local function snapshot_search_request(source)
+  return {
+    search = state.search,
+    include = state.include,
+    mode = state.mode,
+    source = source or "manual",
+  }
+end
+
+local function cancel_active_search()
+  local proc = state.search_active_proc
+  if proc then
+    pcall(proc.kill, proc, 15)
+  end
+
+  state.search_active_proc = nil
+  state.search_active_seq = 0
+  state.search_active_started = 0
+  state.search_active_request = nil
+  set_loading("search", false)
+end
+
+local function adaptive_search_quiet_ms(now)
+  if not state.search_input_last_hrtime then
+    state.search_input_last_hrtime = now
+    return SEARCH_QUIET_MIN_MS, nil
+  end
+
+  local delta_ms = (now - state.search_input_last_hrtime) / 1000000
+  state.search_input_last_hrtime = now
+  state.search_input_ewma_ms = (SEARCH_EWMA_ALPHA * delta_ms) + ((1 - SEARCH_EWMA_ALPHA) * state.search_input_ewma_ms)
+
+  local quiet = math.floor(state.search_input_ewma_ms * 0.9)
+  return math.max(SEARCH_QUIET_MIN_MS, math.min(SEARCH_QUIET_MAX_MS, quiet)), delta_ms
+end
+
+local function start_search(n, request)
+  if not state.signal then
+    return
+  end
+
+  clear_search_timer()
 
   state.search_seq = state.search_seq + 1
   local seq = state.search_seq
+  state.search_active_seq = seq
+  state.search_active_started = uv.hrtime()
+  state.search_active_request = request
 
+  stop_replacement_timer()
+  state.preview_compute_seq = state.preview_compute_seq + 1
+  set_loading("preview", false)
+
+  local search = request.search
   if search == "" then
-    stop_replacement_timer()
-    state.preview_compute_seq = state.preview_compute_seq + 1
+    state.search_active_proc = nil
+    state.search_active_seq = 0
+    state.search_active_started = 0
+    state.search_active_request = nil
+    set_loading("search", false)
     state.files = {}
     state.signal.nodes = {}
-    state.signal.status = "Type to search"
+    set_status("Type to search")
     clear_section_error("results")
     clear_section_error("replace")
     clear_preview_highlight()
     return
   end
 
-  state.signal.status = "Searching..."
   clear_section_error("results")
+  set_loading("search", true)
 
   local args = {
     "rg",
@@ -604,56 +749,129 @@ local function run_search(n)
     "!.venv",
   }
 
-  if state.mode == "literal" then
+  if request.mode == "literal" then
     table.insert(args, "--fixed-strings")
   end
 
-  local include_globs = parse_include_globs()
+  local include_globs = parse_include_globs(request.include)
   for _, glob in ipairs(include_globs) do
     table.insert(args, "--glob")
     table.insert(args, glob)
   end
 
   table.insert(args, search)
+  local started = uv.hrtime()
 
-  vim.system(args, { text = true, cwd = state.cwd }, function(obj)
+  state.search_active_proc = vim.system(args, { text = true, cwd = state.cwd }, function(obj)
     vim.schedule(function()
-      if not state.signal or seq ~= state.search_seq then
+      if not state.signal or seq ~= state.search_active_seq then
         return
       end
+
+      state.search_active_proc = nil
+      state.search_active_seq = 0
+      state.search_active_started = 0
+      state.search_active_request = nil
+      set_loading("search", false)
 
       if obj.code > 1 then
         stop_replacement_timer()
         state.preview_compute_seq = state.preview_compute_seq + 1
-        state.signal.status = "Search failed"
+        set_loading("preview", false)
+        set_status("Search failed")
         set_section_error("results", obj.stderr ~= "" and obj.stderr or "rg failed")
-        return
+      else
+        local files = parse_rg_output(obj.stdout or "")
+        local elapsed = (uv.hrtime() - started) / 1000000000
+        set_results(n, files, elapsed)
+        schedule_preview_compute(n, 180)
+        if next(files) == nil then
+          clear_preview_highlight()
+        end
       end
 
-      local files = parse_rg_output(obj.stdout or "")
-      local elapsed = (uv.hrtime() - started) / 1000000000
-      set_results(n, files, elapsed)
-      schedule_preview_compute(n, 220)
-      if next(files) == nil then
-        clear_preview_highlight()
+      if state.pending_search_request then
+        local pending = state.pending_search_request
+        state.pending_search_request = nil
+        start_search(n, pending)
       end
     end)
   end)
 end
 
-schedule_search = function(n)
-  if state.search_timer then
-    state.search_timer:stop()
-    state.search_timer:close()
-    state.search_timer = nil
+schedule_search = function(n, source, opts)
+  opts = opts or {}
+  if not state.signal then
+    return
   end
 
-  state.search_timer = uv.new_timer()
-  state.search_timer:start(180, 0, function()
-    vim.schedule(function()
-      run_search(n)
+  local request = snapshot_search_request(source)
+
+  if state.search_active_request and search_requests_equal(request, state.search_active_request) and not opts.force then
+    if not state.search_active_proc and not state.pending_search_request then
+      return
+    end
+  end
+
+  if state.pending_search_request and search_requests_equal(request, state.pending_search_request) and not opts.force then
+    return
+  end
+
+  state.pending_search_request = request
+
+  local now = uv.hrtime()
+  local quiet_ms = 0
+  local delta_ms = nil
+  if request.source == "search" and not opts.force then
+    quiet_ms, delta_ms = adaptive_search_quiet_ms(now)
+  end
+
+  if state.search_active_proc then
+    if opts.force then
+      cancel_active_search()
+    else
+    local age_ms = (now - state.search_active_started) / 1000000
+    if age_ms >= SEARCH_CANCEL_AGE_MS then
+      cancel_active_search()
+    else
+      return
+    end
+    end
+  end
+
+  if request.source == "search" and not opts.force then
+    if delta_ms and delta_ms >= quiet_ms then
+      local pending_now = state.pending_search_request
+      state.pending_search_request = nil
+      if pending_now then
+        start_search(n, pending_now)
+      end
+      return
+    end
+
+    clear_search_timer()
+    state.search_timer = uv.new_timer()
+    state.search_timer:start(quiet_ms, 0, function()
+      vim.schedule(function()
+        if state.search_active_proc then
+          return
+        end
+
+        local pending = state.pending_search_request
+        state.pending_search_request = nil
+        if pending then
+          start_search(n, pending)
+        end
+      end)
     end)
-  end)
+    return
+  end
+
+  local pending = state.pending_search_request
+  state.pending_search_request = nil
+  if pending then
+    start_search(n, pending)
+  end
 end
 
 local function preview_cache_key(match_text)
@@ -667,6 +885,7 @@ local function run_preview_compute(n, seq)
 
   if next(state.files) == nil then
     clear_section_error("replace")
+    set_loading("preview", false)
     return
   end
 
@@ -674,6 +893,7 @@ local function run_preview_compute(n, seq)
     apply_preview_parts_to_files(nil)
     refresh_nodes(n)
     clear_section_error("replace")
+    set_loading("preview", false)
     return
   end
 
@@ -711,6 +931,8 @@ local function run_preview_compute(n, seq)
     else
       clear_section_error("replace")
     end
+
+    set_loading("preview", false)
   end
 
   local function step()
@@ -761,6 +983,8 @@ schedule_preview_compute = function(n, delay_ms)
   stop_replacement_timer()
   state.preview_compute_seq = state.preview_compute_seq + 1
   local seq = state.preview_compute_seq
+
+  set_loading("preview", true)
 
   state.replacement_timer = uv.new_timer()
   state.replacement_timer:start(delay_ms or 300, 0, function()
@@ -859,7 +1083,7 @@ end
 local function apply_paths(paths, n)
   if state.search == "" then
     set_section_error("search", "Search value is empty")
-    state.signal.status = "Cannot apply without search text"
+    set_status("Cannot apply without search text")
     return
   end
 
@@ -910,7 +1134,7 @@ local function apply_paths(paths, n)
   if skipped_modified > 0 then
     msg = msg .. string.format(" (%d modified buffers skipped)", skipped_modified)
   end
-  state.signal.status = msg
+  set_status(msg)
 
   if #failures > 0 then
     local err = failures[1]
@@ -920,21 +1144,21 @@ local function apply_paths(paths, n)
     set_section_error("results", err)
   end
 
-  run_search(n)
+  schedule_search(n, "manual", { force = true })
 end
 
 local function apply_current_file(n)
   local node = state.focused_node
   if not node then
     set_section_error("results", "No file selected")
-    state.signal.status = "Select a file or preview row first"
+    set_status("Select a file or preview row first")
     return
   end
 
   local path = node.path
   if node.type ~= "file" and node.type ~= "match" then
     set_section_error("results", "No file selected")
-    state.signal.status = "Select a file or preview row first"
+    set_status("Select a file or preview row first")
     return
   end
 
@@ -946,13 +1170,13 @@ local function apply_current_match(n)
   local node = state.focused_node
   if not node or node.type ~= "match" then
     set_section_error("results", "Select a diff line first")
-    state.signal.status = "No focused diff line"
+    set_status("No focused diff line")
     return
   end
 
   if state.search == "" then
     set_section_error("search", "Search value is empty")
-    state.signal.status = "Cannot apply without search text"
+    set_status("Cannot apply without search text")
     return
   end
 
@@ -963,21 +1187,21 @@ local function apply_current_match(n)
   local bufnr = vim.fn.bufnr(path)
   if bufnr ~= -1 and vim.api.nvim_buf_is_loaded(bufnr) and vim.bo[bufnr].modified then
     set_section_error("results", "Buffer has unsaved changes")
-    state.signal.status = "Save buffer before applying diff"
+    set_status("Save buffer before applying diff")
     return
   end
 
   local original, read_err = read_file(path)
   if not original then
     set_section_error("results", string.format("Cannot read %s: %s", path, read_err or "unknown error"))
-    state.signal.status = "Apply failed"
+    set_status("Apply failed")
     return
   end
 
   local line_start = get_line_start_index(original, node.lnum or 1)
   if not line_start then
     set_section_error("results", "Match line is out of range")
-    state.signal.status = "Apply failed"
+    set_status("Apply failed")
     return
   end
 
@@ -990,7 +1214,7 @@ local function apply_current_match(n)
   local target = original:sub(start_idx, end_idx_exclusive - 1)
   if node.raw_match_text and node.raw_match_text ~= "" and target ~= node.raw_match_text then
     set_section_error("results", "Focused diff is stale. Refresh search and try again")
-    state.signal.status = "Apply failed"
+    set_status("Apply failed")
     return
   end
 
@@ -1002,25 +1226,25 @@ local function apply_current_match(n)
 
   if not updated then
     set_section_error("results", replace_err or "Apply failed")
-    state.signal.status = "Apply failed"
+    set_status("Apply failed")
     return
   end
 
   if updated == original then
-    state.signal.status = "No change applied"
+    set_status("No change applied")
     return
   end
 
   local ok, write_err = write_file(path, updated)
   if not ok then
     set_section_error("results", string.format("Cannot write %s: %s", path, write_err or "unknown error"))
-    state.signal.status = "Apply failed"
+    set_status("Apply failed")
     return
   end
 
   reload_buffer_if_loaded(path)
-  state.signal.status = string.format("Applied 1 replacement in %s:%d", node.rel_path or path, node.lnum or 1)
-  run_search(n)
+  set_status(string.format("Applied 1 replacement in %s:%d", node.rel_path or path, node.lnum or 1))
+  schedule_search(n, "manual", { force = true })
 end
 
 local function apply_all_files(n)
@@ -1032,7 +1256,7 @@ local function apply_all_files(n)
   table.sort(paths)
   if #paths == 0 then
     set_section_error("results", "No files to apply")
-    state.signal.status = "No files matched current search"
+    set_status("No files matched current search")
     return
   end
 
@@ -1098,7 +1322,12 @@ function M.open(opts)
     nodes = {},
     status = "Type to search",
   })
+  state.status_base = "Type to search"
+  state.spinner_index = 1
+  state.search_loading = false
+  state.preview_loading = false
   sync_mode_signal()
+  render_status_line()
 
   local function error_panel(lines_signal, hidden_signal)
     return n.paragraph({
@@ -1162,7 +1391,7 @@ function M.open(opts)
           state.reset_results_to_top_on_next_results = true
           state.sd_preview_cache = {}
           clear_section_error("search")
-          schedule_search(n)
+          schedule_search(n, "search")
         end,
       }),
       error_panel(state.signal.search_error, state.signal.search_error_hidden),
@@ -1209,7 +1438,7 @@ function M.open(opts)
           state.signal.include = value
           state.sd_preview_cache = {}
           clear_section_error("include")
-          schedule_search(n)
+          schedule_search(n, "include")
         end,
       }),
       error_panel(state.signal.include_error, state.signal.include_error_hidden),
@@ -1338,7 +1567,7 @@ function M.open(opts)
       mode = "n",
       key = "r",
       handler = function()
-        run_search(n)
+        schedule_search(n, "manual", { force = true })
       end,
     },
     {
@@ -1360,6 +1589,9 @@ function M.open(opts)
   clear_all_errors()
 
   renderer:on_unmount(function()
+    cancel_active_search()
+    clear_search_timer()
+    stop_spinner()
     state.renderer = nil
     state.signal = nil
     state.files = {}
@@ -1371,6 +1603,13 @@ function M.open(opts)
     state.results_component = nil
     state.reset_results_to_top_on_next_results = false
     state.sd_preview_cache = {}
+    state.pending_search_request = nil
+    state.search_active_proc = nil
+    state.search_active_seq = 0
+    state.search_active_started = 0
+    state.search_active_request = nil
+    state.search_loading = false
+    state.preview_loading = false
     stop_preview_timer()
     stop_replacement_timer()
     state.preview_compute_seq = state.preview_compute_seq + 1
