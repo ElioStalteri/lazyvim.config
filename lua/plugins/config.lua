@@ -75,19 +75,22 @@ return {
       branch = true,
     },
   },
-  -- {
-  --   "MagicDuck/grug-far.nvim",
-  --   keys = {
-  --     { "<leader>sr", "<cmd>GrugFar<cr>", desc = "Open find and replace" },
-  --   },
-  --   opts = {},
-  -- },
   {
-    "AckslD/muren.nvim",
-    config = true,
+    "grapp-dev/nui-components.nvim",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+    },
+    config = function()
+      require("search_panel").setup()
+    end,
     keys = {
-      { "<leader>sr", "<cmd>MurenToggle<cr>", desc = "Find and replace" },
-      { "<leader>su", "<cmd>MurenUnique<cr>", desc = "Find and replace unique" },
+      {
+        "<leader>sr",
+        function()
+          require("search_panel").open()
+        end,
+        desc = "Search and replace panel",
+      },
     },
   },
   {
