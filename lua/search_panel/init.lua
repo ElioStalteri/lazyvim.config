@@ -21,6 +21,7 @@ local function setup_highlights()
   vim.api.nvim_set_hl(0, "SearchPanelBg", { fg = "#f8f8f0", bg = "#1a1a18" })
   vim.api.nvim_set_hl(0, "SearchPanelResultsBg", { fg = "#f8f8f0", bg = "#171712" })
   vim.api.nvim_set_hl(0, "SearchPanelStatus", { fg = "#8f908a", bg = "#1a1a18" })
+  vim.api.nvim_set_hl(0, "SearchPanelHelp", { fg = "#7f837d", bg = "#1a1a18" })
   vim.api.nvim_set_hl(0, "SearchPanelBorder", { fg = "#4d5154", bg = "#1a1a18" })
   vim.api.nvim_set_hl(0, "SearchPanelHeader", { fg = "#9ca0a4", bg = "#1a1a18" })
   vim.api.nvim_set_hl(0, "SearchPanelErrorBorder", { fg = "#6b2c3b", bg = "#1a1a18" })
@@ -894,6 +895,17 @@ function M.open(opts)
         end,
       }),
       error_panel(state.signal.results_error, state.signal.results_error_hidden),
+      n.paragraph({
+        lines = "Results panel only: a apply focused diff, A apply focused file\n"
+          .. "Any panel section: R apply all matches (confirm)",
+        is_focusable = false,
+        window = {
+          highlight = {
+            Normal = "SearchPanelHelp",
+            NormalFloat = "SearchPanelHelp",
+          },
+        },
+      }),
       n.paragraph({
         lines = state.signal.status,
         is_focusable = false,
