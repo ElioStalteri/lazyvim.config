@@ -525,19 +525,8 @@ local function apply_all_files(n)
 end
 
 local function confirm_apply_all_files(n)
-  local choices = { "Cancel", "Apply all files" }
-
-  if vim.ui and vim.ui.select then
-    vim.ui.select(choices, { prompt = "Replace in all matched files?" }, function(choice)
-      if choice == "Apply all files" then
-        apply_all_files(n)
-      end
-    end)
-    return
-  end
-
-  local answer = vim.fn.confirm("Replace in all matched files?", "&Cancel\n&Apply all", 1)
-  if answer == 2 then
+  local answer = vim.fn.confirm("Replace in all matched files?", "&Apply all\n&Cancel", 2)
+  if answer == 1 then
     apply_all_files(n)
   end
 end
@@ -550,7 +539,6 @@ local function register_results_which_key(bufnr)
 
   wk.add({
     { "a", desc = "Apply current file", mode = "n", buffer = bufnr },
-    { "<leader>a", desc = "Apply all files", mode = "n", buffer = bufnr },
   })
 end
 
@@ -692,13 +680,6 @@ function M.open(opts)
                 apply_current_file(n)
               end,
             },
-            {
-              mode = "n",
-              key = "<leader>a",
-              handler = function()
-                confirm_apply_all_files(n)
-              end,
-            },
           }
         end,
         on_mount = function(component)
@@ -786,6 +767,13 @@ function M.open(opts)
       key = "r",
       handler = function()
         run_search(n)
+      end,
+    },
+    {
+      mode = "n",
+      key = "R",
+      handler = function()
+        confirm_apply_all_files(n)
       end,
     },
   })
