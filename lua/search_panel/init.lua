@@ -15,17 +15,16 @@ local state = {
   search_timer = nil,
 }
 
-local function notify(msg, level)
-  vim.notify(msg, level or vim.log.levels.INFO, { title = "Search Panel" })
-end
-
 local function setup_highlights()
   vim.api.nvim_set_hl(0, "SearchPanelBorder", { fg = "#5f6672", default = true })
   vim.api.nvim_set_hl(0, "SearchPanelHeader", { fg = "#aeb6c2", default = true })
+  vim.api.nvim_set_hl(0, "SearchPanelErrorBorder", { fg = "#6b4f4f", default = true })
+  vim.api.nvim_set_hl(0, "SearchPanelErrorHeader", { fg = "#c8a6a6", default = true })
+  vim.api.nvim_set_hl(0, "SearchPanelErrorText", { fg = "#d4b8b8", default = true })
   vim.api.nvim_set_hl(0, "SearchPanelArrow", { link = "Comment", default = true })
   vim.api.nvim_set_hl(0, "SearchPanelFile", { link = "Directory", default = true })
-  vim.api.nvim_set_hl(0, "SearchPanelMatch", { link = "DiffDelete", default = true })
-  vim.api.nvim_set_hl(0, "SearchPanelReplace", { link = "DiffAdd", default = true })
+  vim.api.nvim_set_hl(0, "SearchPanelMatch", { fg = "#f6d5db", bg = "#8b1a2b" })
+  vim.api.nvim_set_hl(0, "SearchPanelReplace", { fg = "#d8f3dc", bg = "#2f6a3d" })
 end
 
 local function get_file_icon(path)
@@ -59,6 +58,27 @@ end
 
 local function trim(str)
   return (str:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
+local function set_section_error(section, message)
+  if not state.signal then
+    return
+  end
+
+  local text = trim(message or "")
+  state.signal[section .. "_error"] = text
+  state.signal[section .. "_error_hidden"] = text == ""
+end
+
+local function clear_section_error(section)
+  set_section_error(section, "")
+end
+
+local function clear_all_errors()
+  clear_section_error("search")
+  clear_section_error("replace")
+  clear_section_error("include")
+  clear_section_error("results")
 end
 
 local function build_preview_parts(line_text, col, search, replacement)
@@ -191,6 +211,7 @@ local function to_tree_nodes(n)
 end
 
 local function set_results(n, files, elapsed)
+  clear_section_error("results")
   state.files = files
 
   local file_count = 0
@@ -246,10 +267,12 @@ local function run_search(n)
     state.files = {}
     state.signal.nodes = {}
     state.signal.status = "Type to search"
+    clear_section_error("results")
     return
   end
 
   state.signal.status = "Searching..."
+  clear_section_error("results")
 
   local args = {
     "rg",
@@ -279,7 +302,7 @@ local function run_search(n)
 
       if obj.code > 1 then
         state.signal.status = "Search failed"
-        notify(obj.stderr ~= "" and obj.stderr or "rg failed", vim.log.levels.ERROR)
+        set_section_error("results", obj.stderr ~= "" and obj.stderr or "rg failed")
         return
       end
 
@@ -402,13 +425,18 @@ end
 
 local function apply_paths(paths, n)
   if state.search == "" then
-    notify("Search value is empty", vim.log.levels.WARN)
+    set_section_error("search", "Search value is empty")
+    state.signal.status = "Cannot apply without search text"
     return
   end
+
+  clear_section_error("search")
+  clear_section_error("results")
 
   local changed_files = 0
   local replaced_total = 0
   local skipped_modified = 0
+  local failures = {}
 
   for _, path in ipairs(paths) do
     local bufnr = vim.fn.bufnr(path)
@@ -419,7 +447,7 @@ local function apply_paths(paths, n)
 
     local original, read_err = read_file(path)
     if not original then
-      notify(string.format("Cannot read %s: %s", path, read_err or "unknown error"), vim.log.levels.ERROR)
+      table.insert(failures, string.format("Cannot read %s: %s", path, read_err or "unknown error"))
       goto continue
     end
 
@@ -427,7 +455,7 @@ local function apply_paths(paths, n)
     if count > 0 and updated ~= original then
       local ok, write_err = write_file(path, updated)
       if not ok then
-        notify(string.format("Cannot write %s: %s", path, write_err or "unknown error"), vim.log.levels.ERROR)
+        table.insert(failures, string.format("Cannot write %s: %s", path, write_err or "unknown error"))
         goto continue
       end
 
@@ -443,7 +471,15 @@ local function apply_paths(paths, n)
   if skipped_modified > 0 then
     msg = msg .. string.format(" (%d modified buffers skipped)", skipped_modified)
   end
-  notify(msg)
+  state.signal.status = msg
+
+  if #failures > 0 then
+    local err = failures[1]
+    if #failures > 1 then
+      err = string.format("%s (+%d more)", err, #failures - 1)
+    end
+    set_section_error("results", err)
+  end
 
   run_search(n)
 end
@@ -451,16 +487,19 @@ end
 local function apply_current_file(n)
   local node = state.focused_node
   if not node then
-    notify("No file selected", vim.log.levels.WARN)
+    set_section_error("results", "No file selected")
+    state.signal.status = "Select a file or preview row first"
     return
   end
 
   local path = node.path
   if node.type ~= "file" and node.type ~= "match" then
-    notify("No file selected", vim.log.levels.WARN)
+    set_section_error("results", "No file selected")
+    state.signal.status = "Select a file or preview row first"
     return
   end
 
+  clear_section_error("results")
   apply_paths({ path }, n)
 end
 
@@ -472,10 +511,12 @@ local function apply_all_files(n)
 
   table.sort(paths)
   if #paths == 0 then
-    notify("No files to apply", vim.log.levels.WARN)
+    set_section_error("results", "No files to apply")
+    state.signal.status = "No files matched current search"
     return
   end
 
+  clear_section_error("results")
   apply_paths(paths, n)
 end
 
@@ -505,9 +546,36 @@ function M.open(opts)
     search = "",
     replacement = "",
     include = "",
+    search_error = "",
+    replace_error = "",
+    include_error = "",
+    results_error = "",
+    search_error_hidden = true,
+    replace_error_hidden = true,
+    include_error_hidden = true,
+    results_error_hidden = true,
     nodes = {},
     status = "Type to search",
   })
+
+  local function error_panel(lines_signal, hidden_signal)
+    return n.paragraph({
+      lines = lines_signal,
+      hidden = hidden_signal,
+      is_focusable = false,
+      border_style = "rounded",
+      border_label = "Error",
+      truncate = true,
+      max_lines = 2,
+      window = {
+        highlight = {
+          FloatBorder = "SearchPanelErrorBorder",
+          FloatTitle = "SearchPanelErrorHeader",
+          Normal = "SearchPanelErrorText",
+        },
+      },
+    })
+  end
 
   local function body()
     return n.rows(
@@ -526,9 +594,11 @@ function M.open(opts)
         on_change = function(value)
           state.search = value
           state.signal.search = value
+          clear_section_error("search")
           schedule_search(n)
         end,
       }),
+      error_panel(state.signal.search_error, state.signal.search_error_hidden),
       n.text_input({
         id = "replace-input",
         border_label = "Replace",
@@ -543,9 +613,11 @@ function M.open(opts)
         on_change = function(value)
           state.replacement = value
           state.signal.replacement = value
+          clear_section_error("replace")
           schedule_search(n)
         end,
       }),
+      error_panel(state.signal.replace_error, state.signal.replace_error_hidden),
       n.text_input({
         id = "include-input",
         border_label = "Files to include",
@@ -561,9 +633,11 @@ function M.open(opts)
         on_change = function(value)
           state.include = value
           state.signal.include = value
+          clear_section_error("include")
           schedule_search(n)
         end,
       }),
+      error_panel(state.signal.include_error, state.signal.include_error_hidden),
       n.tree({
         id = "result-tree",
         flex = 1,
@@ -620,6 +694,7 @@ function M.open(opts)
           return line
         end,
       }),
+      error_panel(state.signal.results_error, state.signal.results_error_hidden),
       n.paragraph({
         lines = state.signal.status,
         is_focusable = false,
@@ -657,6 +732,8 @@ function M.open(opts)
       end,
     },
   })
+
+  clear_all_errors()
 
   renderer:on_unmount(function()
     state.renderer = nil
