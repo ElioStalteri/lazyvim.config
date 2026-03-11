@@ -17,6 +17,7 @@ vim.opt.smartindent = true -- Insert indents automatically
 vim.opt.spelllang = { "en" }
 vim.g.markdown_folding = 1 -- enable markdown folding
 vim.opt.termguicolors = true
+-- vim.opt.guicursor = "n-v-c-sm:block-Cursor,i-ci-ve:ver25-iCursor,r-cr-o:hor20-Cursor,t:block-TermCursor,a:blinkon500-blinkoff500"
 -- vim.g.autoformat = false
 -- vim.g.lazygit_config = false
 -- vim.opt.clipboard = "unnamed,unnamedplus"

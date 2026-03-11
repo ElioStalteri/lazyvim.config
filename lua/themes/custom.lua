@@ -62,6 +62,8 @@ M.scheme = {
   teal = "#3ae0b4",
   dark_yellow = "#ffd121",
   dark_teal = "#26cca0",
+  cursor_bg = "#b3ab60",
+  cursor_fg = "#1a1a18",
   -- Specific colors
   whitespace_fg = "#4d5154",
   non_text_fg = "#4d5154",
@@ -132,33 +134,33 @@ end
 M.hl_groups = function(scheme)
   return add_missing({
     ["Cursor"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["iCursor"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["lCursor"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["vCursor"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["CursorIM"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["TermCursor"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["FloatBorder"] = {
