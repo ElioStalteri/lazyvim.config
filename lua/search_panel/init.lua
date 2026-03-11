@@ -11,8 +11,10 @@ local state = {
   include = "",
   files = {},
   focused_node = nil,
+  interactive_preview = true,
   search_seq = 0,
   search_timer = nil,
+  preview_timer = nil,
 }
 
 local function setup_highlights()
@@ -83,6 +85,53 @@ local function clear_all_errors()
   clear_section_error("replace")
   clear_section_error("include")
   clear_section_error("results")
+end
+
+local function stop_preview_timer()
+  if state.preview_timer then
+    state.preview_timer:stop()
+    state.preview_timer:close()
+    state.preview_timer = nil
+  end
+end
+
+local function preview_in_origin(node)
+  if not node or node.type ~= "match" or not node.path then
+    return
+  end
+
+  local origin_win = state.renderer and state.renderer:get_origin_winid() or nil
+  if not origin_win or not vim.api.nvim_win_is_valid(origin_win) then
+    return
+  end
+
+  local bufnr = vim.fn.bufadd(node.path)
+  vim.fn.bufload(bufnr)
+
+  pcall(vim.api.nvim_win_set_buf, origin_win, bufnr)
+  pcall(vim.api.nvim_win_set_cursor, origin_win, { node.lnum or 1, math.max((node.col or 1) - 1, 0) })
+end
+
+local function schedule_preview(node)
+  stop_preview_timer()
+
+  if not state.interactive_preview or not node or node.type ~= "match" then
+    return
+  end
+
+  local target = {
+    type = node.type,
+    path = node.path,
+    lnum = node.lnum,
+    col = node.col,
+  }
+
+  state.preview_timer = uv.new_timer()
+  state.preview_timer:start(60, 0, function()
+    vim.schedule(function()
+      preview_in_origin(target)
+    end)
+  end)
 end
 
 local function build_preview_parts(line_text, col, search, replacement)
@@ -697,6 +746,7 @@ function M.open(opts)
         data = state.signal.nodes,
         on_change = function(node)
           state.focused_node = node
+          schedule_preview(node)
         end,
         on_select = function(node, component)
           if not node then
@@ -788,6 +838,7 @@ function M.open(opts)
     state.search = ""
     state.replacement = ""
     state.include = ""
+    stop_preview_timer()
     if state.search_timer then
       state.search_timer:stop()
       state.search_timer:close()
