@@ -62,6 +62,8 @@ M.scheme = {
   teal = "#3ae0b4",
   dark_yellow = "#ffd121",
   dark_teal = "#26cca0",
+  cursor_bg = "#b3ab60",
+  cursor_fg = "#1a1a18",
   -- Specific colors
   whitespace_fg = "#4d5154",
   non_text_fg = "#4d5154",
@@ -70,7 +72,7 @@ M.scheme = {
   highlighted_word_bg = "#343942",
   tab_visible_fg = "#b3ab60",
   line_fg = "#f8f8f0",
-  cursor_line_bg = "#333227",
+  cursor_line_bg = "#40403a",
   cursor_linenr_fg = "#e6db74",
   mid_orange = "#de933c",
   lightorange = "#dea255",
@@ -132,33 +134,33 @@ end
 M.hl_groups = function(scheme)
   return add_missing({
     ["Cursor"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["iCursor"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["lCursor"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["vCursor"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["CursorIM"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["TermCursor"] = {
-      fg = scheme.black,
-      bg = scheme.white,
+      fg = scheme.cursor_fg,
+      bg = scheme.cursor_bg,
       reverse = false,
     },
     ["FloatBorder"] = {
@@ -204,6 +206,18 @@ M.hl_groups = function(scheme)
       fg = scheme.aqua,
     },
     ["NonText"] = {
+      fg = scheme.grey,
+    },
+    ["CursorLine"] = {
+      bg = scheme.cursor_line_bg,
+    },
+    ["SearchPanelCursorLine"] = {
+      bg = scheme.cursor_line_bg,
+    },
+    ["SearchPanelFile"] = {
+      fg = scheme.comment_fg,
+    },
+    ["SearchPanelArrow"] = {
       fg = scheme.grey,
     },
 

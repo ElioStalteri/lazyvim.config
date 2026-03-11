@@ -55,6 +55,10 @@ return {
     opts = {},
   },
   {
+    "MunifTanjim/nui.nvim",
+    commit = "de740991c12411b663994b2860f1a4fd0937c130",
+  },
+  {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
@@ -75,19 +79,23 @@ return {
       branch = true,
     },
   },
-  -- {
-  --   "MagicDuck/grug-far.nvim",
-  --   keys = {
-  --     { "<leader>sr", "<cmd>GrugFar<cr>", desc = "Open find and replace" },
-  --   },
-  --   opts = {},
-  -- },
   {
-    "AckslD/muren.nvim",
-    config = true,
+    "grapp-dev/nui-components.nvim",
+    commit = "1654dd709f13874089eefc80d82e0eb667f7fdfb",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+    },
+    config = function()
+      require("search_panel").setup()
+    end,
     keys = {
-      { "<leader>sr", "<cmd>MurenToggle<cr>", desc = "Find and replace" },
-      { "<leader>su", "<cmd>MurenUnique<cr>", desc = "Find and replace unique" },
+      {
+        "<leader>sr",
+        function()
+          require("search_panel").open()
+        end,
+        desc = "Search and replace panel",
+      },
     },
   },
   {
