@@ -459,6 +459,38 @@ local function replace_literal(content, search, replacement)
   return table.concat(parts), count
 end
 
+local function replace_match_at_position(content, lnum, col, search, replacement)
+  if search == "" then
+    return nil, "Search value is empty"
+  end
+
+  local line = 1
+  local idx = 1
+
+  while line < lnum do
+    local nl = content:find("\n", idx, true)
+    if not nl then
+      return nil, "Match line is out of range"
+    end
+    idx = nl + 1
+    line = line + 1
+  end
+
+  local start_pos = idx + math.max((col or 1) - 1, 0)
+  local end_pos = start_pos + #search - 1
+
+  if start_pos < 1 or start_pos > (#content + 1) then
+    return nil, "Match column is out of range"
+  end
+
+  if content:sub(start_pos, end_pos) ~= search then
+    return nil, "Focused diff is stale. Refresh search and try again"
+  end
+
+  local updated = content:sub(1, start_pos - 1) .. replacement .. content:sub(end_pos + 1)
+  return updated
+end
+
 local function reload_buffer_if_loaded(path)
   local bufnr = vim.fn.bufnr(path)
   if bufnr == -1 or not vim.api.nvim_buf_is_loaded(bufnr) then
@@ -556,6 +588,69 @@ local function apply_current_file(n)
   apply_paths({ path }, n)
 end
 
+local function apply_current_match(n)
+  local node = state.focused_node
+  if not node or node.type ~= "match" then
+    set_section_error("results", "Select a diff line first")
+    state.signal.status = "No focused diff line"
+    return
+  end
+
+  if state.search == "" then
+    set_section_error("search", "Search value is empty")
+    state.signal.status = "Cannot apply without search text"
+    return
+  end
+
+  clear_section_error("search")
+  clear_section_error("results")
+
+  local path = node.path
+  local bufnr = vim.fn.bufnr(path)
+  if bufnr ~= -1 and vim.api.nvim_buf_is_loaded(bufnr) and vim.bo[bufnr].modified then
+    set_section_error("results", "Buffer has unsaved changes")
+    state.signal.status = "Save buffer before applying diff"
+    return
+  end
+
+  local original, read_err = read_file(path)
+  if not original then
+    set_section_error("results", string.format("Cannot read %s: %s", path, read_err or "unknown error"))
+    state.signal.status = "Apply failed"
+    return
+  end
+
+  local updated, replace_err = replace_match_at_position(
+    original,
+    node.lnum or 1,
+    node.col or 1,
+    state.search,
+    state.replacement
+  )
+
+  if not updated then
+    set_section_error("results", replace_err or "Apply failed")
+    state.signal.status = "Apply failed"
+    return
+  end
+
+  if updated == original then
+    state.signal.status = "No change applied"
+    return
+  end
+
+  local ok, write_err = write_file(path, updated)
+  if not ok then
+    set_section_error("results", string.format("Cannot write %s: %s", path, write_err or "unknown error"))
+    state.signal.status = "Apply failed"
+    return
+  end
+
+  reload_buffer_if_loaded(path)
+  state.signal.status = string.format("Applied 1 replacement in %s:%d", node.rel_path or path, node.lnum or 1)
+  run_search(n)
+end
+
 local function apply_all_files(n)
   local paths = {}
   for path in pairs(state.files) do
@@ -587,7 +682,8 @@ local function register_results_which_key(bufnr)
   end
 
   wk.add({
-    { "a", desc = "Apply current file", mode = "n", buffer = bufnr },
+    { "a", desc = "Apply current diff", mode = "n", buffer = bufnr },
+    { "A", desc = "Apply current file", mode = "n", buffer = bufnr },
   })
 end
 
@@ -725,6 +821,13 @@ function M.open(opts)
             {
               mode = "n",
               key = "a",
+              handler = function()
+                apply_current_match(n)
+              end,
+            },
+            {
+              mode = "n",
+              key = "A",
               handler = function()
                 apply_current_file(n)
               end,
