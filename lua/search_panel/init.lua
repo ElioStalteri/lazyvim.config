@@ -16,15 +16,19 @@ local state = {
 }
 
 local function setup_highlights()
-  vim.api.nvim_set_hl(0, "SearchPanelBorder", { fg = "#5f6672", default = true })
-  vim.api.nvim_set_hl(0, "SearchPanelHeader", { fg = "#aeb6c2", default = true })
-  vim.api.nvim_set_hl(0, "SearchPanelErrorBorder", { fg = "#6b4f4f", default = true })
-  vim.api.nvim_set_hl(0, "SearchPanelErrorHeader", { fg = "#c8a6a6", default = true })
-  vim.api.nvim_set_hl(0, "SearchPanelErrorText", { fg = "#d4b8b8", default = true })
-  vim.api.nvim_set_hl(0, "SearchPanelArrow", { link = "Comment", default = true })
-  vim.api.nvim_set_hl(0, "SearchPanelFile", { link = "Directory", default = true })
-  vim.api.nvim_set_hl(0, "SearchPanelMatch", { fg = "#f6d5db", bg = "#8b1a2b" })
-  vim.api.nvim_set_hl(0, "SearchPanelReplace", { fg = "#d8f3dc", bg = "#2f6a3d" })
+  vim.api.nvim_set_hl(0, "SearchPanelBg", { fg = "#f8f8f0", bg = "#1a1a18" })
+  vim.api.nvim_set_hl(0, "SearchPanelResultsBg", { fg = "#f8f8f0", bg = "#171712" })
+  vim.api.nvim_set_hl(0, "SearchPanelStatus", { fg = "#8f908a", bg = "#1a1a18" })
+  vim.api.nvim_set_hl(0, "SearchPanelBorder", { fg = "#4d5154", bg = "#1a1a18" })
+  vim.api.nvim_set_hl(0, "SearchPanelHeader", { fg = "#9ca0a4", bg = "#1a1a18" })
+  vim.api.nvim_set_hl(0, "SearchPanelErrorBorder", { fg = "#6b2c3b", bg = "#1a1a18" })
+  vim.api.nvim_set_hl(0, "SearchPanelErrorHeader", { fg = "#e95678", bg = "#1a1a18" })
+  vim.api.nvim_set_hl(0, "SearchPanelErrorText", { fg = "#f3c7d2", bg = "#22171b" })
+  vim.api.nvim_set_hl(0, "SearchPanelArrow", { fg = "#8f908a", bg = "#171712" })
+  vim.api.nvim_set_hl(0, "SearchPanelFile", { fg = "#9ca0a4", bg = "#171712" })
+  vim.api.nvim_set_hl(0, "SearchPanelCursorLine", { bg = "#2c2c26" })
+  vim.api.nvim_set_hl(0, "SearchPanelMatch", { fg = "#f8f8f0", bg = "#4a0f23" })
+  vim.api.nvim_set_hl(0, "SearchPanelReplace", { fg = "#f8f8f0", bg = "#3d5213" })
 end
 
 local function get_file_icon(path)
@@ -520,6 +524,36 @@ local function apply_all_files(n)
   apply_paths(paths, n)
 end
 
+local function confirm_apply_all_files(n)
+  local choices = { "Cancel", "Apply all files" }
+
+  if vim.ui and vim.ui.select then
+    vim.ui.select(choices, { prompt = "Replace in all matched files?" }, function(choice)
+      if choice == "Apply all files" then
+        apply_all_files(n)
+      end
+    end)
+    return
+  end
+
+  local answer = vim.fn.confirm("Replace in all matched files?", "&Cancel\n&Apply all", 1)
+  if answer == 2 then
+    apply_all_files(n)
+  end
+end
+
+local function register_results_which_key(bufnr)
+  local ok, wk = pcall(require, "which-key")
+  if not ok then
+    return
+  end
+
+  wk.add({
+    { "a", desc = "Apply current file", mode = "n", buffer = bufnr },
+    { "<leader>a", desc = "Apply all files", mode = "n", buffer = bufnr },
+  })
+end
+
 function M.open(opts)
   if state.renderer then
     state.renderer:focus()
@@ -572,6 +606,7 @@ function M.open(opts)
           FloatBorder = "SearchPanelErrorBorder",
           FloatTitle = "SearchPanelErrorHeader",
           Normal = "SearchPanelErrorText",
+          NormalFloat = "SearchPanelErrorText",
         },
       },
     })
@@ -588,6 +623,8 @@ function M.open(opts)
           highlight = {
             FloatBorder = "SearchPanelBorder",
             FloatTitle = "SearchPanelHeader",
+            Normal = "SearchPanelBg",
+            NormalFloat = "SearchPanelBg",
           },
         },
         value = state.signal.search,
@@ -607,6 +644,8 @@ function M.open(opts)
           highlight = {
             FloatBorder = "SearchPanelBorder",
             FloatTitle = "SearchPanelHeader",
+            Normal = "SearchPanelBg",
+            NormalFloat = "SearchPanelBg",
           },
         },
         value = state.signal.replacement,
@@ -626,6 +665,8 @@ function M.open(opts)
           highlight = {
             FloatBorder = "SearchPanelBorder",
             FloatTitle = "SearchPanelHeader",
+            Normal = "SearchPanelBg",
+            NormalFloat = "SearchPanelBg",
           },
         },
         value = state.signal.include,
@@ -642,10 +683,34 @@ function M.open(opts)
         id = "result-tree",
         flex = 1,
         border_label = "Results",
+        mappings = function()
+          return {
+            {
+              mode = "n",
+              key = "a",
+              handler = function()
+                apply_current_file(n)
+              end,
+            },
+            {
+              mode = "n",
+              key = "<leader>a",
+              handler = function()
+                confirm_apply_all_files(n)
+              end,
+            },
+          }
+        end,
+        on_mount = function(component)
+          register_results_which_key(component.bufnr)
+        end,
         window = {
           highlight = {
             FloatBorder = "SearchPanelBorder",
             FloatTitle = "SearchPanelHeader",
+            Normal = "SearchPanelResultsBg",
+            NormalFloat = "SearchPanelResultsBg",
+            CursorLine = "SearchPanelCursorLine",
           },
         },
         data = state.signal.nodes,
@@ -698,6 +763,12 @@ function M.open(opts)
       n.paragraph({
         lines = state.signal.status,
         is_focusable = false,
+        window = {
+          highlight = {
+            Normal = "SearchPanelStatus",
+            NormalFloat = "SearchPanelStatus",
+          },
+        },
       })
     )
   end
@@ -708,20 +779,6 @@ function M.open(opts)
       key = "q",
       handler = function()
         renderer:close()
-      end,
-    },
-    {
-      mode = "n",
-      key = "a",
-      handler = function()
-        apply_current_file(n)
-      end,
-    },
-    {
-      mode = "n",
-      key = "A",
-      handler = function()
-        apply_all_files(n)
       end,
     },
     {
