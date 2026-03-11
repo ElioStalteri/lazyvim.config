@@ -51,6 +51,7 @@ return {
   },
   {
     "stevearc/dressing.nvim",
+    event = "VeryLazy",
     opts = {},
   },
   {
@@ -130,6 +131,7 @@ return {
   },
   {
     "echasnovski/mini.nvim",
+    event = "VeryLazy",
     config = function()
       require("mini.ai").setup({ n_lines = 500 })
       require("mini.surround").setup()
@@ -240,7 +242,7 @@ return {
       })
     end,
   },
-  { "saecki/live-rename.nvim" },
+  { "saecki/live-rename.nvim", event = "LspAttach" },
   {
     "lesnik2u/herald.nvim",
     event = "VeryLazy",

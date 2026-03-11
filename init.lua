@@ -65,6 +65,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   {
     "lewis6991/gitsigns.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     opts = {
       signs = {
         add = { text = "+" },

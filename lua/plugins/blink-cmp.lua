@@ -2,6 +2,7 @@
 return {
   {
     "saghen/blink.indent",
+    event = { "BufReadPost", "BufNewFile" },
     --- @module 'blink.indent'
     --- @type blink.indent.Config
     opts = {
@@ -12,6 +13,7 @@ return {
   },
   {
     "saghen/blink.cmp",
+    event = { "InsertEnter", "CmdlineEnter" },
     -- optional: provides snippets for the snippet source
     dependencies = {
       { "xzbdmw/colorful-menu.nvim", opts = {} },
