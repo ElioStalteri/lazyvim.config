@@ -38,6 +38,9 @@ local state = {
   preview_loading = false,
 }
 
+local queue_signal_value
+local queue_signal_update
+
 local function setup_highlights()
   vim.api.nvim_set_hl(0, "SearchPanelBg", { fg = "#f8f8f0", bg = "#1a1a18" })
   vim.api.nvim_set_hl(0, "SearchPanelResultsBg", { fg = "#f8f8f0", bg = "#171712" })
@@ -90,13 +93,11 @@ local function trim(str)
 end
 
 local function set_section_error(section, message)
-  if not state.signal then
-    return
-  end
-
   local text = trim(message or "")
-  state.signal[section .. "_error"] = text
-  state.signal[section .. "_error_hidden"] = text == ""
+  queue_signal_update(function(signal)
+    signal[section .. "_error"] = text
+    signal[section .. "_error_hidden"] = text == ""
+  end)
 end
 
 local function clear_section_error(section)
@@ -116,6 +117,39 @@ local SEARCH_QUIET_MAX_MS = 180
 local SEARCH_CANCEL_AGE_MS = 220
 local SPINNER_FRAMES = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
 
+local pending_signal_values = {}
+local pending_signal_values_flush = false
+
+queue_signal_value = function(key, value)
+  pending_signal_values[key] = value
+
+  if pending_signal_values_flush then
+    return
+  end
+
+  pending_signal_values_flush = true
+  vim.schedule(function()
+    pending_signal_values_flush = false
+    if not state.signal then
+      pending_signal_values = {}
+      return
+    end
+
+    for k, v in pairs(pending_signal_values) do
+      state.signal[k] = v
+      pending_signal_values[k] = nil
+    end
+  end)
+end
+
+queue_signal_update = function(fn)
+  vim.schedule(function()
+    if state.signal then
+      fn(state.signal)
+    end
+  end)
+end
+
 local function render_status_line()
   if not state.signal then
     return
@@ -123,11 +157,11 @@ local function render_status_line()
 
   local frame = SPINNER_FRAMES[state.spinner_index]
   if state.search_loading then
-    state.signal.status = "Searching " .. frame
+    queue_signal_value("status", "Searching " .. frame)
   elseif state.preview_loading then
-    state.signal.status = "Updating preview " .. frame
+    queue_signal_value("status", "Updating preview " .. frame)
   else
-    state.signal.status = state.status_base
+    queue_signal_value("status", state.status_base)
   end
 end
 
@@ -638,6 +672,7 @@ end
 
 local schedule_search
 local schedule_preview_compute
+local enqueue_start_search
 
 local function toggle_mode(n)
   state.mode = state.mode == "literal" and "regex" or "literal"
@@ -793,9 +828,21 @@ local function start_search(n, request)
       if state.pending_search_request then
         local pending = state.pending_search_request
         state.pending_search_request = nil
-        start_search(n, pending)
+        enqueue_start_search(n, pending)
       end
     end)
+  end)
+end
+
+enqueue_start_search = function(n, request)
+  vim.schedule(function()
+    if not state.signal then
+      return
+    end
+
+    if request then
+      start_search(n, request)
+    end
   end)
 end
 
@@ -844,7 +891,7 @@ schedule_search = function(n, source, opts)
       local pending_now = state.pending_search_request
       state.pending_search_request = nil
       if pending_now then
-        start_search(n, pending_now)
+        enqueue_start_search(n, pending_now)
       end
       return
     end
@@ -860,7 +907,7 @@ schedule_search = function(n, source, opts)
         local pending = state.pending_search_request
         state.pending_search_request = nil
         if pending then
-          start_search(n, pending)
+          enqueue_start_search(n, pending)
         end
       end)
     end)
@@ -870,7 +917,7 @@ schedule_search = function(n, source, opts)
   local pending = state.pending_search_request
   state.pending_search_request = nil
   if pending then
-    start_search(n, pending)
+    enqueue_start_search(n, pending)
   end
 end
 
@@ -1387,7 +1434,7 @@ function M.open(opts)
         value = state.signal.search,
         on_change = function(value)
           state.search = value
-          state.signal.search = value
+          queue_signal_value("search", value)
           state.reset_results_to_top_on_next_results = true
           state.sd_preview_cache = {}
           clear_section_error("search")
@@ -1411,7 +1458,7 @@ function M.open(opts)
         value = state.signal.replacement,
         on_change = function(value)
           state.replacement = value
-          state.signal.replacement = value
+          queue_signal_value("replacement", value)
           state.sd_preview_cache = {}
           clear_section_error("replace")
           schedule_preview_compute(n, 300)
@@ -1435,7 +1482,7 @@ function M.open(opts)
         placeholder = "lua/**/*.lua,lua/config/**",
         on_change = function(value)
           state.include = value
-          state.signal.include = value
+          queue_signal_value("include", value)
           state.sd_preview_cache = {}
           clear_section_error("include")
           schedule_search(n, "include")
