@@ -99,24 +99,4 @@ return {
       },
     },
   },
-  {
-    "josephburgess/nvumi",
-    dependencies = { "folke/snacks.nvim" },
-    opts = {
-      virtual_text = "inline",
-      prefix = "= ",
-      keys = {
-        run = "<CR>",
-        reset = "R",
-        yank = "<leader>y",
-      },
-    },
-    keys = {
-      {
-        "<leader>xn",
-        "<cmd>Nvumi<cr>",
-        desc = "run Nvumi",
-      },
-    },
-  },
 }

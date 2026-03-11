@@ -74,12 +74,20 @@ return {
       branch = true,
     },
   },
+  -- {
+  --   "MagicDuck/grug-far.nvim",
+  --   keys = {
+  --     { "<leader>sr", "<cmd>GrugFar<cr>", desc = "Open find and replace" },
+  --   },
+  --   opts = {},
+  -- },
   {
-    "MagicDuck/grug-far.nvim",
+    "AckslD/muren.nvim",
+    config = true,
     keys = {
-      { "<leader>sr", "<cmd>GrugFar<cr>", desc = "Open find and replace" },
+      { "<leader>sr", "<cmd>MurenToggle<cr>", desc = "Find and replace" },
+      { "<leader>su", "<cmd>MurenUnique<cr>", desc = "Find and replace unique" },
     },
-    opts = {},
   },
   {
     "gbprod/yanky.nvim",
