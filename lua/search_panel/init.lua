@@ -1,4 +1,5 @@
 local uv = vim.uv or vim.loop
+local PREVIEW_NS = vim.api.nvim_create_namespace("search_panel_preview")
 
 local M = {}
 
@@ -15,6 +16,7 @@ local state = {
   search_seq = 0,
   search_timer = nil,
   preview_timer = nil,
+  preview_bufnr = nil,
 }
 
 local function setup_highlights()
@@ -31,7 +33,8 @@ local function setup_highlights()
   vim.api.nvim_set_hl(0, "SearchPanelFile", { fg = "#9ca0a4" })
   vim.api.nvim_set_hl(0, "SearchPanelCursorLine", { bg = "#40403a" })
   vim.api.nvim_set_hl(0, "SearchPanelMatch", { fg = "#f8f8f0", bg = "#4a0f23" })
-  vim.api.nvim_set_hl(0, "SearchPanelReplace", { fg = "#f8f8f0", bg = "#3d5213" })
+  vim.api.nvim_set_hl(0, "SearchPanelReplace", { fg = "#f8f8f0", bg = "#5c8014" })
+  vim.api.nvim_set_hl(0, "SearchPanelPreviewFocus", { fg = "#f8f8f0", bg = "#56791a", nocombine = true })
 end
 
 local function get_file_icon(path)
@@ -96,13 +99,75 @@ local function stop_preview_timer()
   end
 end
 
+local function clear_preview_highlight()
+  if state.preview_bufnr and vim.api.nvim_buf_is_valid(state.preview_bufnr) then
+    pcall(vim.api.nvim_buf_clear_namespace, state.preview_bufnr, PREVIEW_NS, 0, -1)
+  end
+  state.preview_bufnr = nil
+end
+
+local function panel_has_focus()
+  if not state.renderer then
+    return false
+  end
+
+  local current_win = vim.api.nvim_get_current_win()
+  local components = state.renderer:get_focusable_components() or {}
+
+  for _, component in ipairs(components) do
+    if component.winid and vim.api.nvim_win_is_valid(component.winid) and component.winid == current_win then
+      return true
+    end
+  end
+
+  return false
+end
+
+local function clear_preview_if_panel_unfocused()
+  vim.schedule(function()
+    if not panel_has_focus() then
+      clear_preview_highlight()
+    end
+  end)
+end
+
+local function highlight_preview_match(bufnr, node)
+  if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
+
+  clear_preview_highlight()
+
+  local lnum = (node.lnum or 1) - 1
+  local start_col = math.max((node.col or 1) - 1, 0)
+  local end_col = start_col + math.max(#state.search, 1)
+
+  local line = vim.api.nvim_buf_get_lines(bufnr, lnum, lnum + 1, false)[1]
+  if line then
+    end_col = math.min(end_col, #line)
+  end
+  if end_col <= start_col then
+    end_col = start_col + 1
+  end
+
+  pcall(vim.api.nvim_buf_set_extmark, bufnr, PREVIEW_NS, lnum, start_col, {
+    end_row = lnum,
+    end_col = end_col,
+    hl_group = "SearchPanelPreviewFocus",
+    priority = 250,
+  })
+  state.preview_bufnr = bufnr
+end
+
 local function preview_in_origin(node)
   if not node or node.type ~= "match" or not node.path then
+    clear_preview_highlight()
     return
   end
 
   local origin_win = state.renderer and state.renderer:get_origin_winid() or nil
   if not origin_win or not vim.api.nvim_win_is_valid(origin_win) then
+    clear_preview_highlight()
     return
   end
 
@@ -111,12 +176,14 @@ local function preview_in_origin(node)
 
   pcall(vim.api.nvim_win_set_buf, origin_win, bufnr)
   pcall(vim.api.nvim_win_set_cursor, origin_win, { node.lnum or 1, math.max((node.col or 1) - 1, 0) })
+  highlight_preview_match(bufnr, node)
 end
 
 local function schedule_preview(node)
   stop_preview_timer()
 
   if not state.interactive_preview or not node or node.type ~= "match" then
+    clear_preview_highlight()
     return
   end
 
@@ -322,6 +389,7 @@ local function run_search(n)
     state.signal.nodes = {}
     state.signal.status = "Type to search"
     clear_section_error("results")
+    clear_preview_highlight()
     return
   end
 
@@ -363,6 +431,9 @@ local function run_search(n)
       local files = parse_rg_output(obj.stdout or "")
       local elapsed = (uv.hrtime() - started) / 1000000000
       set_results(n, files, elapsed)
+      if next(files) == nil then
+        clear_preview_highlight()
+      end
     end)
   end)
 end
@@ -753,6 +824,7 @@ function M.open(opts)
         border_label = "Search (literal)",
         max_lines = 1,
         autofocus = true,
+        on_blur = clear_preview_if_panel_unfocused,
         window = {
           highlight = {
             FloatBorder = "SearchPanelBorder",
@@ -774,6 +846,7 @@ function M.open(opts)
         id = "replace-input",
         border_label = "Replace",
         max_lines = 1,
+        on_blur = clear_preview_if_panel_unfocused,
         window = {
           highlight = {
             FloatBorder = "SearchPanelBorder",
@@ -795,6 +868,7 @@ function M.open(opts)
         id = "include-input",
         border_label = "Files to include",
         max_lines = 1,
+        on_blur = clear_preview_if_panel_unfocused,
         window = {
           highlight = {
             FloatBorder = "SearchPanelBorder",
@@ -817,6 +891,7 @@ function M.open(opts)
         id = "result-tree",
         flex = 1,
         border_label = "Results",
+        on_blur = clear_preview_if_panel_unfocused,
         mappings = function()
           return {
             {
@@ -954,6 +1029,7 @@ function M.open(opts)
     state.replacement = ""
     state.include = ""
     stop_preview_timer()
+    clear_preview_highlight()
     if state.search_timer then
       state.search_timer:stop()
       state.search_timer:close()
