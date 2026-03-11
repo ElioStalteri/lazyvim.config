@@ -1,4 +1,4 @@
-local uv = vim.uv or vim.loop
+local uv = vim.uv
 local PREVIEW_NS = vim.api.nvim_create_namespace("search_panel_preview")
 
 local M = {}
