@@ -33,6 +33,46 @@ return {
   },
 
   -- {
+  --   "ThePrimeagen/99",
+  --   config = function()
+  --     local _99 = require("99")
+  --
+  --     _99.setup({
+  --       model = "opencode/mimo-v2-flash-free",
+  --       tmp_dir = "./tmp",
+  --     })
+  --
+  --     vim.keymap.set("n", "<leader>aa", function()
+  --       _99.search()
+  --     end, { desc = "AI Search" })
+  --
+  --     vim.keymap.set("v", "<leader>aa", function()
+  --       _99.visual()
+  --     end, { desc = "AI Visual" })
+  --
+  --     vim.keymap.set("n", "<leader>av", function()
+  --       _99.vibe()
+  --     end, { desc = "AI Vibe" })
+  --
+  --     vim.keymap.set("n", "<leader>ao", function()
+  --       _99.open()
+  --     end, { desc = "AI Open" })
+  --
+  --     vim.keymap.set("n", "<leader>am", function()
+  --       require("99.extensions.fzf_lua").select_model()
+  --     end, { desc = "AI Model" })
+  --
+  --     vim.keymap.set("n", "<leader>al", function()
+  --       _99.view_logs()
+  --     end, { desc = "AI Logs" })
+  --
+  --     vim.keymap.set("n", "<leader>ax", function()
+  --       _99.stop_all_requests()
+  --     end, { desc = "AI Stop" })
+  --   end,
+  -- },
+
+  -- {
   --   "NickvanDyke/opencode.nvim",
   --   dependencies = {
   --     -- Recommended for `ask()` and `select()`.

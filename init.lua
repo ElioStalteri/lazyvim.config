@@ -78,7 +78,7 @@ require("lazy").setup({
 
   require("plugins.whichkey"),
 
-  require("plugins.telescope"),
+  require("plugins.fzf-lua"),
 
   -- LSP Plugins
   {

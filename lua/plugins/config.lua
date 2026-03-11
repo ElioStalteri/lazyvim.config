@@ -151,7 +151,7 @@ return {
       {
         "<leader>p",
         function()
-          require("telescope").extensions.yank_history.yank_history({})
+          vim.cmd("YankyRingHistory")
         end,
         mode = { "n", "x" },
         desc = "Open Yank History",
@@ -428,8 +428,7 @@ return {
   --   "LintaoAmons/scratch.nvim",
   --   event = "VeryLazy",
   --   dependencies = {
-  --     { "ibhagwan/fzf-lua" }, --optional: if you want to use fzf-lua to pick scratch file. Recommanded, since it will order the files by modification datetime desc. (require rg)
-  --     { "nvim-telescope/telescope.nvim" }, -- optional: if you want to pick scratch file by telescope
+  --     { "ibhagwan/fzf-lua" }, -- optional: picker backend
   --     { "stevearc/dressing.nvim" }, -- optional: to have the same UI shown in the GIF
   --   },
   --   opts = {

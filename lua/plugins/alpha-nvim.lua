@@ -103,10 +103,10 @@ return {
 
     dashboard.opts.layout[3] = buttons
     dashboard.section.buttons.val = {
-      dashboard.button("f", " " .. " Find file", ":Telescope find_files<CR>"),
+      dashboard.button("f", " " .. " Find file", ":FzfLua files<CR>"),
       dashboard.button("n", " " .. " New file", ":ene <BAR> startinsert <CR>"),
       dashboard.button("s", " " .. " Restore Session", [[<cmd> lua require("persistence").load() <cr>]]),
-      dashboard.button("r", " " .. " Recent files", ":Telescope oldfiles<CR>"),
+      dashboard.button("r", " " .. " Recent files", ":FzfLua oldfiles<CR>"),
       dashboard.button("l", "󰒲 " .. " Lazy", "<cmd> Lazy <cr>"),
       dashboard.button("q", " " .. " Quit", "<cmd> qa <cr>"),
     }

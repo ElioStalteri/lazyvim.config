@@ -13,10 +13,10 @@ return {
 
   { -- https://github.com/tlj/api-browser.nvim?tab=readme-ov-file
     "tlj/api-browser.nvim",
+    enabled = false,
     dependencies = {
       "kkharji/sqlite.lua",
       "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim",
     },
     config = function()
       require("api-browser").setup()
@@ -177,7 +177,7 @@ return {
   -- data explorer for parquet files using dackdb
   {
     "kyytox/data-explorer.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim" },
+    enabled = false,
     config = function()
       require("data-explorer").setup()
     end,
