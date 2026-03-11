@@ -20,6 +20,8 @@ local function notify(msg, level)
 end
 
 local function setup_highlights()
+  vim.api.nvim_set_hl(0, "SearchPanelBorder", { fg = "#5f6672", default = true })
+  vim.api.nvim_set_hl(0, "SearchPanelHeader", { fg = "#aeb6c2", default = true })
   vim.api.nvim_set_hl(0, "SearchPanelFile", { link = "Directory", default = true })
   vim.api.nvim_set_hl(0, "SearchPanelMatch", { link = "DiffDelete", default = true })
   vim.api.nvim_set_hl(0, "SearchPanelReplace", { link = "DiffAdd", default = true })
@@ -497,6 +499,12 @@ function M.open(opts)
         border_label = "Search (literal)",
         max_lines = 1,
         autofocus = true,
+        window = {
+          highlight = {
+            FloatBorder = "SearchPanelBorder",
+            FloatTitle = "SearchPanelHeader",
+          },
+        },
         value = state.signal.search,
         on_change = function(value)
           state.search = value
@@ -508,6 +516,12 @@ function M.open(opts)
         id = "replace-input",
         border_label = "Replace",
         max_lines = 1,
+        window = {
+          highlight = {
+            FloatBorder = "SearchPanelBorder",
+            FloatTitle = "SearchPanelHeader",
+          },
+        },
         value = state.signal.replacement,
         on_change = function(value)
           state.replacement = value
@@ -519,6 +533,12 @@ function M.open(opts)
         id = "include-input",
         border_label = "Files to include",
         max_lines = 1,
+        window = {
+          highlight = {
+            FloatBorder = "SearchPanelBorder",
+            FloatTitle = "SearchPanelHeader",
+          },
+        },
         value = state.signal.include,
         placeholder = "lua/**/*.lua,lua/config/**",
         on_change = function(value)
@@ -531,6 +551,12 @@ function M.open(opts)
         id = "result-tree",
         flex = 1,
         border_label = "Results",
+        window = {
+          highlight = {
+            FloatBorder = "SearchPanelBorder",
+            FloatTitle = "SearchPanelHeader",
+          },
+        },
         data = state.signal.nodes,
         on_change = function(node)
           state.focused_node = node
