@@ -92,6 +92,27 @@ local function trim(str)
   return (str:gsub("^%s+", ""):gsub("%s+$", ""))
 end
 
+local tool_cache = {
+  rg = nil,
+  sd = nil,
+}
+
+local function has_tool(cmd, refresh)
+  if refresh or tool_cache[cmd] == nil then
+    tool_cache[cmd] = vim.fn.executable(cmd) == 1
+  end
+
+  return tool_cache[cmd]
+end
+
+local function has_rg(refresh)
+  return has_tool("rg", refresh)
+end
+
+local function has_sd(refresh)
+  return has_tool("sd", refresh)
+end
+
 local function set_section_error(section, message)
   local text = trim(message or "")
   queue_signal_update(function(signal)
@@ -376,9 +397,18 @@ local function build_sd_args(opts)
 end
 
 local function run_sd_on_text(input, opts)
+  if not has_sd(true) then
+    return nil, "sd is required for replace actions and regex substitutions"
+  end
+
   local args = build_sd_args(opts)
 
-  local obj = vim.system(args, { text = true, cwd = state.cwd, stdin = input }):wait()
+  local ok_proc, proc_or_err = pcall(vim.system, args, { text = true, cwd = state.cwd, stdin = input })
+  if not ok_proc then
+    return nil, trim(tostring(proc_or_err))
+  end
+
+  local obj = proc_or_err:wait()
   if obj.code ~= 0 then
     local err = trim(obj.stderr ~= "" and obj.stderr or (obj.stdout ~= "" and obj.stdout or "sd failed"))
     return nil, err
@@ -388,9 +418,16 @@ local function run_sd_on_text(input, opts)
 end
 
 local function run_sd_on_text_async(input, opts, callback)
+  if not has_sd(true) then
+    vim.schedule(function()
+      callback(nil, "sd is required for replace actions and regex substitutions")
+    end)
+    return
+  end
+
   local args = build_sd_args(opts)
 
-  vim.system(args, { text = true, cwd = state.cwd, stdin = input }, function(obj)
+  local ok_proc, proc_or_err = pcall(vim.system, args, { text = true, cwd = state.cwd, stdin = input }, function(obj)
     vim.schedule(function()
       if obj.code ~= 0 then
         local err = trim(obj.stderr ~= "" and obj.stderr or (obj.stdout ~= "" and obj.stdout or "sd failed"))
@@ -401,6 +438,12 @@ local function run_sd_on_text_async(input, opts, callback)
       callback(obj.stdout or "", nil)
     end)
   end)
+
+  if not ok_proc then
+    vim.schedule(function()
+      callback(nil, trim(tostring(proc_or_err)))
+    end)
+  end
 end
 
 local function build_preview_parts(line_text, start_col0, end_col0, match_text, replacement)
@@ -678,7 +721,11 @@ local function toggle_mode(n)
   state.mode = state.mode == "literal" and "regex" or "literal"
   state.sd_preview_cache = {}
   sync_mode_signal()
-  clear_section_error("replace")
+  if state.mode == "regex" and not has_sd(true) then
+    set_section_error("replace", "sd is required for regex replacement preview and apply")
+  else
+    clear_section_error("replace")
+  end
   clear_section_error("results")
   set_status("Mode switched to " .. state.mode)
   schedule_search(n, "mode")
@@ -765,6 +812,21 @@ local function start_search(n, request)
     set_status("Type to search")
     clear_section_error("results")
     clear_section_error("replace")
+    clear_preview_highlight()
+    return
+  end
+
+  if not has_rg(true) then
+    state.search_active_proc = nil
+    state.search_active_seq = 0
+    state.search_active_started = 0
+    state.search_active_request = nil
+    set_loading("search", false)
+    set_loading("preview", false)
+    state.files = {}
+    state.signal.nodes = {}
+    set_status("Search unavailable")
+    set_section_error("results", "ripgrep (rg) is required but not found in PATH")
     clear_preview_highlight()
     return
   end
@@ -940,6 +1002,14 @@ local function run_preview_compute(n, seq)
     apply_preview_parts_to_files(nil)
     refresh_nodes(n)
     clear_section_error("replace")
+    set_loading("preview", false)
+    return
+  end
+
+  if not has_sd(true) then
+    apply_preview_parts_to_files(nil)
+    refresh_nodes(n)
+    set_section_error("replace", "sd is required for regex replacement preview and apply")
     set_loading("preview", false)
     return
   end
@@ -1134,6 +1204,12 @@ local function apply_paths(paths, n)
     return
   end
 
+  if not has_sd(true) then
+    set_section_error("replace", "sd is required for apply actions")
+    set_status("Replace unavailable")
+    return
+  end
+
   clear_section_error("search")
   clear_section_error("results")
 
@@ -1224,6 +1300,12 @@ local function apply_current_match(n)
   if state.search == "" then
     set_section_error("search", "Search value is empty")
     set_status("Cannot apply without search text")
+    return
+  end
+
+  if not has_sd(true) then
+    set_section_error("replace", "sd is required for apply actions")
+    set_status("Replace unavailable")
     return
   end
 
@@ -1677,7 +1759,7 @@ function M.setup()
   end, {
     nargs = "?",
     complete = "dir",
-    desc = "Open literal search/replace panel",
+    desc = "Open search/replace panel",
   })
 end
 
