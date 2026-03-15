@@ -87,6 +87,7 @@ return {
     },
     config = function()
       require("search_panel").setup()
+      require("opencode_panel").setup()
     end,
     keys = {
       {
@@ -95,6 +96,76 @@ return {
           require("search_panel").open()
         end,
         desc = "Search and replace panel",
+      },
+      {
+        "<leader>aa",
+        function()
+          require("opencode_panel").toggle()
+        end,
+        desc = "Toggle Opencode panel",
+      },
+      {
+        "<leader>as",
+        function()
+          require("opencode_panel").select_session()
+        end,
+        desc = "Select Opencode session",
+      },
+      {
+        "<leader>am",
+        function()
+          require("opencode_panel").select_model()
+        end,
+        desc = "Select Opencode model",
+      },
+      {
+        "<leader>at",
+        function()
+          require("opencode_panel").select_variant()
+        end,
+        desc = "Select Opencode thinking",
+      },
+      {
+        "<leader>an",
+        function()
+          require("opencode_panel").new_session()
+        end,
+        desc = "New Opencode session",
+      },
+      {
+        "<leader>ae",
+        function()
+          require("opencode_panel").accept_edit()
+        end,
+        desc = "Accept AI edit",
+      },
+      {
+        "<leader>ad",
+        function()
+          require("opencode_panel").reject_edit()
+        end,
+        desc = "Reject AI edit",
+      },
+      {
+        "<leader>aj",
+        function()
+          require("opencode_panel").next_edit()
+        end,
+        desc = "Next AI edit",
+      },
+      {
+        "<leader>ak",
+        function()
+          require("opencode_panel").prev_edit()
+        end,
+        desc = "Previous AI edit",
+      },
+      {
+        "<leader>al",
+        function()
+          require("opencode_panel").browse_edits()
+        end,
+        desc = "List AI edits",
       },
     },
   },
