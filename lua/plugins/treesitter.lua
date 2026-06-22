@@ -2,12 +2,13 @@
 return {
   { -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     event = { "BufReadPost", "BufNewFile" },
     build = ":TSUpdate",
-    main = "nvim-treesitter.configs", -- Sets main module to use for opts
+    lazy = false,
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = {
+    opts = function()
+      local languages = {
         "bash",
         "c",
         "diff",
@@ -18,7 +19,6 @@ return {
         "http",
         "javascript",
         "json",
-        "jsonc",
         "just",
         "lua",
         "luadoc",
@@ -32,18 +32,61 @@ return {
         "vim",
         "vimdoc",
         "yaml",
-      },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { "ruby" },
-      },
-      indent = { enable = true, disable = { "ruby" } },
-    },
+      }
+
+      return {
+        languages = languages,
+        filetypes = {
+          "c",
+          "diff",
+          "dockerfile",
+          "gitconfig",
+          "go",
+          "html",
+          "http",
+          "javascript",
+          "json",
+          "jsonc",
+          "just",
+          "lua",
+          "luadoc",
+          "markdown",
+          "query",
+          "sh",
+          "sql",
+          "svelte",
+          "tmux",
+          "typescript",
+          "vim",
+          "vimdoc",
+          "yaml",
+        },
+      }
+    end,
+    config = function(_, opts)
+      vim.env.PATH = "/opt/homebrew/bin:" .. vim.env.PATH
+
+      require("nvim-treesitter").setup()
+      vim.treesitter.language.register("json", "jsonc")
+
+      local installed = require("nvim-treesitter").get_installed()
+      local missing = vim.tbl_filter(function(language)
+        return not vim.tbl_contains(installed, language)
+      end, opts.languages)
+
+      if #missing > 0 then
+        require("nvim-treesitter").install(missing)
+      end
+
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("config-treesitter", { clear = true }),
+        pattern = opts.filetypes,
+        callback = function()
+          vim.treesitter.start()
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
+    end,
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
     --
