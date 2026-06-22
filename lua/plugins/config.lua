@@ -159,7 +159,7 @@ return {
     ft = { "markdown", "opencode_output" },
     cmd = { "RenderMarkdown" },
     dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" },
-    opts = { enabled = true },
+    opts = { enabled = false },
     keys = {
       { "<leader>tm", "<cmd>RenderMarkdown toggle<cr>", desc = "Toggle Markdown view" },
     },
