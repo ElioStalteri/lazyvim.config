@@ -154,16 +154,16 @@ return {
       { "<leader>ct", "<cmd>TodoQuickFix<cr>", desc = "TODO QuickFix" },
     },
   },
-  {
-    "MeanderingProgrammer/render-markdown.nvim",
-    ft = { "markdown", "opencode_output" },
-    cmd = { "RenderMarkdown" },
-    dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" },
-    opts = { enabled = false },
-    keys = {
-      { "<leader>tm", "<cmd>RenderMarkdown toggle<cr>", desc = "Toggle Markdown view" },
-    },
-  },
+  -- {
+  --   "MeanderingProgrammer/render-markdown.nvim",
+  --   ft = { "markdown", "opencode_output" },
+  --   cmd = { "RenderMarkdown" },
+  --   dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" },
+  --   opts = { enabled = false },
+  --   keys = {
+  --     { "<leader>tm", "<cmd>RenderMarkdown toggle<cr>", desc = "Toggle Markdown view" },
+  --   },
+  -- },
   {
     "akinsho/bufferline.nvim",
     version = "*",
